@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DDPAIDash", "DDPAIDash.csproj", "{5A591BF7-20C9-4A72-BCC3-E66766FA750F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DDPAIDash", "DDPAIDash\DDPAIDash.csproj", "{5A591BF7-20C9-4A72-BCC3-E66766FA750F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DDPAIDash.Core", "..\DDPAIDash.Core\DDPAIDash.Core.csproj", "{13B8D6DD-DD52-43C3-98D3-369F3B341C1E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DDPAIDash.Core", "DDPAIDash.Core\DDPAIDash.Core.csproj", "{13B8D6DD-DD52-43C3-98D3-369F3B341C1E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
