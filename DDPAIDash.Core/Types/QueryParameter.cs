@@ -22,61 +22,13 @@
 * SOFTWARE.
 */
 
-using System;
-using DDPAIDash.Core.Types;
+using Newtonsoft.Json;
 
-namespace DDPAIDash.Core
+namespace DDPAIDash.Core.Types
 {
-    internal interface IDevice : IDisposable
+    internal class QueryParameter
     {
-        DeviceInfo Info { get; }
-
-        UserInfo User { get; }
-
-        StorageInfo Storage { get; }
-
-        DeviceState DeviceState { get; }
-
-        DeviceCapabilities Capabilities { get; }
-
-        string SessionId { get; }
-
-        GSensorMode GsMode { get; set; }
-
-        int CycleRecordSpace { get; set; }
-
-        int SpeakerLevel { get; set; }
-
-        int AntiFog { get; set; }
-
-        int EventAfterTime { get; set; }
-
-        int EventBeforeTime { get; set; }
-
-        int DisplayMode { get; set; }
-
-        SwitchState Wdr { get; set; }
-
-        SwitchState Ldc { get; set; }
-
-        SwitchState Mic { get; set; }
-
-        ImageQuality Quality { get; set; }
-
-        SwitchState Osd { get; set; }
-
-        SwitchState OsdSpeed { get; set; }
-
-        SwitchState StartSound { get; set; }
-
-        SwitchState ParkingMode { get; set; }
-
-        SwitchState TimeLapse { get; set; }
-
-        void Connect(UserInfo userInfo);
-
-        void Disconnect();
-
-        event EventHandler<DeviceStateChangedEventArgs> DeviceStateChanged;
+        [JsonProperty("key")]
+        public string Key { get; set; }
     }
 }

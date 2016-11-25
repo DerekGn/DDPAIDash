@@ -63,12 +63,7 @@ namespace DDPAIDash.Core
 
         public DeviceInfo Info { get; private set; }
 
-        public UserInfo User
-        {
-            get { throw new NotImplementedException(); }
-
-            set { throw new NotImplementedException(); }
-        }
+        public UserInfo User { get; private set; }
 
         public StorageInfo Storage
         {
@@ -77,7 +72,8 @@ namespace DDPAIDash.Core
 
         public DeviceState DeviceState
         {
-            get { throw new NotImplementedException(); }
+            get;
+            private set;
         }
 
         public DeviceCapabilities Capabilities { get; private set; }
@@ -96,7 +92,12 @@ namespace DDPAIDash.Core
 
         public int CycleRecordSpace
         {
-            get { throw new NotImplementedException(); }
+            get { return _speakerLevel; }
+            set
+            {
+                _speakerLevel = value;
+                SetIntValue("cycle_record_space", value);
+            }
         }
 
         public int SpeakerLevel
@@ -121,23 +122,32 @@ namespace DDPAIDash.Core
 
         public int EventAfterTime
         {
-            get { throw new NotImplementedException(); }
-
-            set { throw new NotImplementedException(); }
+            get { return _antiFog; }
+            set
+            {
+                _antiFog = value;
+                SetIntValue("event_after_time", value);
+            }
         }
 
         public int EventBeforeTime
         {
-            get { throw new NotImplementedException(); }
-
-            set { throw new NotImplementedException(); }
+            get { return _antiFog; }
+            set
+            {
+                _antiFog = value;
+                SetIntValue("event_before_time", value);
+            }
         }
 
         public int DisplayMode
         {
-            get { throw new NotImplementedException(); }
-
-            set { throw new NotImplementedException(); }
+            get { return _antiFog; }
+            set
+            {
+                _antiFog = value;
+                SetIntValue("display_mode", value);
+            }
         }
 
         public SwitchState Wdr
@@ -229,7 +239,7 @@ namespace DDPAIDash.Core
                 SetStringValue("timelapse_rec_switch", value.ToString());
             }
         }
-
+        
         public event EventHandler<DeviceStateChangedEventArgs> DeviceStateChanged;
 
         public void Connect(UserInfo userInfo)
@@ -283,6 +293,8 @@ namespace DDPAIDash.Core
                 if (!action())
                     break;
             }
+
+            User = userInfo;
 
             //StartMailBoxTask();
         }
