@@ -24,14 +24,29 @@
 
 using Newtonsoft.Json;
 
-namespace DDPAIDash.Core.Transports
+namespace DDPAIDash.Core.Types
 {
-    internal class ResponseMessage
+    internal class DeviceCapabilities
     {
-        [JsonProperty("errcode")]
-        public int ErrorCode { get; set; }
+        [JsonProperty("bs_pixel")]
+        public string ResolutionRatio { get; set; }
 
-        [JsonProperty("data")]
-        public string Data { get; set; }
+        [JsonProperty("bs_bitrat")]
+        public string BitRate { get; set; }
+
+        [JsonProperty("bs_frmrate")]
+        public string FrameRate { get; set; }
+
+        [JsonProperty("aud_samplerate")]
+        public string SampleRate { get; set; }
+
+        [JsonProperty("aud_pt")]
+        public string AudioType { get; set; }
+
+        //public string curLiveMode { get; set; }
+
+        //public string curFrameRate { get; set; }
+
+        //public string curStreamType { get; set; }
     }
 }

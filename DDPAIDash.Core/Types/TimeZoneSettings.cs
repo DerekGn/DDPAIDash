@@ -22,16 +22,41 @@
 * SOFTWARE.
 */
 
+using System;
+using System.Globalization;
 using Newtonsoft.Json;
 
-namespace DDPAIDash.Core.Transports
+namespace DDPAIDash.Core.Types
 {
-    internal class ResponseMessage
+    public class TimeZoneSettings
     {
-        [JsonProperty("errcode")]
-        public int ErrorCode { get; set; }
+        private static readonly Lazy<TimeZoneSettings> InstanceLazy =
+            new Lazy<TimeZoneSettings>(() => new TimeZoneSettings());
 
-        [JsonProperty("data")]
-        public string Data { get; set; }
+        private TimeZoneSettings()
+        {
+            Date = DateTime.Now.ToString("yyyyMMddHHmmss");
+            DateFormat = CultureInfo.CurrentCulture.DateTimeFormat.FullDateTimePattern;
+            Language = CultureInfo.CurrentCulture.Name;
+            Imei = "012345678912345";
+            TimeZone = 0;
+        }
+
+        public static TimeZoneSettings Instance => InstanceLazy.Value;
+
+        [JsonProperty("date")]
+        public string Date { get; set; }
+
+        [JsonProperty("format")]
+        public string DateFormat { get; set; }
+
+        [JsonProperty("lang")]
+        public string Language { get; set; }
+
+        [JsonProperty("imei")]
+        public string Imei { get; set; }
+
+        [JsonProperty("time_zone")]
+        public int TimeZone { get; set; }
     }
 }

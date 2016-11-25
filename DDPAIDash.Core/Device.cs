@@ -1,347 +1,290 @@
-﻿using System;
+﻿/**
+* MIT License
+*
+* Copyright (c) 2016 Derek Goslin < http://corememorydump.blogspot.ie/ >
+*
+* Permission is hereby granted, free of charge, to any person obtaining a copy
+* of this software and associated documentation files (the "Software"), to deal
+* in the Software without restriction, including without limitation the rights
+* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+* copies of the Software, and to permit persons to whom the Software is
+* furnished to do so, subject to the following conditions:
+*
+* The above copyright notice and this permission notice shall be included in all
+* copies or substantial portions of the Software.
+*
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+* SOFTWARE.
+*/
+
+using System;
+using System.Collections.Generic;
 using DDPAIDash.Core.Constants;
+using DDPAIDash.Core.Logging;
 using DDPAIDash.Core.Transports;
+using DDPAIDash.Core.Types;
 using Newtonsoft.Json;
-using Windows.Networking;
 
 namespace DDPAIDash.Core
 {
     internal class Device : IDevice
     {
-        //{"keys":[{"key":"wdr_enable"},{"key":"gsensor_mode"},{"key":"cycle_record_space"},{"key":"speaker_turn"},{"key":"default_user"},{"key":"ldc_switch"},{"key":"anti_fog"},{"key":"is_need_update"},{"key":"event_after_time"},{"key":"event_before_time"},{"key":"mic_switch"},{"key":"image_quality"},{"key":"display_mode"},{"key":"osd_switch"},{"key":"osd_speedswitch"},{"key":"start_sound_switch"},{"key":"delay_poweroff_time"},{"key":"edog_switch"},{"key":"parking_mode_switch"},{"key":"timelapse_rec_switch"}]}
+        private readonly ILogger _logger;
 
-        //{"errcode":0,"data":"{\"int_params\":[{\"key\":\"gsensor_mode\",\"value\":2},
-        //{\"key\":\"cycle_record_space\",\"value\":1048576},
-        //{\"key\":\"speaker_turn\",\"value\":34},
-        //{\"key\":\"anti_fog\",\"value\":0},
-        //{\"key\":\"is_need_update\",\"value\":0},
-        //{\"key\":\"event_after_time\",\"value\":0},
-        //{\"key\":\"event_before_time\",\"value\":0},
-        //{\"key\":\"display_mode\",\"value\":0}],
-        //\"string_params\":[{\"key\":\"wdr_enable\",\"value\":\"off\"},
-        //{\"key\":\"default_user\",\"value\":\"012345678912345\"},{\"key\":\"ldc_switch\",\"value\":\"on\"},
-        //{\"key\":\"mic_switch\",\"value\":\"off\"},{\"key\":\"image_quality\",\"value\":\"low\"},
-        //{\"key\":\"osd_switch\",\"value\":\"on\"},{\"key\":\"osd_speedswitch\",\"value\":\"na\"},
-        //{\"key\":\"start_sound_switch\",\"value\":\"on\"},{\"key\":\"parking_mode_switch\",\"value\":\"on\"},
-        //{\"key\":\"timelapse_rec_switch\",\"value\":\"on\"}]}"}
+        private readonly ITransport _transport;
+        private int _antiFog;
+        private GSensorMode _gsmode;
+        private SwitchState _ldc;
+        private SwitchState _mic;
+        private SwitchState _osd;
+        private SwitchState _osdSpeed;
 
-        private ITransport _transport;
+        private SwitchState _parkingMode;
+        private ImageQuality _quality;
+        private int _speakerLevel;
+        private SwitchState _startSound;
+        private SwitchState _timeLapse;
+        private SwitchState _wdr;
 
-        public Device() : this(new HttpTransport())
-        { }
-
-        public Device(ITransport transport)
+        public Device() : this(new HttpTransport(), new Logger())
         {
-            _transport = transport;
         }
 
-        public int AntiFog
+        public Device(ITransport transport, ILogger logger)
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            _transport = transport;
+            _logger = logger;
+        }
 
+        public DeviceInfo Info { get; private set; }
+
+        public UserInfo User
+        {
+            get { throw new NotImplementedException(); }
+
+            set { throw new NotImplementedException(); }
+        }
+
+        public StorageInfo Storage
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public DeviceState DeviceState
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public DeviceCapabilities Capabilities { get; private set; }
+
+        public string SessionId { get; private set; }
+
+        public GSensorMode GsMode
+        {
+            get { return _gsmode; }
             set
             {
-                throw new NotImplementedException();
+                _gsmode = value;
+                SetStringValue("gsensor_mode", value.ToString());
             }
         }
 
         public int CycleRecordSpace
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get { throw new NotImplementedException(); }
         }
 
-        public string DefaultUser
+        public int SpeakerLevel
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public DeviceState DeviceState
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public int DisplayMode
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-
+            get { return _speakerLevel; }
             set
             {
-                throw new NotImplementedException();
+                _speakerLevel = value;
+                SetIntValue("speaker_turn", value);
+            }
+        }
+
+        public int AntiFog
+        {
+            get { return _antiFog; }
+            set
+            {
+                _antiFog = value;
+                SetIntValue("anti_fog", value);
             }
         }
 
         public int EventAfterTime
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get { throw new NotImplementedException(); }
 
-            set
-            {
-                throw new NotImplementedException();
-            }
+            set { throw new NotImplementedException(); }
         }
 
         public int EventBeforeTime
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get { throw new NotImplementedException(); }
 
+            set { throw new NotImplementedException(); }
+        }
+
+        public int DisplayMode
+        {
+            get { throw new NotImplementedException(); }
+
+            set { throw new NotImplementedException(); }
+        }
+
+        public SwitchState Wdr
+        {
+            get { return _wdr; }
             set
             {
-                throw new NotImplementedException();
+                _wdr = value;
+                SetStringValue("wdr_enable", value.ToString());
             }
         }
 
-        public DeviceInfo Info
+        public SwitchState Ldc
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
-
+            get { return _ldc; }
             set
             {
-                throw new NotImplementedException();
+                _ldc = value;
+                SetStringValue("ldc_switch", value.ToString());
             }
         }
 
-        public bool IsNeedUpdate
+        public SwitchState Mic
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
-
+            get { return _mic; }
             set
             {
-                throw new NotImplementedException();
-            }
-        }
-
-        public SwitchState LdcSwitch
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public GSensorMode Level
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public SwitchState MicSwitch
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public SwitchState OsdSpeedSwitch
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public SwitchState OsdSwitch
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public SwitchState ParkingModeSwitch
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-
-            set
-            {
-                throw new NotImplementedException();
+                _mic = value;
+                SetStringValue("mic_switch", value.ToString());
             }
         }
 
         public ImageQuality Quality
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
-
+            get { return _quality; }
             set
             {
-                throw new NotImplementedException();
+                _quality = value;
+                SetStringValue("mic_switch", value.ToString());
             }
         }
 
-        public string SessionId
+        public SwitchState Osd
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
-
+            get { return _osd; }
             set
             {
-                throw new NotImplementedException();
+                _osd = value;
+                SetStringValue("osd_switch", value.ToString());
             }
         }
 
-        public int SpeakerLevel
+        public SwitchState OsdSpeed
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
-
+            get { return _osdSpeed; }
             set
             {
-                throw new NotImplementedException();
+                _osdSpeed = value;
+                SetStringValue("osd_speedswitch", value.ToString());
             }
         }
 
-        public SwitchState StartSoundSwitch
+        public SwitchState StartSound
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
-
+            get { return _startSound; }
             set
             {
-                throw new NotImplementedException();
+                _startSound = value;
+                SetStringValue("start_sound_switch", value.ToString());
             }
         }
 
-        public StorageInfo Storage
+        public SwitchState ParkingMode
         {
-            get
+            get { return _parkingMode; }
+            set
             {
-                throw new NotImplementedException();
+                _parkingMode = value;
+                SetStringValue("parking_mode_switch", value.ToString());
             }
         }
 
-        public SwitchState TimeLapseSwitch
+        public SwitchState TimeLapse
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
-
+            get { return _timeLapse; }
             set
             {
-                throw new NotImplementedException();
-            }
-        }
-
-        public UserInfo User
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public SwitchState WdrSwitch
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-
-            set
-            {
-                throw new NotImplementedException();
+                _timeLapse = value;
+                SetStringValue("timelapse_rec_switch", value.ToString());
             }
         }
 
         public event EventHandler<DeviceStateChangedEventArgs> DeviceStateChanged;
 
-        public void Connect(UserInfo userInfo, TimeZoneSettings timeZoneSettings)
+        public void Connect(UserInfo userInfo)
         {
-            try
+            _transport.Connect("193.168.0.1", 80);
+
+            var connectActions = new List<Func<bool>>
             {
-                _transport.Connect(new HostName("192.168.0.1"), 80);
+                () =>
+                {
+                    return ExecuteRequest(ApiConstants.RequestSession, apiCommand => _transport.Execute(apiCommand),
+                        response =>
+                        {
+                            SessionId =
+                                _transport.SessionId =
+                                    JsonConvert.DeserializeAnonymousType(response.Data, new {acsessionid = string.Empty})
+                                        .acsessionid;
+                        });
+                },
+                () =>
+                {
+                    return ExecuteRequest(ApiConstants.RequestCertificate,
+                        apiCommand => _transport.Execute(apiCommand, JsonConvert.SerializeObject(userInfo)), null);
+                },
+                () =>
+                {
+                    return ExecuteRequest(ApiConstants.SyncDate,
+                        apiCommand =>
+                            _transport.Execute(apiCommand, JsonConvert.SerializeObject(TimeZoneSettings.Instance)), null);
+                },
+                () =>
+                {
+                    return ExecuteRequest(ApiConstants.GetBaseInfo, apiCommand => _transport.Execute(apiCommand),
+                        response => { Info = JsonConvert.DeserializeObject<DeviceInfo>(response.Data); });
+                },
+                () =>
+                {
+                    return ExecuteRequest(ApiConstants.AvCapReq, apiCommand => _transport.Execute(apiCommand),
+                        response => { Capabilities = JsonConvert.DeserializeObject<DeviceCapabilities>(response.Data); });
+                },
+                () =>
+                {
+                    return ExecuteRequest(ApiConstants.AvCapSet,
+                        apiCommand =>
+                            _transport.Execute(apiCommand, JsonConvert.SerializeObject(new StreamSettings(30, 0))), null);
+                }
+            };
 
-                ResponseMessage response = _transport.Execute(ApiConstants.RequestSession);
-
-                //_transport.SessionId = session;
-
-                //response = _transport.Execute(ApiConstants.RequestCertificate, JsonConvert.SerializeObject(userInfo));
-
-                //response = _transport.Execute(ApiConstants.SyncDate, JsonConvert.SerializeObject(timeZoneSettings));
-
-                //response = _transport.Execute(ApiConstants.GetBaseInfo);
-
-                //response = _transport.Execute(ApiConstants.AvCapReq);
-
-                //response = _transport.Execute(ApiConstants.AvCapSet, JsonConvert.SerializeObject(new StreamSettings(30, 0)));
-
-                //StartMailBoxTask();
-            }
-            catch (Exception ex)
+            foreach (var action in connectActions)
             {
-                throw;
+                if (!action())
+                    break;
             }
+
+            //StartMailBoxTask();
         }
 
         public void Disconnect()
@@ -352,10 +295,90 @@ namespace DDPAIDash.Core
 
                 _transport.Disconnect();
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
                 throw;
             }
         }
+
+        private bool ExecuteRequest(string apiCommand, Func<string, ResponseMessage> transportAction,
+            Action<ResponseMessage> responseAction)
+        {
+            var result = true;
+
+            try
+            {
+                var response = transportAction(apiCommand);
+
+                if (response.ErrorCode == 0)
+                {
+                    _logger.Error($"[{apiCommand}] Execution Succeded. Data: [{response.Data}]");
+                    responseAction?.Invoke(response);
+                }
+                else
+                {
+                    _logger.Error($"[{apiCommand}] Execution Failed. Data: [{response.Data}]");
+                    result = false;
+                }
+            }
+            catch (Exception exception)
+            {
+                _logger.Fatal($"[{apiCommand}] Execution Failed", exception);
+                result = false;
+            }
+
+            return result;
+        }
+
+        private void SetStringValue(string key, string state)
+        {
+            var parameter = new Parameters {StringParameters = {new StringParameter {Key = key, Value = state}}};
+            ExecuteRequest(ApiConstants.GeneralSave,
+                apiCommand => _transport.Execute(apiCommand, JsonConvert.SerializeObject(parameter)), null);
+        }
+
+        private void SetIntValue(string key, int state)
+        {
+            var parameter = new Parameters {IntParameters = {new IntParameter {Key = key, Value = state}}};
+            ExecuteRequest(ApiConstants.GeneralSave,
+                apiCommand => _transport.Execute(apiCommand, JsonConvert.SerializeObject(parameter)), null);
+        }
+
+        #region IDisposable Support
+
+        private bool _disposedValue;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposedValue)
+            {
+                if (disposing)
+                {
+                    // TODO: dispose managed state (managed objects).
+                }
+
+                // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
+                // TODO: set large fields to null.
+
+                _disposedValue = true;
+            }
+        }
+
+        // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
+        // ~Device() {
+        //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+        //   Dispose(false);
+        // }
+
+        // This code added to correctly implement the disposable pattern.
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+            Dispose(true);
+            // TODO: uncomment the following line if the finalizer is overridden above.
+            // GC.SuppressFinalize(this);
+        }
+
+        #endregion
     }
 }

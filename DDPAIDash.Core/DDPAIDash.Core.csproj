@@ -81,26 +81,34 @@
   <ItemGroup>
     <Compile Include="Constants\ApiConstants.cs" />
     <Compile Include="Device.cs" />
-    <Compile Include="DeviceException.cs" />
-    <Compile Include="DeviceInfo.cs" />
-    <Compile Include="DeviceState.cs" />
     <Compile Include="DeviceStateChangedEventArgs.cs" />
-    <Compile Include="StreamSettings.cs" />
-    <Compile Include="GSensorMode.cs" />
+    <Compile Include="Exceptions\DeviceException.cs" />
     <Compile Include="IDevice.cs" />
-    <Compile Include="ImageQuality.cs" />
-    <Compile Include="TimeZoneSettings.cs" />
+    <Compile Include="Logging\ILogger.cs" />
+    <Compile Include="Logging\Logger.cs" />
     <Compile Include="Transports\HttpTransport.cs" />
+    <Compile Include="Transports\HttpTransportException.cs" />
     <Compile Include="Transports\ITransport.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StorageInfo.cs" />
-    <Compile Include="SwitchState.cs" />
     <Compile Include="Transports\ResponseMessage.cs" />
-    <Compile Include="UserInfo.cs" />
+    <Compile Include="Transports\TransportException.cs" />
+    <Compile Include="Types\DeviceCapabilities.cs" />
+    <Compile Include="Types\DeviceInfo.cs" />
+    <Compile Include="Types\DeviceState.cs" />
+    <Compile Include="Types\GSensorMode.cs" />
+    <Compile Include="Types\ImageQuality.cs" />
+    <Compile Include="Types\IntParameter.cs" />
+    <Compile Include="Types\Parameters.cs" />
+    <Compile Include="Types\StorageInfo.cs" />
+    <Compile Include="Types\StreamSettings.cs" />
+    <Compile Include="Types\StringParameter.cs" />
+    <Compile Include="Types\SwitchState.cs" />
+    <Compile Include="Types\TimeZoneSettings.cs" />
+    <Compile Include="Types\UserInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\DDPAIDash\packages\Newtonsoft.Json.9.0.1\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>

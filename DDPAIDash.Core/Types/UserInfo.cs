@@ -24,14 +24,28 @@
 
 using Newtonsoft.Json;
 
-namespace DDPAIDash.Core.Transports
+namespace DDPAIDash.Core.Types
 {
-    internal class ResponseMessage
+    internal class UserInfo
     {
-        [JsonProperty("errcode")]
-        public int ErrorCode { get; set; }
+        public UserInfo(string uid, string username, string password, int level)
+        {
+            Uid = uid;
+            Username = username;
+            Password = password;
+            Level = level;
+        }
 
-        [JsonProperty("data")]
-        public string Data { get; set; }
+        [JsonProperty("uid")]
+        public string Uid { get; private set; }
+
+        [JsonProperty("user")]
+        public string Username { get; private set; }
+
+        [JsonProperty("password")]
+        public string Password { get; private set; }
+
+        [JsonProperty("level")]
+        public int Level { get; private set; }
     }
 }

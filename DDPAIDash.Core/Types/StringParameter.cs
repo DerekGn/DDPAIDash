@@ -24,14 +24,14 @@
 
 using Newtonsoft.Json;
 
-namespace DDPAIDash.Core.Transports
+namespace DDPAIDash.Core.Types
 {
-    internal class ResponseMessage
+    public class StringParameter
     {
-        [JsonProperty("errcode")]
-        public int ErrorCode { get; set; }
+        [JsonProperty("key")]
+        public string Key { get; set; }
 
-        [JsonProperty("data")]
-        public string Data { get; set; }
+        [JsonProperty("value")]
+        public string Value { get; set; }
     }
 }

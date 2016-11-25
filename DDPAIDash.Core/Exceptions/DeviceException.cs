@@ -22,16 +22,22 @@
 * SOFTWARE.
 */
 
-using Newtonsoft.Json;
+using System;
 
-namespace DDPAIDash.Core.Transports
+namespace DDPAIDash.Core.Exceptions
 {
-    internal class ResponseMessage
+    public class DeviceException : Exception
     {
-        [JsonProperty("errcode")]
-        public int ErrorCode { get; set; }
+        public DeviceException()
+        {
+        }
 
-        [JsonProperty("data")]
-        public string Data { get; set; }
+        public DeviceException(string message) : base(message)
+        {
+        }
+
+        public DeviceException(string message, Exception inner) : base(message, inner)
+        {
+        }
     }
 }

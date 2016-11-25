@@ -22,16 +22,12 @@
 * SOFTWARE.
 */
 
-using Newtonsoft.Json;
-
-namespace DDPAIDash.Core.Transports
+namespace DDPAIDash.Core.Types
 {
-    internal class ResponseMessage
+    public enum SwitchState
     {
-        [JsonProperty("errcode")]
-        public int ErrorCode { get; set; }
-
-        [JsonProperty("data")]
-        public string Data { get; set; }
+        Na,
+        Off,
+        On
     }
 }

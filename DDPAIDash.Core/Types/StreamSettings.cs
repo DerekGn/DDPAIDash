@@ -24,14 +24,20 @@
 
 using Newtonsoft.Json;
 
-namespace DDPAIDash.Core.Transports
+namespace DDPAIDash.Core.Types
 {
-    internal class ResponseMessage
+    internal class StreamSettings
     {
-        [JsonProperty("errcode")]
-        public int ErrorCode { get; set; }
+        public StreamSettings(int frameRate, int streamType)
+        {
+            FrameRate = frameRate;
+            StreamType = streamType;
+        }
 
-        [JsonProperty("data")]
-        public string Data { get; set; }
+        [JsonProperty("frmrate")]
+        public int FrameRate { get; set; }
+
+        [JsonProperty("stream_type")]
+        public int StreamType { get; set; }
     }
 }

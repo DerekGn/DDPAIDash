@@ -22,16 +22,12 @@
 * SOFTWARE.
 */
 
-using Newtonsoft.Json;
-
-namespace DDPAIDash.Core.Transports
+namespace DDPAIDash.Core.Types
 {
-    internal class ResponseMessage
+    internal enum ImageQuality
     {
-        [JsonProperty("errcode")]
-        public int ErrorCode { get; set; }
-
-        [JsonProperty("data")]
-        public string Data { get; set; }
+        Low,
+        Middle,
+        High
     }
 }

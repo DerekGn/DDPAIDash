@@ -1,4 +1,5 @@
-﻿/**
+﻿
+/**
 * MIT License
 *
 * Copyright (c) 2016 Derek Goslin < http://corememorydump.blogspot.ie/ >
@@ -22,16 +23,18 @@
 * SOFTWARE.
 */
 
-using Newtonsoft.Json;
+using System;
 
-namespace DDPAIDash.Core.Transports
+namespace DDPAIDash.Core.Logging
 {
-    internal class ResponseMessage
+    internal class Logger : ILogger
     {
-        [JsonProperty("errcode")]
-        public int ErrorCode { get; set; }
+        public void Error(string message)
+        {
+        }
 
-        [JsonProperty("data")]
-        public string Data { get; set; }
+        public void Fatal(string message, Exception exception)
+        {
+        }
     }
 }

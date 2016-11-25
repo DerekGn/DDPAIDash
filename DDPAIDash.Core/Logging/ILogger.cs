@@ -22,16 +22,13 @@
 * SOFTWARE.
 */
 
-using Newtonsoft.Json;
+using System;
 
-namespace DDPAIDash.Core.Transports
+namespace DDPAIDash.Core.Logging
 {
-    internal class ResponseMessage
+    interface ILogger
     {
-        [JsonProperty("errcode")]
-        public int ErrorCode { get; set; }
-
-        [JsonProperty("data")]
-        public string Data { get; set; }
+        void Error(string message);
+        void Fatal(string message, Exception exception);
     }
 }

@@ -22,16 +22,23 @@
 * SOFTWARE.
 */
 
+using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace DDPAIDash.Core.Transports
+namespace DDPAIDash.Core.Types
 {
-    internal class ResponseMessage
+    internal class Parameters
     {
-        [JsonProperty("errcode")]
-        public int ErrorCode { get; set; }
+        public Parameters()
+        {
+            StringParameters = new List<StringParameter>();
+            IntParameters = new List<IntParameter>();
+        }
 
-        [JsonProperty("data")]
-        public string Data { get; set; }
+        [JsonProperty("string_params")]
+        public List<StringParameter> StringParameters { get; set; }
+
+        [JsonProperty("int_params")]
+        public List<IntParameter> IntParameters { get; set; }
     }
 }
