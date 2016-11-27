@@ -27,11 +27,23 @@ namespace DDPAIDash.Core.Constants
     internal static class ApiConstants
     {
         public const string RequestCertificate = "API_RequestCertificate";
+        public const string PlaybackLiveSwitch = "APP_PlaybackLiveSwitch";
+        public const string PlaybackListReq = "APP_PlaybackListReq";
         public const string RequestSession = "API_RequestSessionID";
+        public const string GetMailboxData = "API_GetMailboxData";
+        public const string GetStorageInfo = "API_GetStorageInfo";
+        public const string CameraCapture = "API_CameraCapture";
+        public const string PlayModeQuery = "API_PlayModeQuery";
+        public const string LockedListReq = "APP_LockedListReq";
+        public const string GeneralQuery = "API_GeneralQuery";
+        public const string SetLockFile = "API_SetLockFile";
+        public const string ButtonMatch = "API_ButtonMatch";
         public const string GetBaseInfo = "API_GetBaseInfo";
         public const string GeneralSave = "API_GeneralSave";
+        public const string RecordOpt = "API_RecordOpt";
         public const string SyncDate = "API_SyncDate";
         public const string AvCapReq = "APP_AvCapReq";
         public const string AvCapSet = "APP_AvCapSet";
+        public const string SetUuid = "API_SetUuid";
     }
 }

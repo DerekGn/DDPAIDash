@@ -31,14 +31,14 @@ namespace DDPAIDash.Core.Types
     {
         public Parameters()
         {
-            StringParameters = new List<StringParameter>();
-            IntParameters = new List<IntParameter>();
+            StringParameters = new List<Parameter<string>>();
+            IntParameters = new List<Parameter<int>>();
         }
 
         [JsonProperty("string_params")]
-        public List<StringParameter> StringParameters { get; set; }
+        public List<Parameter<string>> StringParameters { get; set; }
 
         [JsonProperty("int_params")]
-        public List<IntParameter> IntParameters { get; set; }
+        public List<Parameter<int>> IntParameters { get; set; }
     }
 }

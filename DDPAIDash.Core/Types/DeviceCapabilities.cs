@@ -37,16 +37,19 @@ namespace DDPAIDash.Core.Types
         [JsonProperty("bs_frmrate")]
         public string FrameRate { get; set; }
 
+        [JsonProperty("ss_pixel")]
+        public string LowResolutionRatio { get; set; }
+
+        [JsonProperty("ss_frmrate")]
+        public string LowFrameRate { get; set; }
+
+        [JsonProperty("ss_bitrat")]
+        public string LowBitRate { get; set; }
+        
         [JsonProperty("aud_samplerate")]
         public string SampleRate { get; set; }
-
+        
         [JsonProperty("aud_pt")]
         public string AudioType { get; set; }
-
-        //public string curLiveMode { get; set; }
-
-        //public string curFrameRate { get; set; }
-
-        //public string curStreamType { get; set; }
-    }
+}
 }

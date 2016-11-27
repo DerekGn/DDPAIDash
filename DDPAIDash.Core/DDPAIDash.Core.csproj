@@ -98,7 +98,11 @@
     <Compile Include="Types\GSensorMode.cs" />
     <Compile Include="Types\ImageQuality.cs" />
     <Compile Include="Types\IntParameter.cs" />
+    <Compile Include="Types\Parameter.cs" />
     <Compile Include="Types\Parameters.cs" />
+    <Compile Include="Types\QueryParameter.cs" />
+    <Compile Include="Types\QueryParameterKeys.cs" />
+    <Compile Include="Types\QueryParameters.cs" />
     <Compile Include="Types\StorageInfo.cs" />
     <Compile Include="Types\StreamSettings.cs" />
     <Compile Include="Types\StringParameter.cs" />

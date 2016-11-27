@@ -34,33 +34,33 @@ namespace DDPAIDash.Core.Types
         {
             Keys = new List<QueryParameter>()
             {
-                new QueryParameter() { Key = "wdr_enable" },
-                new QueryParameter() { Key = "gsensor_mode" },
-                new QueryParameter() { Key = "cycle_record_space" },
-                new QueryParameter() { Key = "speaker_turn" },
-                new QueryParameter() { Key = "default_user" },
-                new QueryParameter() { Key = "ldc_switch" },
-                new QueryParameter() { Key = "anti_fog" },
-                new QueryParameter() { Key = "is_need_update" },
-                new QueryParameter() { Key = "event_after_time" },
-                new QueryParameter() { Key = "event_before_time" },
-                new QueryParameter() { Key = "mic_switch" },
-                new QueryParameter() { Key = "image_quality" },
-                new QueryParameter() { Key = "display_mode" },
-                new QueryParameter() { Key = "osd_switch" },
-                new QueryParameter() { Key = "osd_speedswitch" },
-                new QueryParameter() { Key = "start_sound_switch" },
-                new QueryParameter() { Key = "delay_poweroff_time" },
-                new QueryParameter() { Key = "edog_switch" },
-                new QueryParameter() { Key = "parking_mode_switch" },
-                new QueryParameter() { Key = "timelapse_rec_switch" },
-
-
+                new QueryParameter() { Key = QueryParameterKeys.wdr_enable.ToString() },
+                new QueryParameter() { Key = QueryParameterKeys.gsensor_mode.ToString() },
+                new QueryParameter() { Key = QueryParameterKeys.cycle_record_space.ToString() },
+                new QueryParameter() { Key = QueryParameterKeys.speaker_turn.ToString() },
+                new QueryParameter() { Key = QueryParameterKeys.default_user.ToString() },
+                new QueryParameter() { Key = QueryParameterKeys.ldc_switch.ToString() },
+                new QueryParameter() { Key = QueryParameterKeys.anti_fog.ToString() },
+                new QueryParameter() { Key = QueryParameterKeys.is_need_update.ToString() },
+                new QueryParameter() { Key = QueryParameterKeys.event_after_time.ToString() },
+                new QueryParameter() { Key = QueryParameterKeys.event_before_time.ToString() },
+                new QueryParameter() { Key = QueryParameterKeys.mic_switch.ToString() },
+                new QueryParameter() { Key = QueryParameterKeys.image_quality.ToString() },
+                new QueryParameter() { Key = QueryParameterKeys.display_mode.ToString() },
+                new QueryParameter() { Key = QueryParameterKeys.osd_switch.ToString() },
+                new QueryParameter() { Key = QueryParameterKeys.osd_speedswitch.ToString() },
+                new QueryParameter() { Key = QueryParameterKeys.start_sound_switch.ToString() },
+                new QueryParameter() { Key = QueryParameterKeys.delay_poweroff_time.ToString() },
+                new QueryParameter() { Key = QueryParameterKeys.edog_switch.ToString() },
+                new QueryParameter() { Key = QueryParameterKeys.parking_mode_switch.ToString() },
+                new QueryParameter() { Key = QueryParameterKeys.timelapse_rec_switch.ToString() }
             };
         }
 
         private static readonly Lazy<QueryParameters> InstanceLazy =
             new Lazy<QueryParameters>(() => new QueryParameters());
+
+        public static QueryParameters Instance => InstanceLazy.Value;
 
         [JsonProperty("keys")]
         public List<QueryParameter> Keys { get; set; }

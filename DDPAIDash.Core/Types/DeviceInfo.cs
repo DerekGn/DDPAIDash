@@ -83,7 +83,7 @@ namespace DDPAIDash.Core.Types
         public int LsBitrate { get; private set; }
 
         [JsonProperty("default_user")]
-        public int DefaultUser { get; private set; }
+        public string DefaultUser { get; private set; }
 
         [JsonProperty("is_neeed_update")]
         public bool IsNeeedUpdate { get; private set; }

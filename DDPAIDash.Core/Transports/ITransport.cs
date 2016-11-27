@@ -32,8 +32,10 @@ namespace DDPAIDash.Core.Transports
 
         void Connect(string address, int port);
 
-        ResponseMessage Execute(string requestSession);
-        ResponseMessage Execute(string requestCertificate, string v);
+        ResponseMessage Execute(string apiCommand);
+
+        ResponseMessage Execute(string apiCommand, string payload);
+
         void Disconnect();
     }
 }

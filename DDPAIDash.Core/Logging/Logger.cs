@@ -31,10 +31,12 @@ namespace DDPAIDash.Core.Logging
     {
         public void Error(string message)
         {
+            //Trace.WriteLine(message);
         }
 
         public void Fatal(string message, Exception exception)
         {
+            //Trace.WriteLine(string.Format("{0} {1}", message, exception));
         }
     }
 }

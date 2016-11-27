@@ -23,28 +23,26 @@
 */
 
 using System;
-using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using Newtonsoft.Json;
+using DDPAIDash.Core.Constants;
 
 namespace DDPAIDash.Core.Transports
 {
     internal class HttpTransport : ITransport
     {
         private readonly CookieContainer _cookieContainer;
-        private readonly HttpClient _httpClient;
         private readonly HttpClientHandler _httpClientHandler;
-        private readonly JsonSerializer _serializer;
+        private readonly HttpClient _httpClient;
         private string _sessionId;
 
         public HttpTransport()
         {
-            _serializer = new JsonSerializer();
             _cookieContainer = new CookieContainer();
-            _httpClientHandler = new HttpClientHandler {CookieContainer = _cookieContainer};
+            _httpClientHandler = new HttpClientHandler { CookieContainer = _cookieContainer };
             _httpClient = new HttpClient();
         }
 
@@ -90,13 +88,19 @@ namespace DDPAIDash.Core.Transports
 
             if (postResult.IsSuccessStatusCode)
             {
-                using (var streamReader = new StreamReader(postResult.Content.ReadAsStreamAsync().Result))
+                string payload = postResult.Content.ReadAsStringAsync().Result;
+
+                if (apiCommand == ApiConstants.AvCapReq)
                 {
-                    using (JsonReader reader = new JsonTextReader(streamReader))
-                    {
-                        result = _serializer.Deserialize<ResponseMessage>(reader);
-                    }
+                    payload = string.Concat(
+                        payload.Substring(0, 20),
+                        "\"",
+                        payload.Substring(20)
+                        .Replace("\"", "\\\"")
+                        .Replace("}}", "}\"}"));
                 }
+
+                result = JsonConvert.DeserializeObject<ResponseMessage>(payload);
             }
             else
             {

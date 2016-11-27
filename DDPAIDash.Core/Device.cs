@@ -29,27 +29,38 @@ using DDPAIDash.Core.Logging;
 using DDPAIDash.Core.Transports;
 using DDPAIDash.Core.Types;
 using Newtonsoft.Json;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace DDPAIDash.Core
 {
     internal class Device : IDevice
     {
-        private readonly ILogger _logger;
+        private static CancellationTokenSource cts = new CancellationTokenSource();
 
         private readonly ITransport _transport;
-        private int _antiFog;
-        private GSensorMode _gsmode;
-        private SwitchState _ldc;
-        private SwitchState _mic;
-        private SwitchState _osd;
-        private SwitchState _osdSpeed;
-
-        private SwitchState _parkingMode;
-        private ImageQuality _quality;
-        private int _speakerLevel;
-        private SwitchState _startSound;
-        private SwitchState _timeLapse;
-        private SwitchState _wdr;
+        private readonly ILogger _logger;
+        
+        private int? _antiFog;
+        private int? _cycleRecordSpace;
+        private string _defaultUser;
+        private int? _delayPoweroffTime;
+        private int? _displayMode;
+        private int? _eventAfterTime;
+        private int? _eventBeforeTime;
+        private SwitchState? _edogSwitch;
+        private bool? _isNeedUpdate;
+        private GSensorMode? _gsmode;
+        private SwitchState? _ldc;
+        private SwitchState? _mic;
+        private SwitchState? _osd;
+        private SwitchState? _osdSpeed;
+        private SwitchState? _parkingMode;
+        private ImageQuality? _quality;
+        private int? _speakerLevel;
+        private SwitchState? _startSound;
+        private SwitchState? _timeLapse;
+        private SwitchState? _wdr;
 
         public Device() : this(new HttpTransport(), new Logger())
         {
@@ -65,186 +76,310 @@ namespace DDPAIDash.Core
 
         public UserInfo User { get; private set; }
 
-        public StorageInfo Storage
-        {
-            get { throw new NotImplementedException(); }
-        }
+        public StorageInfo Storage { get; private set; }
 
-        public DeviceState DeviceState
-        {
-            get;
-            private set;
-        }
+        public DeviceState DeviceState { get; private set; }
 
         public DeviceCapabilities Capabilities { get; private set; }
 
         public string SessionId { get; private set; }
 
-        public GSensorMode GsMode
+        public string DefaultUser
+        {
+            get { return _defaultUser; }
+            set
+            {
+                _defaultUser = value;
+                SetStringValue("default_user", value.ToString());
+            }
+        }
+        
+        public GSensorMode? GsMode
         {
             get { return _gsmode; }
             set
             {
                 _gsmode = value;
-                SetStringValue("gsensor_mode", value.ToString());
+                if (_gsmode.HasValue)
+                    SetStringValue("gsensor_mode", value.Value.ToString());
             }
         }
 
-        public int CycleRecordSpace
+        public int? CycleRecordSpace
+        {
+            get { return _cycleRecordSpace; }
+            set
+            {
+                _cycleRecordSpace = value;
+                if (_cycleRecordSpace.HasValue)
+                    SetIntValue("cycle_record_space", value.Value);
+            }
+        }
+
+        public int? SpeakerLevel
         {
             get { return _speakerLevel; }
             set
             {
                 _speakerLevel = value;
-                SetIntValue("cycle_record_space", value);
+                if(_speakerLevel.HasValue)
+                    SetIntValue("speaker_turn", value.Value);
             }
         }
 
-        public int SpeakerLevel
-        {
-            get { return _speakerLevel; }
-            set
-            {
-                _speakerLevel = value;
-                SetIntValue("speaker_turn", value);
-            }
-        }
-
-        public int AntiFog
+        public int? AntiFog
         {
             get { return _antiFog; }
             set
             {
                 _antiFog = value;
-                SetIntValue("anti_fog", value);
+                if (_antiFog.HasValue)
+                    SetIntValue("anti_fog", value.Value);
             }
         }
 
-        public int EventAfterTime
+        public int? EventAfterTime
         {
-            get { return _antiFog; }
+            get { return _eventAfterTime; }
             set
             {
-                _antiFog = value;
-                SetIntValue("event_after_time", value);
+                _eventAfterTime = value;
+                if (_eventAfterTime.HasValue)
+                    SetIntValue("event_after_time", value.Value);
             }
         }
 
-        public int EventBeforeTime
+        public int? EventBeforeTime
         {
-            get { return _antiFog; }
+            get { return _eventBeforeTime; }
             set
             {
-                _antiFog = value;
-                SetIntValue("event_before_time", value);
+                _eventBeforeTime = value;
+                if (_eventBeforeTime.HasValue)
+                    SetIntValue("event_before_time", value.Value);
             }
         }
 
-        public int DisplayMode
+        public int? DisplayMode
         {
-            get { return _antiFog; }
+            get { return _displayMode; }
             set
             {
-                _antiFog = value;
-                SetIntValue("display_mode", value);
+                _displayMode = value;
+                if (_displayMode.HasValue)
+                    SetIntValue("display_mode", value.Value);
             }
         }
 
-        public SwitchState Wdr
+        public SwitchState? EDogSwitch
+        {
+            get { return _edogSwitch; }
+            set
+            {
+                _edogSwitch = value;
+                if (_edogSwitch.HasValue)
+                    SetStringValue("edog_switch", value.Value.ToString());
+            }
+        }
+
+        public SwitchState? Wdr
         {
             get { return _wdr; }
             set
             {
                 _wdr = value;
-                SetStringValue("wdr_enable", value.ToString());
+                if (_wdr.HasValue)
+                    SetStringValue("wdr_enable", value.Value.ToString());
             }
         }
 
-        public SwitchState Ldc
+        public SwitchState? Ldc
         {
             get { return _ldc; }
             set
             {
                 _ldc = value;
-                SetStringValue("ldc_switch", value.ToString());
+                if (_ldc.HasValue)
+                    SetStringValue("ldc_switch", value.Value.ToString());
             }
         }
 
-        public SwitchState Mic
+        public SwitchState? Mic
         {
             get { return _mic; }
             set
             {
                 _mic = value;
-                SetStringValue("mic_switch", value.ToString());
+                if (_mic.HasValue)
+                    SetStringValue("mic_switch", value.Value.ToString());
             }
         }
 
-        public ImageQuality Quality
+        public ImageQuality? Quality
         {
             get { return _quality; }
             set
             {
                 _quality = value;
-                SetStringValue("mic_switch", value.ToString());
+                if (_quality.HasValue)
+                    SetStringValue("image_quality", value.Value.ToString());
             }
         }
 
-        public SwitchState Osd
+        public SwitchState? Osd
         {
             get { return _osd; }
             set
             {
                 _osd = value;
-                SetStringValue("osd_switch", value.ToString());
+                if (_osd.HasValue)
+                    SetStringValue("osd_switch", value.Value.ToString());
             }
         }
 
-        public SwitchState OsdSpeed
+        public SwitchState? OsdSpeed
         {
             get { return _osdSpeed; }
             set
             {
                 _osdSpeed = value;
-                SetStringValue("osd_speedswitch", value.ToString());
+                if (_osdSpeed.HasValue)
+                    SetStringValue("osd_speedswitch", value.Value.ToString());
             }
         }
 
-        public SwitchState StartSound
+        public SwitchState? StartSound
         {
             get { return _startSound; }
             set
             {
                 _startSound = value;
-                SetStringValue("start_sound_switch", value.ToString());
+                if (_startSound.HasValue)
+                    SetStringValue("start_sound_switch", value.Value.ToString());
             }
         }
 
-        public SwitchState ParkingMode
+        public SwitchState? ParkingMode
         {
             get { return _parkingMode; }
             set
             {
                 _parkingMode = value;
-                SetStringValue("parking_mode_switch", value.ToString());
+                if (_parkingMode.HasValue)
+                    SetStringValue("parking_mode_switch", value.Value.ToString());
             }
         }
 
-        public SwitchState TimeLapse
+        public SwitchState? TimeLapse
         {
             get { return _timeLapse; }
             set
             {
                 _timeLapse = value;
-                SetStringValue("timelapse_rec_switch", value.ToString());
+                if (_timeLapse.HasValue)
+                    SetStringValue("timelapse_rec_switch", value.Value.ToString());
+            }
+        }
+
+        public int? DelayPoweroffTime
+        {
+            get { return _delayPoweroffTime; }
+            set
+            {
+                _delayPoweroffTime = value;
+                if (_displayMode.HasValue)
+                    SetIntValue("delay_poweroff_time", value.Value);
             }
         }
         
+        public bool? IsNeedUpdate
+        {
+            get { return _isNeedUpdate; }
+            set
+            {
+                _isNeedUpdate = value;
+                SetStringValue("is_need_update", value.ToString());
+            }
+        }
+
         public event EventHandler<DeviceStateChangedEventArgs> DeviceStateChanged;
 
-        public void Connect(UserInfo userInfo)
+        public bool Connect(UserInfo userInfo)
         {
+            bool result = false;
+
             _transport.Connect("193.168.0.1", 80);
+
+            result = PerformConnect(userInfo);
+
+            if(result)
+            {
+                User = userInfo;
+ 
+                _mailboxTask = Task.Factory.StartNew(() => PollMailbox(cts.Token), cts.Token);
+            }
+
+            return result;
+        }
+
+        public void Disconnect()
+        {
+            try
+            {
+#warning logout
+                ExecuteRequest(ApiConstants.GetMailboxData,
+                    apiCommand => _transport.Execute(apiCommand), (response) => {
+                        _logger.Error(response.Data);
+                    });
+
+                _transport.Disconnect();
+            }
+            catch (Exception exception)
+            {
+                throw;
+            }
+        }
+
+        private void PollMailbox(CancellationToken cancellationToken)
+        {
+            do
+            {
+                Task.Delay(5000).Wait();
+
+                // OK
+                ExecuteRequest(ApiConstants.GetMailboxData,
+                    apiCommand => _transport.Execute(apiCommand), (response) => {
+                        _logger.Error(response.Data);
+                    });
+
+                //ExecuteRequest("API_GetTestdate",
+                //    apiCommand => _transport.Execute(apiCommand), (response) => {
+                //        _logger.Error(response.Data);
+                //    });
+
+                ////OK
+                //ExecuteRequest(ApiConstants.PlayModeQuery,
+                //        apiCommand => _transport.Execute(apiCommand), (response) => {
+                //            _logger.Error(response.Data);
+                //        });
+                ////ok
+                //ExecuteRequest(ApiConstants.PlaybackListReq,
+                //        apiCommand => _transport.Execute(apiCommand), (response) => {
+                //            _logger.Error(response.Data);
+                //        });
+
+                //ExecuteRequest("API_GetModuleState",
+                //        apiCommand => _transport.Execute(apiCommand), (response) =>
+                //        {
+                //            _logger.Error(response.Data);
+                //        });
+                
+            } while (!cancellationToken.IsCancellationRequested);
+        }
+
+        private bool PerformConnect(UserInfo userInfo)
+        {
+            bool result = false;
 
             var connectActions = new List<Func<bool>>
             {
@@ -285,31 +420,113 @@ namespace DDPAIDash.Core
                     return ExecuteRequest(ApiConstants.AvCapSet,
                         apiCommand =>
                             _transport.Execute(apiCommand, JsonConvert.SerializeObject(new StreamSettings(30, 0))), null);
+                },
+                () =>
+                {
+                    return ExecuteRequest(ApiConstants.GeneralQuery,
+                        apiCommand =>
+                            _transport.Execute(apiCommand, JsonConvert.SerializeObject(QueryParameters.Instance)), response => { LoadSettings(response); });
+                },
+                () =>
+                {
+                    return ExecuteRequest(ApiConstants.GetStorageInfo,
+                        apiCommand => _transport.Execute(apiCommand), response => {  Storage =  JsonConvert.DeserializeObject<StorageInfo>(response.Data); });
                 }
             };
 
             foreach (var action in connectActions)
             {
-                if (!action())
+                result = action();
+
+                if (!result)
                     break;
             }
 
-            User = userInfo;
 
-            //StartMailBoxTask();
+            return result;
+        }
+        
+        private void LoadSettings(ResponseMessage response)
+        {
+            Parameters parameters = JsonConvert.DeserializeObject<Parameters>(response.Data);
+
+            foreach (var intParameter in parameters.IntParameters)
+            {
+                LoadSetting(intParameter);
+            }
+
+            foreach (var stringParameter in parameters.StringParameters)
+            {
+                LoadSetting(stringParameter);
+            }
         }
 
-        public void Disconnect()
+        private void LoadSetting<T>(Parameter<T> parameter)
         {
-            try
+            switch ((QueryParameterKeys)Enum.Parse(typeof(QueryParameterKeys), parameter.Key))
             {
-#warning logout
-
-                _transport.Disconnect();
-            }
-            catch (Exception exception)
-            {
-                throw;
+                case QueryParameterKeys.wdr_enable:
+                    _wdr = (SwitchState)Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
+                    break;
+                case QueryParameterKeys.gsensor_mode:
+                    _gsmode = (GSensorMode)Enum.Parse(typeof(GSensorMode), parameter.Value.ToString(), true);
+                    break;
+                case QueryParameterKeys.cycle_record_space:
+                    _cycleRecordSpace = int.Parse(parameter.Value.ToString());
+                    break;
+                case QueryParameterKeys.speaker_turn:
+                    _speakerLevel = int.Parse(parameter.Value.ToString());
+                    break;
+                case QueryParameterKeys.default_user:
+                    _defaultUser = parameter.Value.ToString();
+                    break;
+                case QueryParameterKeys.ldc_switch:
+                    _ldc = (SwitchState)Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
+                    break;
+                case QueryParameterKeys.anti_fog:
+                    _antiFog = int.Parse(parameter.Value.ToString());
+                    break;
+                case QueryParameterKeys.is_need_update:
+                    _isNeedUpdate = int.Parse(parameter.Value.ToString()) == 1;
+                    break;
+                case QueryParameterKeys.event_after_time:
+                    _eventAfterTime = int.Parse(parameter.Value.ToString());
+                    break;
+                case QueryParameterKeys.event_before_time:
+                    _eventBeforeTime = int.Parse(parameter.Value.ToString());
+                    break;
+                case QueryParameterKeys.mic_switch:
+                    _mic = (SwitchState)Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
+                    break;
+                case QueryParameterKeys.image_quality:
+                    _quality = (ImageQuality)Enum.Parse(typeof(ImageQuality), parameter.Value.ToString(), true);
+                    break;
+                case QueryParameterKeys.display_mode:
+                    _displayMode = int.Parse(parameter.Value.ToString());
+                    break;
+                case QueryParameterKeys.osd_switch:
+                    _osd = (SwitchState)Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
+                    break;
+                case QueryParameterKeys.osd_speedswitch:
+                    _osdSpeed = (SwitchState)Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
+                    break;
+                case QueryParameterKeys.start_sound_switch:
+                    _startSound = (SwitchState)Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
+                    break;
+                case QueryParameterKeys.delay_poweroff_time:
+                    _delayPoweroffTime = int.Parse(parameter.Value.ToString());
+                    break;
+                case QueryParameterKeys.edog_switch:
+                    _edogSwitch = (SwitchState)Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
+                    break;
+                case QueryParameterKeys.parking_mode_switch:
+                    _parkingMode = (SwitchState)Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
+                    break;
+                case QueryParameterKeys.timelapse_rec_switch:
+                    _timeLapse = (SwitchState)Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
+                    break;
+                default:
+                    break;
             }
         }
 
@@ -344,14 +561,14 @@ namespace DDPAIDash.Core
 
         private void SetStringValue(string key, string state)
         {
-            var parameter = new Parameters {StringParameters = {new StringParameter {Key = key, Value = state}}};
+            var parameter = new Parameters { StringParameters = { new Parameter<string> { Key = key, Value = state } } };
             ExecuteRequest(ApiConstants.GeneralSave,
                 apiCommand => _transport.Execute(apiCommand, JsonConvert.SerializeObject(parameter)), null);
         }
 
         private void SetIntValue(string key, int state)
         {
-            var parameter = new Parameters {IntParameters = {new IntParameter {Key = key, Value = state}}};
+            var parameter = new Parameters { IntParameters = { new Parameter<int> { Key = key, Value = state } } };
             ExecuteRequest(ApiConstants.GeneralSave,
                 apiCommand => _transport.Execute(apiCommand, JsonConvert.SerializeObject(parameter)), null);
         }
@@ -359,6 +576,7 @@ namespace DDPAIDash.Core
         #region IDisposable Support
 
         private bool _disposedValue;
+        private object _mailboxTask;
 
         protected virtual void Dispose(bool disposing)
         {

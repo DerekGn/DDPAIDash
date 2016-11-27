@@ -41,39 +41,47 @@ namespace DDPAIDash.Core
 
         string SessionId { get; }
 
-        GSensorMode GsMode { get; set; }
+        GSensorMode? GsMode { get; set; }
 
-        int CycleRecordSpace { get; set; }
+        int? CycleRecordSpace { get; set; }
 
-        int SpeakerLevel { get; set; }
+        string DefaultUser { get; set; }
 
-        int AntiFog { get; set; }
+        int? SpeakerLevel { get; set; }
 
-        int EventAfterTime { get; set; }
+        int? AntiFog { get; set; }
 
-        int EventBeforeTime { get; set; }
+        int? EventAfterTime { get; set; }
 
-        int DisplayMode { get; set; }
+        int? EventBeforeTime { get; set; }
 
-        SwitchState Wdr { get; set; }
+        int? DisplayMode { get; set; }
 
-        SwitchState Ldc { get; set; }
+        int? DelayPoweroffTime { get; set; }
 
-        SwitchState Mic { get; set; }
+        bool? IsNeedUpdate { get; set; }
 
-        ImageQuality Quality { get; set; }
+        SwitchState? EDogSwitch { get; set; }
 
-        SwitchState Osd { get; set; }
+        SwitchState? Wdr { get; set; }
 
-        SwitchState OsdSpeed { get; set; }
+        SwitchState? Ldc { get; set; }
 
-        SwitchState StartSound { get; set; }
+        SwitchState? Mic { get; set; }
 
-        SwitchState ParkingMode { get; set; }
+        ImageQuality? Quality { get; set; }
 
-        SwitchState TimeLapse { get; set; }
+        SwitchState? Osd { get; set; }
 
-        void Connect(UserInfo userInfo);
+        SwitchState? OsdSpeed { get; set; }
+
+        SwitchState? StartSound { get; set; }
+
+        SwitchState? ParkingMode { get; set; }
+
+        SwitchState? TimeLapse { get; set; }
+
+        bool Connect(UserInfo userInfo);
 
         void Disconnect();
 

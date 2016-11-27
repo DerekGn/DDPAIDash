@@ -22,9 +22,49 @@
 * SOFTWARE.
 */
 
+using Newtonsoft.Json;
+
 namespace DDPAIDash.Core.Types
 {
     internal class StorageInfo
     {
+        [JsonProperty("sdcapacity")]
+        public int Capacity { get; set; }
+
+        [JsonProperty("sdspare")]
+        public int Spare { get; set; }
+
+        [JsonProperty("n_num")]
+        public int NNumber { get; set; }
+
+        [JsonProperty("g_num")]
+        public int GNumber { get; set; }
+
+        [JsonProperty("stmsize")]
+        public int StmSize { get; set; }
+
+        [JsonProperty("playback_size")]
+        public int PlaybackSize { get; set; }
+
+        [JsonProperty("cycle_record_space")]
+        public int CycleRecordSpace { get; set; }
+
+        [JsonProperty("smart_ok")]
+        public int SmartOk { get; set; }
+
+        [JsonProperty("smart_version")]
+        public int SmartVersion { get; set; }
+
+        [JsonProperty("increasebadblock")]
+        public int IncreaseBadBlock { get; set; }
+
+        [JsonProperty("replaceblockleft")]
+        public int ReplaceBlockLeft { get; set; }
+
+        [JsonProperty("runtime")]
+        public int Runtime { get; set; }
+
+        [JsonProperty("totalruntime")]
+        public int TotalRuntime { get; set; }
     }
 }
