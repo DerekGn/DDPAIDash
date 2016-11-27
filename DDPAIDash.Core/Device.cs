@@ -78,7 +78,7 @@ namespace DDPAIDash.Core
 
         public StorageInfo Storage { get; private set; }
 
-        public DeviceState DeviceState { get; private set; }
+        public DeviceState State { get; private set; }
 
         public DeviceCapabilities Capabilities { get; private set; }
 

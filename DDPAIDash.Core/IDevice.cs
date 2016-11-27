@@ -35,7 +35,7 @@ namespace DDPAIDash.Core
 
         StorageInfo Storage { get; }
 
-        DeviceState DeviceState { get; }
+        DeviceState State { get; }
 
         DeviceCapabilities Capabilities { get; }
 

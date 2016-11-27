@@ -10,8 +10,8 @@
     
     <Page.BottomAppBar>
         <CommandBar x:Name="MainCommandBar" ClosedDisplayMode="Minimal">
-            <AppBarButton x:Name="btnCamera" Icon="Camera" Click="btnCamera_Click"/>
-            <AppBarButton x:Name="btnSettings" Icon="Setting" Click="btnSettings_Click"/>
+            <AppBarButton x:Name="btnCamera" Icon="Camera" Click="btnCamera_Click" IsEnabled="DeviceModel.DeviceInstance.State == DeviceState.Disconnected"/>
+            <AppBarButton x:Name="btnSettings" Icon="Setting" Click="btnSettings_Click" IsEnabled="DeviceModel.DeviceInstance.State == DeviceState.Connected"/>
         </CommandBar>
     </Page.BottomAppBar>
 
