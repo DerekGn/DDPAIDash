@@ -24,7 +24,7 @@
 
 namespace DDPAIDash.Core.Types
 {
-    internal enum ImageQuality
+    public enum ImageQuality
     {
         Low,
         Middle,

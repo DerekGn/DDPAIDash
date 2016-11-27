@@ -44,5 +44,14 @@ namespace DDPAIDash
             // If you are using the NavigationHelper provided by some templates,
             // this event is handled for you.
         }
+
+        private void btnCamera_Click(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void btnSettings_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(DeviceSettings));
+        }
     }
 }

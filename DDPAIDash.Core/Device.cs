@@ -34,7 +34,7 @@ using System.Threading;
 
 namespace DDPAIDash.Core
 {
-    internal class Device : IDevice
+    public class Device : IDevice
     {
         private static CancellationTokenSource cts = new CancellationTokenSource();
 

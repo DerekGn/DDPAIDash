@@ -24,7 +24,7 @@
 
 namespace DDPAIDash.Core.Types
 {
-    internal enum DeviceState
+    public enum DeviceState
     {
         Initial,
         Connected,

@@ -26,7 +26,7 @@ using Newtonsoft.Json;
 
 namespace DDPAIDash.Core.Types
 {
-    internal class DeviceCapabilities
+    public class DeviceCapabilities
     {
         [JsonProperty("bs_pixel")]
         public string ResolutionRatio { get; set; }

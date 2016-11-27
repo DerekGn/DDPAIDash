@@ -26,7 +26,7 @@ using System;
 
 namespace DDPAIDash.Core.Transports
 {
-    internal interface ITransport : IDisposable
+    public interface ITransport : IDisposable
     {
         string SessionId { get; set; }
 

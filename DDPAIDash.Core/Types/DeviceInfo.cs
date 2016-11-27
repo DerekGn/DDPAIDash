@@ -26,7 +26,7 @@ using Newtonsoft.Json;
 
 namespace DDPAIDash.Core.Types
 {
-    internal class DeviceInfo
+    public class DeviceInfo
     {
         [JsonProperty("nickname")]
         public string Nickname { get; private set; }

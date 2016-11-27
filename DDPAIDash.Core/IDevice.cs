@@ -27,7 +27,7 @@ using DDPAIDash.Core.Types;
 
 namespace DDPAIDash.Core
 {
-    internal interface IDevice : IDisposable
+    public interface IDevice : IDisposable
     {
         DeviceInfo Info { get; }
 

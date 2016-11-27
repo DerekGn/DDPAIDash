@@ -26,7 +26,7 @@ using System;
 
 namespace DDPAIDash.Core.Logging
 {
-    interface ILogger
+    public interface ILogger
     {
         void Error(string message);
         void Fatal(string message, Exception exception);

@@ -26,7 +26,7 @@ using Newtonsoft.Json;
 
 namespace DDPAIDash.Core.Transports
 {
-    internal class ResponseMessage
+    public class ResponseMessage
     {
         [JsonProperty("errcode")]
         public int ErrorCode { get; set; }

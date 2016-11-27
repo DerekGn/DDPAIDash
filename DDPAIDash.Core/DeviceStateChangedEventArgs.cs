@@ -27,7 +27,7 @@ using DDPAIDash.Core.Types;
 
 namespace DDPAIDash.Core
 {
-    internal class DeviceStateChangedEventArgs : EventArgs
+    public class DeviceStateChangedEventArgs : EventArgs
     {
         public DeviceState DeviceState { get; set; }
     }

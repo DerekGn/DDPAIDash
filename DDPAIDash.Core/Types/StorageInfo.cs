@@ -26,7 +26,7 @@ using Newtonsoft.Json;
 
 namespace DDPAIDash.Core.Types
 {
-    internal class StorageInfo
+    public class StorageInfo
     {
         [JsonProperty("sdcapacity")]
         public int Capacity { get; set; }

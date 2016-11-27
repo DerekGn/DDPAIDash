@@ -26,7 +26,7 @@ using Newtonsoft.Json;
 
 namespace DDPAIDash.Core.Types
 {
-    internal class UserInfo
+    public class UserInfo
     {
         public UserInfo(string uid, string username, string password, int level)
         {
