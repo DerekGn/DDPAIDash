@@ -22,6 +22,7 @@
 * SOFTWARE.
 */
 
+using System.Collections.Generic;
 using DDPAIDash.Core;
 using DDPAIDash.Core.Types;
 
@@ -33,9 +34,15 @@ namespace DDPAIDash.Model
         {
             DeviceInstance = new Device();
         }
-
+        
         public IDevice DeviceInstance { get; }
 
+        public IEnumerable<DeviceProperty> DeviceProperties { get; private set; }
+
         public bool IsDeviceConnected => DeviceInstance.State == DeviceState.Connected;
+
+        private void SetupDeviceProperties()
+        {
+        }
     }
 }
