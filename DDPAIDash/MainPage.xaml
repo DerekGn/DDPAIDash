@@ -1,22 +1,25 @@
 ﻿<Page
-    x:Class="DDPAIDash.MainPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:model="using:DDPAIDash.Model"
+    xmlns:Controls="using:DDPAIDash.Controls"
+    x:Class="DDPAIDash.MainPage"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <Page.Resources>
-        <model:DeviceModel x:Key="DeviceModelSource"></model:DeviceModel>
+        <model:DeviceModel x:Key="DeviceModelSource"/>
     </Page.Resources>
     <Page.DataContext>
         <Binding Source="{StaticResource DeviceModelSource}"/>
     </Page.DataContext>
     <Page.BottomAppBar>
         <CommandBar x:Name="MainCommandBar" ClosedDisplayMode="Minimal">
-            <AppBarButton x:Name="BtnCamera" Icon="Camera" Click="btnCamera_Click" /><!--IsEnabled="{Binding Path=IsDeviceConnected}"/>-->
-            <AppBarButton x:Name="BtnSettings" Icon="Setting" Click="btnSettings_Click" /><!--IsEnabled="{Binding Path=IsDeviceConnected}"/>-->
+            <AppBarButton x:Name="BtnCamera" Icon="Camera" Click="btnCamera_Click" />
+            <!--IsEnabled="{Binding Path=IsDeviceConnected}"/>-->
+            <!--IsEnabled="{Binding Path=IsDeviceConnected}"/>-->
+            <AppBarButton x:Name="BtnSettings" Icon="Setting" Click="btnSettings_Click" />
         </CommandBar>
     </Page.BottomAppBar>
 
