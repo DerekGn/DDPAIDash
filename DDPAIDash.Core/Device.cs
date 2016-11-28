@@ -36,11 +36,11 @@ namespace DDPAIDash.Core
 {
     public class Device : IDevice
     {
-        private static CancellationTokenSource cts = new CancellationTokenSource();
+        private static readonly CancellationTokenSource cts = new CancellationTokenSource();
 
         private readonly ITransport _transport;
         private readonly ILogger _logger;
-        
+
         private int? _antiFog;
         private int? _cycleRecordSpace;
         private string _defaultUser;
@@ -89,19 +89,26 @@ namespace DDPAIDash.Core
             get { return _defaultUser; }
             set
             {
-                _defaultUser = value;
-                SetStringValue("default_user", value.ToString());
+                GuardPropertySet(nameof(DefaultUser), value,
+                    () =>
+                    {
+                        _defaultUser = value;
+                        SetStringValue("default_user", value);
+                    });
             }
         }
-        
+
         public GSensorMode? GsMode
         {
             get { return _gsmode; }
             set
             {
-                _gsmode = value;
-                if (_gsmode.HasValue)
-                    SetStringValue("gsensor_mode", value.Value.ToString());
+                GuardPropertySet(nameof(GsMode), value,
+                    () =>
+                    {
+                        _gsmode = value;
+                        SetStringValue("gsensor_mode", value.Value.ToString());
+                    });
             }
         }
 
@@ -110,9 +117,12 @@ namespace DDPAIDash.Core
             get { return _cycleRecordSpace; }
             set
             {
-                _cycleRecordSpace = value;
-                if (_cycleRecordSpace.HasValue)
-                    SetIntValue("cycle_record_space", value.Value);
+                GuardPropertySet(nameof(CycleRecordSpace), value,
+                    () =>
+                    {
+                        _cycleRecordSpace = value;
+                        SetIntValue("cycle_record_space", value.Value);
+                    });
             }
         }
 
@@ -121,9 +131,12 @@ namespace DDPAIDash.Core
             get { return _speakerLevel; }
             set
             {
-                _speakerLevel = value;
-                if(_speakerLevel.HasValue)
-                    SetIntValue("speaker_turn", value.Value);
+                GuardPropertySet(nameof(SpeakerLevel), value,
+                    () =>
+                    {
+                        _speakerLevel = value;
+                        SetIntValue("speaker_turn", value.Value);
+                    });
             }
         }
 
@@ -132,9 +145,12 @@ namespace DDPAIDash.Core
             get { return _antiFog; }
             set
             {
-                _antiFog = value;
-                if (_antiFog.HasValue)
-                    SetIntValue("anti_fog", value.Value);
+                GuardPropertySet(nameof(AntiFog), value,
+                    () =>
+                    {
+                        _antiFog = value;
+                        SetIntValue("anti_fog", value.Value);
+                    });
             }
         }
 
@@ -143,9 +159,12 @@ namespace DDPAIDash.Core
             get { return _eventAfterTime; }
             set
             {
-                _eventAfterTime = value;
-                if (_eventAfterTime.HasValue)
-                    SetIntValue("event_after_time", value.Value);
+                GuardPropertySet(nameof(EventAfterTime), value,
+                    () =>
+                    {
+                        _eventAfterTime = value;
+                        SetIntValue("event_after_time", value.Value);
+                    });
             }
         }
 
@@ -154,9 +173,12 @@ namespace DDPAIDash.Core
             get { return _eventBeforeTime; }
             set
             {
-                _eventBeforeTime = value;
-                if (_eventBeforeTime.HasValue)
-                    SetIntValue("event_before_time", value.Value);
+                GuardPropertySet(nameof(EventBeforeTime), value,
+                    () =>
+                    {
+                        _eventBeforeTime = value;
+                        SetIntValue("event_before_time", value.Value);
+                    });
             }
         }
 
@@ -165,9 +187,12 @@ namespace DDPAIDash.Core
             get { return _displayMode; }
             set
             {
-                _displayMode = value;
-                if (_displayMode.HasValue)
-                    SetIntValue("display_mode", value.Value);
+                GuardPropertySet(nameof(DisplayMode), value,
+                    () =>
+                    {
+                        _displayMode = value;
+                        SetIntValue("display_mode", value.Value);
+                    });
             }
         }
 
@@ -176,9 +201,12 @@ namespace DDPAIDash.Core
             get { return _edogSwitch; }
             set
             {
-                _edogSwitch = value;
-                if (_edogSwitch.HasValue)
-                    SetStringValue("edog_switch", value.Value.ToString());
+                GuardPropertySet(nameof(EDogSwitch), value,
+                    () =>
+                    {
+                        _edogSwitch = value;
+                        SetStringValue("edog_switch", value.Value.ToString());
+                    });
             }
         }
 
@@ -187,9 +215,12 @@ namespace DDPAIDash.Core
             get { return _wdr; }
             set
             {
-                _wdr = value;
-                if (_wdr.HasValue)
-                    SetStringValue("wdr_enable", value.Value.ToString());
+                GuardPropertySet(nameof(Wdr), value,
+                    () =>
+                    {
+                        _wdr = value;
+                        SetStringValue("wdr_enable", value.Value.ToString());
+                    });
             }
         }
 
@@ -198,9 +229,12 @@ namespace DDPAIDash.Core
             get { return _ldc; }
             set
             {
-                _ldc = value;
-                if (_ldc.HasValue)
-                    SetStringValue("ldc_switch", value.Value.ToString());
+                GuardPropertySet(nameof(Ldc), value,
+                    () =>
+                    {
+                        _ldc = value;
+                        SetStringValue("ldc_switch", value.Value.ToString());
+                    });
             }
         }
 
@@ -209,9 +243,12 @@ namespace DDPAIDash.Core
             get { return _mic; }
             set
             {
-                _mic = value;
-                if (_mic.HasValue)
-                    SetStringValue("mic_switch", value.Value.ToString());
+                GuardPropertySet(nameof(Mic), value,
+                    () =>
+                    {
+                        _mic = value;
+                        SetStringValue("mic_switch", value.Value.ToString());
+                    });
             }
         }
 
@@ -220,9 +257,12 @@ namespace DDPAIDash.Core
             get { return _quality; }
             set
             {
-                _quality = value;
-                if (_quality.HasValue)
-                    SetStringValue("image_quality", value.Value.ToString());
+                GuardPropertySet(nameof(Ldc), value,
+                    () =>
+                    {
+                        _quality = value;
+                        SetStringValue("image_quality", value.Value.ToString());
+                    });
             }
         }
 
@@ -231,9 +271,12 @@ namespace DDPAIDash.Core
             get { return _osd; }
             set
             {
-                _osd = value;
-                if (_osd.HasValue)
-                    SetStringValue("osd_switch", value.Value.ToString());
+                GuardPropertySet(nameof(Ldc), value,
+                    () =>
+                    {
+                        _osd = value;
+                        SetStringValue("osd_switch", value.Value.ToString());
+                    });
             }
         }
 
@@ -242,9 +285,12 @@ namespace DDPAIDash.Core
             get { return _osdSpeed; }
             set
             {
-                _osdSpeed = value;
-                if (_osdSpeed.HasValue)
-                    SetStringValue("osd_speedswitch", value.Value.ToString());
+                GuardPropertySet(nameof(Ldc), value,
+                    () =>
+                    {
+                        _osdSpeed = value;
+                        SetStringValue("osd_speedswitch", value.Value.ToString());
+                    });
             }
         }
 
@@ -253,9 +299,12 @@ namespace DDPAIDash.Core
             get { return _startSound; }
             set
             {
-                _startSound = value;
-                if (_startSound.HasValue)
-                    SetStringValue("start_sound_switch", value.Value.ToString());
+                GuardPropertySet(nameof(Ldc), value,
+                    () =>
+                    {
+                        _startSound = value;
+                        SetStringValue("start_sound_switch", value.Value.ToString());
+                    });
             }
         }
 
@@ -264,9 +313,12 @@ namespace DDPAIDash.Core
             get { return _parkingMode; }
             set
             {
-                _parkingMode = value;
-                if (_parkingMode.HasValue)
-                    SetStringValue("parking_mode_switch", value.Value.ToString());
+                GuardPropertySet(nameof(Ldc), value,
+                    () =>
+                    {
+                        _parkingMode = value;
+                        SetStringValue("parking_mode_switch", value.Value.ToString());
+                    });
             }
         }
 
@@ -275,9 +327,12 @@ namespace DDPAIDash.Core
             get { return _timeLapse; }
             set
             {
-                _timeLapse = value;
-                if (_timeLapse.HasValue)
-                    SetStringValue("timelapse_rec_switch", value.Value.ToString());
+                GuardPropertySet(nameof(Ldc), value,
+                    () =>
+                    {
+                        _timeLapse = value;
+                        SetStringValue("timelapse_rec_switch", value.Value.ToString());
+                    });
             }
         }
 
@@ -286,19 +341,26 @@ namespace DDPAIDash.Core
             get { return _delayPoweroffTime; }
             set
             {
-                _delayPoweroffTime = value;
-                if (_displayMode.HasValue)
-                    SetIntValue("delay_poweroff_time", value.Value);
+                GuardPropertySet(nameof(Ldc), value,
+                    () =>
+                    {
+                        _delayPoweroffTime = value;
+                        SetIntValue("delay_poweroff_time", value.Value);
+                    });
             }
         }
-        
+
         public bool? IsNeedUpdate
         {
             get { return _isNeedUpdate; }
             set
             {
-                _isNeedUpdate = value;
-                SetStringValue("is_need_update", value.ToString());
+                GuardPropertySet(nameof(Ldc), value,
+                    () =>
+                    {
+                        _isNeedUpdate = value;
+                        SetStringValue("is_need_update", value.ToString());
+                    });
             }
         }
 
@@ -306,16 +368,16 @@ namespace DDPAIDash.Core
 
         public bool Connect(UserInfo userInfo)
         {
-            bool result = false;
+            bool result;
 
             _transport.Connect("193.168.0.1", 80);
 
             result = PerformConnect(userInfo);
 
-            if(result)
+            if (result)
             {
                 User = userInfo;
- 
+
                 _mailboxTask = Task.Factory.StartNew(() => PollMailbox(cts.Token), cts.Token);
             }
 
@@ -328,9 +390,7 @@ namespace DDPAIDash.Core
             {
 #warning logout
                 ExecuteRequest(ApiConstants.GetMailboxData,
-                    apiCommand => _transport.Execute(apiCommand), (response) => {
-                        _logger.Error(response.Data);
-                    });
+                    apiCommand => _transport.Execute(apiCommand), (response) => { _logger.Error(response.Data); });
 
                 _transport.Disconnect();
             }
@@ -344,13 +404,11 @@ namespace DDPAIDash.Core
         {
             do
             {
-                Task.Delay(5000).Wait();
+                Task.Delay(5000, cancellationToken).Wait(cancellationToken);
 
                 // OK
                 ExecuteRequest(ApiConstants.GetMailboxData,
-                    apiCommand => _transport.Execute(apiCommand), (response) => {
-                        _logger.Error(response.Data);
-                    });
+                    apiCommand => _transport.Execute(apiCommand), (response) => { _logger.Error(response.Data); });
 
                 //ExecuteRequest("API_GetTestdate",
                 //    apiCommand => _transport.Execute(apiCommand), (response) => {
@@ -373,7 +431,6 @@ namespace DDPAIDash.Core
                 //        {
                 //            _logger.Error(response.Data);
                 //        });
-                
             } while (!cancellationToken.IsCancellationRequested);
         }
 
@@ -425,12 +482,14 @@ namespace DDPAIDash.Core
                 {
                     return ExecuteRequest(ApiConstants.GeneralQuery,
                         apiCommand =>
-                            _transport.Execute(apiCommand, JsonConvert.SerializeObject(QueryParameters.Instance)), response => { LoadSettings(response); });
+                            _transport.Execute(apiCommand, JsonConvert.SerializeObject(QueryParameters.Instance)),
+                        LoadSettings);
                 },
                 () =>
                 {
                     return ExecuteRequest(ApiConstants.GetStorageInfo,
-                        apiCommand => _transport.Execute(apiCommand), response => {  Storage =  JsonConvert.DeserializeObject<StorageInfo>(response.Data); });
+                        apiCommand => _transport.Execute(apiCommand),
+                        response => { Storage = JsonConvert.DeserializeObject<StorageInfo>(response.Data); });
                 }
             };
 
@@ -445,7 +504,7 @@ namespace DDPAIDash.Core
 
             return result;
         }
-        
+
         private void LoadSettings(ResponseMessage response)
         {
             Parameters parameters = JsonConvert.DeserializeObject<Parameters>(response.Data);
@@ -463,13 +522,13 @@ namespace DDPAIDash.Core
 
         private void LoadSetting<T>(Parameter<T> parameter)
         {
-            switch ((QueryParameterKeys)Enum.Parse(typeof(QueryParameterKeys), parameter.Key))
+            switch ((QueryParameterKeys) Enum.Parse(typeof(QueryParameterKeys), parameter.Key))
             {
                 case QueryParameterKeys.wdr_enable:
-                    _wdr = (SwitchState)Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
+                    _wdr = (SwitchState) Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
                     break;
                 case QueryParameterKeys.gsensor_mode:
-                    _gsmode = (GSensorMode)Enum.Parse(typeof(GSensorMode), parameter.Value.ToString(), true);
+                    _gsmode = (GSensorMode) Enum.Parse(typeof(GSensorMode), parameter.Value.ToString(), true);
                     break;
                 case QueryParameterKeys.cycle_record_space:
                     _cycleRecordSpace = int.Parse(parameter.Value.ToString());
@@ -481,7 +540,7 @@ namespace DDPAIDash.Core
                     _defaultUser = parameter.Value.ToString();
                     break;
                 case QueryParameterKeys.ldc_switch:
-                    _ldc = (SwitchState)Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
+                    _ldc = (SwitchState) Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
                     break;
                 case QueryParameterKeys.anti_fog:
                     _antiFog = int.Parse(parameter.Value.ToString());
@@ -496,36 +555,34 @@ namespace DDPAIDash.Core
                     _eventBeforeTime = int.Parse(parameter.Value.ToString());
                     break;
                 case QueryParameterKeys.mic_switch:
-                    _mic = (SwitchState)Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
+                    _mic = (SwitchState) Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
                     break;
                 case QueryParameterKeys.image_quality:
-                    _quality = (ImageQuality)Enum.Parse(typeof(ImageQuality), parameter.Value.ToString(), true);
+                    _quality = (ImageQuality) Enum.Parse(typeof(ImageQuality), parameter.Value.ToString(), true);
                     break;
                 case QueryParameterKeys.display_mode:
                     _displayMode = int.Parse(parameter.Value.ToString());
                     break;
                 case QueryParameterKeys.osd_switch:
-                    _osd = (SwitchState)Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
+                    _osd = (SwitchState) Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
                     break;
                 case QueryParameterKeys.osd_speedswitch:
-                    _osdSpeed = (SwitchState)Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
+                    _osdSpeed = (SwitchState) Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
                     break;
                 case QueryParameterKeys.start_sound_switch:
-                    _startSound = (SwitchState)Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
+                    _startSound = (SwitchState) Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
                     break;
                 case QueryParameterKeys.delay_poweroff_time:
                     _delayPoweroffTime = int.Parse(parameter.Value.ToString());
                     break;
                 case QueryParameterKeys.edog_switch:
-                    _edogSwitch = (SwitchState)Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
+                    _edogSwitch = (SwitchState) Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
                     break;
                 case QueryParameterKeys.parking_mode_switch:
-                    _parkingMode = (SwitchState)Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
+                    _parkingMode = (SwitchState) Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
                     break;
                 case QueryParameterKeys.timelapse_rec_switch:
-                    _timeLapse = (SwitchState)Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
-                    break;
-                default:
+                    _timeLapse = (SwitchState) Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
                     break;
             }
         }
@@ -561,16 +618,36 @@ namespace DDPAIDash.Core
 
         private void SetStringValue(string key, string state)
         {
-            var parameter = new Parameters { StringParameters = { new Parameter<string> { Key = key, Value = state } } };
+            var parameter = new Parameters {StringParameters = {new Parameter<string> {Key = key, Value = state}}};
             ExecuteRequest(ApiConstants.GeneralSave,
                 apiCommand => _transport.Execute(apiCommand, JsonConvert.SerializeObject(parameter)), null);
         }
 
         private void SetIntValue(string key, int state)
         {
-            var parameter = new Parameters { IntParameters = { new Parameter<int> { Key = key, Value = state } } };
+            var parameter = new Parameters {IntParameters = {new Parameter<int> {Key = key, Value = state}}};
             ExecuteRequest(ApiConstants.GeneralSave,
                 apiCommand => _transport.Execute(apiCommand, JsonConvert.SerializeObject(parameter)), null);
+        }
+
+        private void GuardPropertySet(string propertyName, string value, Action assignValue)
+        {
+            if (value == null)
+            {
+                throw new ArgumentNullException(propertyName);
+            }
+
+            assignValue();
+        }
+
+        private void GuardPropertySet<T>(string propertyName, T? value, Action assignValue) where T : struct
+        {
+            if (!value.HasValue)
+            {
+                throw new ArgumentNullException(propertyName);
+            }
+
+            assignValue();
         }
 
         #region IDisposable Support

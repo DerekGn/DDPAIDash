@@ -23,16 +23,19 @@
 */
 
 using DDPAIDash.Core;
+using DDPAIDash.Core.Types;
 
 namespace DDPAIDash.Model
 {
-    internal static class DeviceModel
+    public class DeviceModel
     {
-        static DeviceModel()
+        public DeviceModel()
         {
             DeviceInstance = new Device();
         }
 
-        public static IDevice DeviceInstance { get; private set; }
+        public IDevice DeviceInstance { get; }
+
+        public bool IsDeviceConnected => DeviceInstance.State == DeviceState.Connected;
     }
 }

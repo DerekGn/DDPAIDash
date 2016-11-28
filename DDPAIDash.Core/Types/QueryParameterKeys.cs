@@ -1,5 +1,8 @@
-﻿namespace DDPAIDash.Core.Types
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace DDPAIDash.Core.Types
 {
+    [SuppressMessage("ReSharper", "InconsistentNaming")]
     internal enum QueryParameterKeys
     {
         wdr_enable,

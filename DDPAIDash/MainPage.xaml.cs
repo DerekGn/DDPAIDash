@@ -51,7 +51,7 @@ namespace DDPAIDash
 
         private void btnSettings_Click(object sender, RoutedEventArgs e)
         {
-            Frame.Navigate(typeof(DeviceSettings));
+            Frame.Navigate(typeof(Settings));
         }
     }
 }

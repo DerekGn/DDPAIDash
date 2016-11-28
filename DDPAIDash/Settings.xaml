@@ -5,10 +5,44 @@
     xmlns:local="using:DDPAIDash"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:model="using:DDPAIDash.Model"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid>
+    <Page.Resources>
+        <model:DeviceModel x:Key="DeviceModelSource" />
+    </Page.Resources>
+    <Page.DataContext>
+        <Binding Source="{StaticResource DeviceModelSource}" />
+    </Page.DataContext>
 
+    <Grid>
+        <Pivot Title="Settings">
+            <PivotItem Header="Device Settings">
+                <Grid />
+            </PivotItem>
+            <PivotItem Header="Device Information">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Column="0" Grid.Row="0" Text="Model:" />
+                    <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding Path=DeviceInstance.Info.Model}" />
+                    <TextBlock Grid.Column="0" Grid.Row="1" Text="Uuid:" />
+                    <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding Path=DeviceInstance.Info.Uuid}" />
+                    <TextBlock Grid.Column="0" Grid.Row="2" Text="DefaultUser:" />
+                    <TextBlock Grid.Column="1" Grid.Row="2" Text="{Binding Path=DeviceInstance.Info.DefaultUser}" />
+                    <TextBlock Grid.Column="0" Grid.Row="3" Text="ChipSerialNumber:" />
+                    <TextBlock Grid.Column="1" Grid.Row="3" Text="{Binding Path=DeviceInstance.Info.ChipSerialNumber}" />
+                </Grid>
+            </PivotItem>
+        </Pivot>
     </Grid>
 </Page>
