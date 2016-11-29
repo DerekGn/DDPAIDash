@@ -35,5 +35,10 @@ namespace DDPAIDash
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
         }
+
+        private void antiFogSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
+        {
+
+        }
     }
 }

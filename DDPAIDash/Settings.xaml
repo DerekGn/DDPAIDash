@@ -1,16 +1,19 @@
 ﻿<Page
-    x:Class="DDPAIDash.Settings"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:DDPAIDash"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:model="using:DDPAIDash.Model"
-    xmlns:controls="using:DDPAIDash.Controls"
+    xmlns:Converter="using:DDPAIDash.Converter"
+    xmlns:Types="using:DDPAIDash.Core.Types"
+    x:Class="DDPAIDash.Settings"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Page.Resources>
+        <Converter:SwitchStateToValueConvertor x:Key="SwitchStateToValueConvertor"/>
+        <Converter:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
         <model:DeviceModel x:Key="DeviceModelSource" />
     </Page.Resources>
     <Page.DataContext>
@@ -22,6 +25,27 @@
             <PivotItem Header="Device Settings">
                 <ScrollViewer>
                     <StackPanel>
+                        <Slider x:Name="antiFogSlider" Header="Anti Fog Level" Minimum="0" Maximum="10" Value="{Binding DeviceInstance.AntiFog.Value, Mode=TwoWay}" Visibility="{Binding DeviceInstance.AntiFog.HasValue, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}" />
+                        <!--DeviceInstance.CycleRecordSpace-->
+                        <!--DeviceInstance.DefaultUser-->
+                        <Slider x:Name="delayPoweroffTimeSlider" Header="Delay Power off Time" Minimum="0" Maximum="10" Value="{Binding DeviceInstance.DelayPoweroffTime.Value, Mode=TwoWay}" Visibility="{Binding DeviceInstance.DelayPoweroffTime.HasValue, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}" />
+                        <!--DeviceInstance.DisplayMode-->
+                        <!--<ToggleSwitch x:Name="EDogSwitch" Header="E Dog" Visibility="{Binding DeviceInstance.EDogSwitch.HasValue, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}"  />-->
+            <!--DeviceInstance.EDogSwitch-->
+            <!--DeviceInstance.EventAfterTime-->
+            <!--DeviceInstance.EventBeforeTime-->
+            <!--DeviceInstance.GsMode-->
+            <!--DeviceInstance.Ldc-->
+            <!--DeviceInstance.Mic-->
+            <!--DeviceInstance.Osd-->
+            <!--DeviceInstance.OsdSpeed-->
+                        <ToggleSwitch x:Name="parkingModeToggle" Header="Parking Mode" Visibility="{Binding DeviceInstance.ParkingMode.HasValue, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}" IsOn="{Binding DeviceInstance.ParkingMode.Value, Converter={StaticResource SwitchStateToValueConvertor}, Mode=TwoWay}" />
+            <!--DeviceInstance.Quality-->
+                        
+                        <Slider x:Name="speakerLevelSlider" Header="Speaker Level" Minimum="0" Maximum="100" Visibility="{Binding DeviceInstance.SpeakerLevel.HasValue, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}" Value="{Binding DeviceInstance.SpeakerLevel.Value, Mode=TwoWay}"/>
+                        <ToggleSwitch x:Name="startSoundToggle" Header="Start Sound" Visibility="{Binding DeviceInstance.StartSound.HasValue, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}" IsOn="{Binding DeviceInstance.StartSound.Value, Converter={StaticResource SwitchStateToValueConvertor}, Mode=TwoWay}" />
+                        <ToggleSwitch x:Name="timeLapseToggle" Header="Time Lapse" Visibility="{Binding DeviceInstance.TimeLapse.HasValue, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}" IsOn="{Binding DeviceInstance.TimeLapse.Value, Converter={StaticResource SwitchStateToValueConvertor}, Mode=TwoWay}" />
+                        <ToggleSwitch x:Name="wdrToggle" Header="Wdr" Visibility="{Binding DeviceInstance.Wdr.HasValue, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}" IsOn="{Binding DeviceInstance.Wdr.Value, Converter={StaticResource SwitchStateToValueConvertor}, Mode=TwoWay}" />
                     </StackPanel>
                 </ScrollViewer>
             </PivotItem>
@@ -29,76 +53,96 @@
                 <ScrollViewer>
                     <StackPanel>
                         <TextBlock Text="Model" Style="{StaticResource BodyTextBlockStyle}" />
-                        <TextBlock Text="{Binding Path=DeviceInstance.Info.Model}" />
+                        <TextBlock Text="{Binding DeviceInstance.Info.Model}" />
                         <TextBlock Text="Version" Style="{StaticResource BaseTextBlockStyle}" />
-                        <TextBlock Text="{Binding Path=DeviceInstance.Info.Version}" />
+                        <TextBlock Text="{Binding DeviceInstance.Info.Version}" />
                         <TextBlock Text="Button Version" Style="{StaticResource BaseTextBlockStyle}" />
-                        <TextBlock Text="{Binding Path=DeviceInstance.Info.ButtonVersion}" />
+                        <TextBlock Text="{Binding DeviceInstance.Info.ButtonVersion}" />
                         <TextBlock Text="Nickname" Style="{StaticResource BaseTextBlockStyle}" />
-                        <TextBlock Text="{Binding Path=DeviceInstance.Info.Nickname}" />
+                        <TextBlock Text="{Binding DeviceInstance.Info.Nickname}" />
                         <TextBlock Text="Uuid" Style="{StaticResource BaseTextBlockStyle}" />
-                        <TextBlock Text="{Binding Path=DeviceInstance.Info.Uuid}" />
+                        <TextBlock Text="{Binding DeviceInstance.Info.Uuid}" />
                         <TextBlock Text="MAC Address" Style="{StaticResource BaseTextBlockStyle}" />
-                        <TextBlock Text="{Binding Path=DeviceInstance.Info.MacAddr}" />
+                        <TextBlock Text="{Binding DeviceInstance.Info.MacAddr}" />
                         <TextBlock Text="Default User" Style="{StaticResource BaseTextBlockStyle}" />
-                        <TextBlock Text="{Binding Path=DeviceInstance.Info.DefaultUser}" />
+                        <TextBlock Text="{Binding DeviceInstance.Info.DefaultUser}" />
                         <TextBlock Text="Chip Serial Number" Style="{StaticResource BaseTextBlockStyle}" />
-                        <TextBlock Text="{Binding Path=DeviceInstance.Info.ChipSerialNumber}" />
+                        <TextBlock Text="{Binding DeviceInstance.Info.ChipSerialNumber}" />
                         <TextBlock Text="Total Runtime" Style="{StaticResource BaseTextBlockStyle}" />
-                        <TextBlock Text="{Binding Path=DeviceInstance.Info.TotalRuntime}" />
+                        <TextBlock Text="{Binding DeviceInstance.Info.TotalRuntime}" />
                         <TextBlock Text="EDog Model" Style="{StaticResource BaseTextBlockStyle}" />
-                        <TextBlock Text="{Binding Path=DeviceInstance.Info.EdogModel}" />
+                        <TextBlock Text="{Binding DeviceInstance.Info.EdogModel}" />
                         <TextBlock Text="EDog Status" Style="{StaticResource BaseTextBlockStyle}" />
-                        <TextBlock Text="{Binding Path=DeviceInstance.Info.EDogStatus}" />
+                        <TextBlock Text="{Binding DeviceInstance.Info.EDogStatus}" />
                         <TextBlock Text="EDog Version" Style="{StaticResource BaseTextBlockStyle}" />
-                        <TextBlock Text="{Binding Path=DeviceInstance.Info.EDogVersion}" />
+                        <TextBlock Text="{Binding DeviceInstance.Info.EDogVersion}" />
                         <TextBlock Text="HbBitrate" Style="{StaticResource BaseTextBlockStyle}" />
-                        <TextBlock Text="{Binding Path=DeviceInstance.Info.HbBitrate}" />
+                        <TextBlock Text="{Binding DeviceInstance.Info.HbBitrate}" />
                         <TextBlock Text="HsBitrate" Style="{StaticResource BaseTextBlockStyle}" />
-                        <TextBlock Text="{Binding Path=DeviceInstance.Info.HsBitrate}" />
+                        <TextBlock Text="{Binding DeviceInstance.Info.HsBitrate}" />
                         <TextBlock Text="MbBitrate" Style="{StaticResource BaseTextBlockStyle}" />
-                        <TextBlock Text="{Binding Path=DeviceInstance.Info.MbBitrate}" />
+                        <TextBlock Text="{Binding DeviceInstance.Info.MbBitrate}" />
                         <TextBlock Text="MsBitrate" Style="{StaticResource BaseTextBlockStyle}" />
-                        <TextBlock Text="{Binding Path=DeviceInstance.Info.MsBitrate}" />
+                        <TextBlock Text="{Binding DeviceInstance.Info.MsBitrate}" />
                         <TextBlock Text="LbBitrate" Style="{StaticResource BaseTextBlockStyle}" />
-                        <TextBlock Text="{Binding Path=DeviceInstance.Info.LbBitrate}" />
+                        <TextBlock Text="{Binding DeviceInstance.Info.LbBitrate}" />
                         <TextBlock Text="LbBitrate" Style="{StaticResource BaseTextBlockStyle}" />
-                        <TextBlock Text="{Binding Path=DeviceInstance.Info.LsBitrate}" />
+                        <TextBlock Text="{Binding DeviceInstance.Info.LsBitrate}" />
                         <TextBlock Text="SdCapacity" Style="{StaticResource BaseTextBlockStyle}" />
-                        <TextBlock Text="{Binding Path=DeviceInstance.Info.SdCapacity}" />
+                        <TextBlock Text="{Binding DeviceInstance.Info.SdCapacity}" />
                         <TextBlock Text="SdSpare" Style="{StaticResource BaseTextBlockStyle}" />
-                        <TextBlock Text="{Binding Path=DeviceInstance.Info.SdSpare}" />
+                        <TextBlock Text="{Binding DeviceInstance.Info.SdSpare}" />
                     </StackPanel>
                 </ScrollViewer>
             </PivotItem>
             <PivotItem Header="Storage Information">
                 <StackPanel>
                     <TextBlock Text="Capacity" Style="{StaticResource BodyTextBlockStyle}" />
-                    <TextBlock Text="{Binding Path=DeviceInstance.Storage.Capacity}"/>
+                    <TextBlock Text="{Binding DeviceInstance.Storage.Capacity}"/>
                     <TextBlock Text="Cycle Record Space" Style="{StaticResource BodyTextBlockStyle}" />
-                    <TextBlock Text="{Binding Path=DeviceInstance.Storage.CycleRecordSpace}"/>
+                    <TextBlock Text="{Binding DeviceInstance.Storage.CycleRecordSpace}"/>
                     <TextBlock Text="GNumber" Style="{StaticResource BodyTextBlockStyle}" />
-                    <TextBlock Text="{Binding Path=DeviceInstance.Storage.GNumber}"/>
+                    <TextBlock Text="{Binding DeviceInstance.Storage.GNumber}"/>
                     <TextBlock Text="IncreaseBadBlock" Style="{StaticResource BodyTextBlockStyle}" />
-                    <TextBlock Text="{Binding Path=DeviceInstance.Storage.IncreaseBadBlock}"/>
+                    <TextBlock Text="{Binding DeviceInstance.Storage.IncreaseBadBlock}"/>
                     <TextBlock Text="NNumber" Style="{StaticResource BodyTextBlockStyle}" />
-                    <TextBlock Text="{Binding Path=DeviceInstance.Storage.NNumber}"/>
+                    <TextBlock Text="{Binding DeviceInstance.Storage.NNumber}"/>
                     <TextBlock Text="PlaybackSize" Style="{StaticResource BodyTextBlockStyle}" />
-                    <TextBlock Text="{Binding Path=DeviceInstance.Storage.PlaybackSize}"/>
+                    <TextBlock Text="{Binding DeviceInstance.Storage.PlaybackSize}"/>
                     <TextBlock Text="ReplaceBlockLeft" Style="{StaticResource BodyTextBlockStyle}" />
-                    <TextBlock Text="{Binding Path=DeviceInstance.Storage.ReplaceBlockLeft}"/>
+                    <TextBlock Text="{Binding DeviceInstance.Storage.ReplaceBlockLeft}"/>
                     <TextBlock Text="SmartOk" Style="{StaticResource BodyTextBlockStyle}" />
-                    <TextBlock Text="{Binding Path=DeviceInstance.Storage.SmartOk}"/>
+                    <TextBlock Text="{Binding DeviceInstance.Storage.SmartOk}"/>
                     <TextBlock Text="Smart Version" Style="{StaticResource BodyTextBlockStyle}" />
-                    <TextBlock Text="{Binding Path=DeviceInstance.Storage.SmartVersion}"/>
+                    <TextBlock Text="{Binding DeviceInstance.Storage.SmartVersion}"/>
                     <TextBlock Text="Spare" Style="{StaticResource BodyTextBlockStyle}" />
-                    <TextBlock Text="{Binding Path=DeviceInstance.Storage.Spare}"/>
+                    <TextBlock Text="{Binding DeviceInstance.Storage.Spare}"/>
                     <TextBlock Text="StmSize" Style="{StaticResource BodyTextBlockStyle}" />
-                    <TextBlock Text="{Binding Path=DeviceInstance.Storage.StmSize}"/>
+                    <TextBlock Text="{Binding DeviceInstance.Storage.StmSize}"/>
                     <TextBlock Text="Runtime" Style="{StaticResource BodyTextBlockStyle}" />
-                    <TextBlock Text="{Binding Path=DeviceInstance.Storage.Runtime}"/>
+                    <TextBlock Text="{Binding DeviceInstance.Storage.Runtime}"/>
                     <TextBlock Text="Total Runtime" Style="{StaticResource BodyTextBlockStyle}" />
-                    <TextBlock Text="{Binding Path=DeviceInstance.Storage.TotalRuntime}"/>
+                    <TextBlock Text="{Binding DeviceInstance.Storage.TotalRuntime}"/>
+                </StackPanel>
+            </PivotItem>
+            <PivotItem Header="Video Information">
+                <StackPanel>
+                    <TextBlock Text="Resolution Ratio" Style="{StaticResource BodyTextBlockStyle}" />
+                    <TextBlock Text="{Binding DeviceInstance.Capabilities.ResolutionRatio}"/>
+                    <TextBlock Text="Bit Rate" Style="{StaticResource BodyTextBlockStyle}" />
+                    <TextBlock Text="{Binding DeviceInstance.Capabilities.BitRate}"/>
+                    <TextBlock Text="Frame Rate" Style="{StaticResource BodyTextBlockStyle}" />
+                    <TextBlock Text="{Binding DeviceInstance.Capabilities.FrameRate}"/>
+                    <TextBlock Text="Low Resolution Ratio" Style="{StaticResource BodyTextBlockStyle}" />
+                    <TextBlock Text="{Binding DeviceInstance.Capabilities.LowResolutionRatio}"/>
+                    <TextBlock Text="Low Bit Rate" Style="{StaticResource BodyTextBlockStyle}" />
+                    <TextBlock Text="{Binding DeviceInstance.Capabilities.LowBitRate}"/>
+                    <TextBlock Text="Low Frame Rate" Style="{StaticResource BodyTextBlockStyle}" />
+                    <TextBlock Text="{Binding DeviceInstance.Capabilities.LowFrameRate}"/>
+                    <TextBlock Text="Audio Type" Style="{StaticResource BodyTextBlockStyle}" />
+                    <TextBlock Text="{Binding DeviceInstance.Capabilities.AudioType}"/>
+                    <TextBlock Text="Audio Sample Rate" Style="{StaticResource BodyTextBlockStyle}" />
+                    <TextBlock Text="{Binding DeviceInstance.Capabilities.SampleRate}"/>
                 </StackPanel>
             </PivotItem>
         </Pivot>

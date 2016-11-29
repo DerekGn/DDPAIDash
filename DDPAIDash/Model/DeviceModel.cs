@@ -36,13 +36,7 @@ namespace DDPAIDash.Model
         }
         
         public IDevice DeviceInstance { get; }
-
-        public IEnumerable<DeviceProperty> DeviceProperties { get; private set; }
-
+        
         public bool IsDeviceConnected => DeviceInstance.State == DeviceState.Connected;
-
-        private void SetupDeviceProperties()
-        {
-        }
     }
 }
