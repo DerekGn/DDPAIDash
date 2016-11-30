@@ -3,7 +3,7 @@
 namespace DDPAIDash.Core.Types
 {
     [SuppressMessage("ReSharper", "InconsistentNaming")]
-    internal enum QueryParameterKeys
+    internal enum PropertyKeys
     {
         wdr_enable,
         gsensor_mode,
@@ -24,6 +24,7 @@ namespace DDPAIDash.Core.Types
         delay_poweroff_time,
         edog_switch,
         parking_mode_switch,
-        timelapse_rec_switch
+        timelapse_rec_switch,
+        horizontal_mirror
     }
 }

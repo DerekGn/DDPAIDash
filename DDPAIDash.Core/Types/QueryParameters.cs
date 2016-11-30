@@ -34,26 +34,27 @@ namespace DDPAIDash.Core.Types
         {
             Keys = new List<QueryParameter>()
             {
-                new QueryParameter() { Key = QueryParameterKeys.wdr_enable.ToString() },
-                new QueryParameter() { Key = QueryParameterKeys.gsensor_mode.ToString() },
-                new QueryParameter() { Key = QueryParameterKeys.cycle_record_space.ToString() },
-                new QueryParameter() { Key = QueryParameterKeys.speaker_turn.ToString() },
-                new QueryParameter() { Key = QueryParameterKeys.default_user.ToString() },
-                new QueryParameter() { Key = QueryParameterKeys.ldc_switch.ToString() },
-                new QueryParameter() { Key = QueryParameterKeys.anti_fog.ToString() },
-                new QueryParameter() { Key = QueryParameterKeys.is_need_update.ToString() },
-                new QueryParameter() { Key = QueryParameterKeys.event_after_time.ToString() },
-                new QueryParameter() { Key = QueryParameterKeys.event_before_time.ToString() },
-                new QueryParameter() { Key = QueryParameterKeys.mic_switch.ToString() },
-                new QueryParameter() { Key = QueryParameterKeys.image_quality.ToString() },
-                new QueryParameter() { Key = QueryParameterKeys.display_mode.ToString() },
-                new QueryParameter() { Key = QueryParameterKeys.osd_switch.ToString() },
-                new QueryParameter() { Key = QueryParameterKeys.osd_speedswitch.ToString() },
-                new QueryParameter() { Key = QueryParameterKeys.start_sound_switch.ToString() },
-                new QueryParameter() { Key = QueryParameterKeys.delay_poweroff_time.ToString() },
-                new QueryParameter() { Key = QueryParameterKeys.edog_switch.ToString() },
-                new QueryParameter() { Key = QueryParameterKeys.parking_mode_switch.ToString() },
-                new QueryParameter() { Key = QueryParameterKeys.timelapse_rec_switch.ToString() }
+                new QueryParameter() { Key = PropertyKeys.wdr_enable.ToString() },
+                new QueryParameter() { Key = PropertyKeys.gsensor_mode.ToString() },
+                new QueryParameter() { Key = PropertyKeys.cycle_record_space.ToString() },
+                new QueryParameter() { Key = PropertyKeys.speaker_turn.ToString() },
+                new QueryParameter() { Key = PropertyKeys.default_user.ToString() },
+                new QueryParameter() { Key = PropertyKeys.ldc_switch.ToString() },
+                new QueryParameter() { Key = PropertyKeys.anti_fog.ToString() },
+                new QueryParameter() { Key = PropertyKeys.is_need_update.ToString() },
+                new QueryParameter() { Key = PropertyKeys.event_after_time.ToString() },
+                new QueryParameter() { Key = PropertyKeys.event_before_time.ToString() },
+                new QueryParameter() { Key = PropertyKeys.mic_switch.ToString() },
+                new QueryParameter() { Key = PropertyKeys.image_quality.ToString() },
+                new QueryParameter() { Key = PropertyKeys.display_mode.ToString() },
+                new QueryParameter() { Key = PropertyKeys.osd_switch.ToString() },
+                new QueryParameter() { Key = PropertyKeys.osd_speedswitch.ToString() },
+                new QueryParameter() { Key = PropertyKeys.start_sound_switch.ToString() },
+                new QueryParameter() { Key = PropertyKeys.delay_poweroff_time.ToString() },
+                new QueryParameter() { Key = PropertyKeys.edog_switch.ToString() },
+                new QueryParameter() { Key = PropertyKeys.parking_mode_switch.ToString() },
+                new QueryParameter() { Key = PropertyKeys.timelapse_rec_switch.ToString() },
+                new QueryParameter() { Key = PropertyKeys.horizontal_mirror.ToString() }
             };
         }
 

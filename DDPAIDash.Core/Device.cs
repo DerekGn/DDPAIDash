@@ -109,7 +109,7 @@ namespace DDPAIDash.Core
                     () =>
                     {
                         _gsmode = value;
-                        SetStringValue("gsensor_mode", value.Value.ToString());
+                        SetStringValue(PropertyKeys.gsensor_mode.ToString(), value.Value.ToString());
                     });
             }
         }
@@ -123,7 +123,7 @@ namespace DDPAIDash.Core
                     () =>
                     {
                         _cycleRecordSpace = value;
-                        SetIntValue("cycle_record_space", value.Value);
+                        SetIntValue(PropertyKeys.cycle_record_space.ToString(), value.Value);
                     });
             }
         }
@@ -137,7 +137,7 @@ namespace DDPAIDash.Core
                     () =>
                     {
                         _speakerLevel = value;
-                        SetIntValue("speaker_turn", value.Value);
+                        SetIntValue(PropertyKeys.speaker_turn.ToString(), value.Value);
                     });
             }
         }
@@ -151,7 +151,7 @@ namespace DDPAIDash.Core
                     () =>
                     {
                         _antiFog = value;
-                        SetIntValue("anti_fog", value.Value);
+                        SetIntValue(PropertyKeys.anti_fog.ToString(), value.Value);
                     });
             }
         }
@@ -165,7 +165,7 @@ namespace DDPAIDash.Core
                     () =>
                     {
                         _eventAfterTime = value;
-                        SetIntValue("event_after_time", value.Value);
+                        SetIntValue(PropertyKeys.event_after_time.ToString(), value.Value);
                     });
             }
         }
@@ -179,7 +179,7 @@ namespace DDPAIDash.Core
                     () =>
                     {
                         _eventBeforeTime = value;
-                        SetIntValue("event_before_time", value.Value);
+                        SetIntValue(PropertyKeys.event_before_time.ToString(), value.Value);
                     });
             }
         }
@@ -193,7 +193,7 @@ namespace DDPAIDash.Core
                     () =>
                     {
                         _displayMode = value;
-                        SetIntValue("display_mode", value.Value);
+                        SetIntValue(PropertyKeys.display_mode.ToString(), value.Value);
                     });
             }
         }
@@ -207,7 +207,7 @@ namespace DDPAIDash.Core
                     () =>
                     {
                         _edogSwitch = value;
-                        SetStringValue("edog_switch", value.Value.ToString());
+                        SetStringValue(PropertyKeys.edog_switch.ToString(), value.Value.ToString());
                     });
             }
         }
@@ -221,7 +221,7 @@ namespace DDPAIDash.Core
                     () =>
                     {
                         _wdr = value;
-                        SetStringValue("wdr_enable", value.Value.ToString());
+                        SetStringValue(PropertyKeys.wdr_enable.ToString(), value.Value.ToString());
                     });
             }
         }
@@ -235,7 +235,7 @@ namespace DDPAIDash.Core
                     () =>
                     {
                         _ldc = value;
-                        SetStringValue("ldc_switch", value.Value.ToString());
+                        SetStringValue(PropertyKeys.ldc_switch.ToString(), value.Value.ToString());
                     });
             }
         }
@@ -249,7 +249,7 @@ namespace DDPAIDash.Core
                     () =>
                     {
                         _mic = value;
-                        SetStringValue("mic_switch", value.Value.ToString());
+                        SetStringValue(PropertyKeys.mic_switch.ToString(), value.Value.ToString());
                     });
             }
         }
@@ -263,7 +263,7 @@ namespace DDPAIDash.Core
                     () =>
                     {
                         _quality = value;
-                        SetStringValue("image_quality", value.Value.ToString());
+                        SetStringValue(PropertyKeys.image_quality.ToString(), value.Value.ToString());
                     });
             }
         }
@@ -273,11 +273,11 @@ namespace DDPAIDash.Core
             get { return _osd; }
             set
             {
-                GuardPropertySet(nameof(Ldc), value,
+                GuardPropertySet(nameof(Osd), value,
                     () =>
                     {
                         _osd = value;
-                        SetStringValue("osd_switch", value.Value.ToString());
+                        SetStringValue(PropertyKeys.osd_switch.ToString(), value.Value.ToString());
                     });
             }
         }
@@ -287,11 +287,11 @@ namespace DDPAIDash.Core
             get { return _osdSpeed; }
             set
             {
-                GuardPropertySet(nameof(Ldc), value,
+                GuardPropertySet(nameof(OsdSpeed), value,
                     () =>
                     {
                         _osdSpeed = value;
-                        SetStringValue("osd_speedswitch", value.Value.ToString());
+                        SetStringValue(PropertyKeys.osd_speedswitch.ToString(), value.Value.ToString());
                     });
             }
         }
@@ -301,11 +301,11 @@ namespace DDPAIDash.Core
             get { return _startSound; }
             set
             {
-                GuardPropertySet(nameof(Ldc), value,
+                GuardPropertySet(nameof(StartSound), value,
                     () =>
                     {
                         _startSound = value;
-                        SetStringValue("start_sound_switch", value.Value.ToString());
+                        SetStringValue(PropertyKeys.start_sound_switch.ToString(), value.Value.ToString());
                     });
             }
         }
@@ -315,11 +315,11 @@ namespace DDPAIDash.Core
             get { return _parkingMode; }
             set
             {
-                GuardPropertySet(nameof(Ldc), value,
+                GuardPropertySet(nameof(ParkingMode), value,
                     () =>
                     {
                         _parkingMode = value;
-                        SetStringValue("parking_mode_switch", value.Value.ToString());
+                        SetStringValue(PropertyKeys.parking_mode_switch.ToString(), value.Value.ToString());
                     });
             }
         }
@@ -329,11 +329,11 @@ namespace DDPAIDash.Core
             get { return _timeLapse; }
             set
             {
-                GuardPropertySet(nameof(Ldc), value,
+                GuardPropertySet(nameof(TimeLapse), value,
                     () =>
                     {
                         _timeLapse = value;
-                        SetStringValue("timelapse_rec_switch", value.Value.ToString());
+                        SetStringValue(PropertyKeys.timelapse_rec_switch.ToString(), value.Value.ToString());
                     });
             }
         }
@@ -347,7 +347,7 @@ namespace DDPAIDash.Core
                     () =>
                     {
                         _hmirror = value;
-                        SetStringValue("horizontal_mirror", value.Value.ToString());
+                        SetStringValue(PropertyKeys.horizontal_mirror.ToString(), value.Value.ToString());
                     });
             }
         }
@@ -357,11 +357,11 @@ namespace DDPAIDash.Core
             get { return _delayPoweroffTime; }
             set
             {
-                GuardPropertySet(nameof(Ldc), value,
+                GuardPropertySet(nameof(DelayPoweroffTime), value,
                     () =>
                     {
                         _delayPoweroffTime = value;
-                        SetIntValue("delay_poweroff_time", value.Value);
+                        SetIntValue(PropertyKeys.delay_poweroff_time.ToString(), value.Value);
                     });
             }
         }
@@ -371,11 +371,11 @@ namespace DDPAIDash.Core
             get { return _isNeedUpdate; }
             set
             {
-                GuardPropertySet(nameof(Ldc), value,
+                GuardPropertySet(nameof(IsNeedUpdate), value,
                     () =>
                     {
                         _isNeedUpdate = value;
-                        SetStringValue("is_need_update", value.ToString());
+                        SetStringValue(PropertyKeys.is_need_update.ToString(), value.ToString());
                     });
             }
         }
@@ -538,67 +538,70 @@ namespace DDPAIDash.Core
 
         private void LoadSetting<T>(Parameter<T> parameter)
         {
-            switch ((QueryParameterKeys) Enum.Parse(typeof(QueryParameterKeys), parameter.Key))
+            switch ((PropertyKeys) Enum.Parse(typeof(PropertyKeys), parameter.Key))
             {
-                case QueryParameterKeys.wdr_enable:
+                case PropertyKeys.wdr_enable:
                     _wdr = (SwitchState) Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
                     break;
-                case QueryParameterKeys.gsensor_mode:
+                case PropertyKeys.gsensor_mode:
                     _gsmode = (GSensorMode) Enum.Parse(typeof(GSensorMode), parameter.Value.ToString(), true);
                     break;
-                case QueryParameterKeys.cycle_record_space:
+                case PropertyKeys.cycle_record_space:
                     _cycleRecordSpace = int.Parse(parameter.Value.ToString());
                     break;
-                case QueryParameterKeys.speaker_turn:
+                case PropertyKeys.speaker_turn:
                     _speakerLevel = int.Parse(parameter.Value.ToString());
                     break;
-                case QueryParameterKeys.default_user:
+                case PropertyKeys.default_user:
                     _defaultUser = parameter.Value.ToString();
                     break;
-                case QueryParameterKeys.ldc_switch:
+                case PropertyKeys.ldc_switch:
                     _ldc = (SwitchState) Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
                     break;
-                case QueryParameterKeys.anti_fog:
+                case PropertyKeys.anti_fog:
                     _antiFog = int.Parse(parameter.Value.ToString());
                     break;
-                case QueryParameterKeys.is_need_update:
+                case PropertyKeys.is_need_update:
                     _isNeedUpdate = int.Parse(parameter.Value.ToString()) == 1;
                     break;
-                case QueryParameterKeys.event_after_time:
+                case PropertyKeys.event_after_time:
                     _eventAfterTime = int.Parse(parameter.Value.ToString());
                     break;
-                case QueryParameterKeys.event_before_time:
+                case PropertyKeys.event_before_time:
                     _eventBeforeTime = int.Parse(parameter.Value.ToString());
                     break;
-                case QueryParameterKeys.mic_switch:
+                case PropertyKeys.mic_switch:
                     _mic = (SwitchState) Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
                     break;
-                case QueryParameterKeys.image_quality:
+                case PropertyKeys.image_quality:
                     _quality = (ImageQuality) Enum.Parse(typeof(ImageQuality), parameter.Value.ToString(), true);
                     break;
-                case QueryParameterKeys.display_mode:
+                case PropertyKeys.display_mode:
                     _displayMode = int.Parse(parameter.Value.ToString());
                     break;
-                case QueryParameterKeys.osd_switch:
+                case PropertyKeys.osd_switch:
                     _osd = (SwitchState) Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
                     break;
-                case QueryParameterKeys.osd_speedswitch:
+                case PropertyKeys.osd_speedswitch:
                     _osdSpeed = (SwitchState) Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
                     break;
-                case QueryParameterKeys.start_sound_switch:
+                case PropertyKeys.start_sound_switch:
                     _startSound = (SwitchState) Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
                     break;
-                case QueryParameterKeys.delay_poweroff_time:
+                case PropertyKeys.delay_poweroff_time:
                     _delayPoweroffTime = int.Parse(parameter.Value.ToString());
                     break;
-                case QueryParameterKeys.edog_switch:
+                case PropertyKeys.edog_switch:
                     _edogSwitch = (SwitchState) Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
                     break;
-                case QueryParameterKeys.parking_mode_switch:
+                case PropertyKeys.parking_mode_switch:
                     _parkingMode = (SwitchState) Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
                     break;
-                case QueryParameterKeys.timelapse_rec_switch:
+                case PropertyKeys.timelapse_rec_switch:
                     _timeLapse = (SwitchState) Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
+                    break;
+                case PropertyKeys.horizontal_mirror:
+                    _hmirror = (SwitchState)Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
                     break;
             }
         }

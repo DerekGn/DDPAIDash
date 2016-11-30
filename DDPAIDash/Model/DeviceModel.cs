@@ -30,12 +30,12 @@ namespace DDPAIDash.Model
 {
     public class DeviceModel
     {
-        public DeviceModel()
+        static DeviceModel()
         {
             DeviceInstance = new Device();
         }
         
-        public IDevice DeviceInstance { get; }
+        public static IDevice DeviceInstance { get; }
         
         public bool IsDeviceConnected => DeviceInstance.State == DeviceState.Connected;
     }

@@ -91,6 +91,7 @@
     </Compile>
     <Compile Include="Converter\BoolToVisibilityConverter.cs" />
     <Compile Include="Converter\EnumToBoolConverter.cs" />
+    <Compile Include="Converter\NullableToBooleanConverter.cs" />
     <Compile Include="Converter\SwitchStateToValueConvertor.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>

@@ -1,14 +1,13 @@
 ﻿using System;
-using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
 
 namespace DDPAIDash.Converter
 {
-    public class BoolToVisibilityConverter : IValueConverter
+    internal class NullableToBooleanConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            return value == null ? Visibility.Collapsed : Visibility.Visible;
+            return value != null;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
@@ -16,5 +15,4 @@ namespace DDPAIDash.Converter
             throw new NotImplementedException();
         }
     }
-
 }

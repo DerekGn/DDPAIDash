@@ -63,7 +63,7 @@ namespace DDPAIDash
 
         private void btnCamera_Click(object sender, RoutedEventArgs e)
         {
-           //DeviceModel.DeviceInstance.Connect(new UserInfo("012345678912345", "admin", "admin", 0));
+            DeviceModel.DeviceInstance.Connect(new UserInfo("012345678912345", "admin", "admin", 0));
         }
 
         private void btnSettings_Click(object sender, RoutedEventArgs e)
