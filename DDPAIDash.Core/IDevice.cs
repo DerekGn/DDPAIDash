@@ -61,7 +61,9 @@ namespace DDPAIDash.Core
 
         bool? IsNeedUpdate { get; set; }
 
-        SwitchState? EDogSwitch { get; set; }
+        SwitchState? HMirror { get; set; }
+
+        SwitchState? EDog { get; set; }
 
         SwitchState? Wdr { get; set; }
 

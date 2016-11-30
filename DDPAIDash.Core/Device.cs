@@ -41,10 +41,12 @@ namespace DDPAIDash.Core
         private readonly ITransport _transport;
         private readonly ILogger _logger;
 
+        private object _mailboxTask;
         private int? _antiFog;
         private int? _cycleRecordSpace;
         private string _defaultUser;
         private int? _delayPoweroffTime;
+        private int? _speakerLevel;
         private int? _displayMode;
         private int? _eventAfterTime;
         private int? _eventBeforeTime;
@@ -57,10 +59,10 @@ namespace DDPAIDash.Core
         private SwitchState? _osdSpeed;
         private SwitchState? _parkingMode;
         private ImageQuality? _quality;
-        private int? _speakerLevel;
         private SwitchState? _startSound;
         private SwitchState? _timeLapse;
         private SwitchState? _wdr;
+        private SwitchState? _hmirror;
 
         public Device() : this(new HttpTransport(), new Logger())
         {
@@ -196,12 +198,12 @@ namespace DDPAIDash.Core
             }
         }
 
-        public SwitchState? EDogSwitch
+        public SwitchState? EDog
         {
             get { return _edogSwitch; }
             set
             {
-                GuardPropertySet(nameof(EDogSwitch), value,
+                GuardPropertySet(nameof(EDog), value,
                     () =>
                     {
                         _edogSwitch = value;
@@ -321,7 +323,7 @@ namespace DDPAIDash.Core
                     });
             }
         }
-
+        
         public SwitchState? TimeLapse
         {
             get { return _timeLapse; }
@@ -332,6 +334,20 @@ namespace DDPAIDash.Core
                     {
                         _timeLapse = value;
                         SetStringValue("timelapse_rec_switch", value.Value.ToString());
+                    });
+            }
+        }
+
+        public SwitchState? HMirror
+        {
+            get { return _hmirror; }
+            set
+            {
+                GuardPropertySet(nameof(HMirror), value,
+                    () =>
+                    {
+                        _hmirror = value;
+                        SetStringValue("horizontal_mirror", value.Value.ToString());
                     });
             }
         }
@@ -363,7 +379,7 @@ namespace DDPAIDash.Core
                     });
             }
         }
-
+        
         public event EventHandler<DeviceStateChangedEventArgs> DeviceStateChanged;
 
         public bool Connect(UserInfo userInfo)
@@ -653,7 +669,6 @@ namespace DDPAIDash.Core
         #region IDisposable Support
 
         private bool _disposedValue;
-        private object _mailboxTask;
 
         protected virtual void Dispose(bool disposing)
         {

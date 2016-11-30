@@ -26,5 +26,8 @@ namespace DDPAIDash.Core.Types
 {
     public enum GSensorMode
     {
+        Low,
+        Mid,
+        High
     }
 }
