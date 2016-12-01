@@ -64,7 +64,7 @@ namespace DDPAIDash.Core
         private SwitchState? _timeLapse;
         private SwitchState? _wdr;
 
-        public Device() : this(new HttpTransport(), new Logger())
+        public Device() : this(new HttpTransport(), EtwLogger.Instance)
         {
         }
 
@@ -630,7 +630,7 @@ namespace DDPAIDash.Core
             }
             catch (Exception exception)
             {
-                _logger.Fatal($"[{apiCommand}] Execution Failed", exception);
+                _logger.Critical($"[{apiCommand}] Execution Failed", exception);
                 result = false;
             }
 

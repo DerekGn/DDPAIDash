@@ -7,12 +7,34 @@ namespace DDPAIDash.Converter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            return (double) value;
+            double result = 0;
+            
+            try
+            {
+                result = System.Convert.ToDouble(value);
+            }
+            catch (OverflowException)
+            {
+                      
+            }
+
+            return System.Convert.ToDouble(value);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
         {
-            return (int) value;
+            int result = 0;
+
+            try
+            {
+                result = System.Convert.ToInt32(value);
+            }
+            catch (OverflowException)
+            {
+#warning TODO
+            }
+
+            return result;
         }
     }
 }

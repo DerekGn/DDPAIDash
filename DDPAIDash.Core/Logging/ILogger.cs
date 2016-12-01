@@ -28,7 +28,9 @@ namespace DDPAIDash.Core.Logging
 {
     public interface ILogger
     {
+        void Info(string message);
+        void Verbose(string message);
         void Error(string message);
-        void Fatal(string message, Exception exception);
+        void Critical(string message, Exception exception);
     }
 }

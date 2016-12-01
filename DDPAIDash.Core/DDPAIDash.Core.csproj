@@ -86,7 +86,7 @@
     <Compile Include="Exceptions\DeviceException.cs" />
     <Compile Include="IDevice.cs" />
     <Compile Include="Logging\ILogger.cs" />
-    <Compile Include="Logging\Logger.cs" />
+    <Compile Include="Logging\EtwLogger.cs" />
     <Compile Include="Transports\HttpTransport.cs" />
     <Compile Include="Transports\HttpTransportException.cs" />
     <Compile Include="Transports\ITransport.cs" />
