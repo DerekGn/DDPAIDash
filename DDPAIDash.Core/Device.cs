@@ -24,45 +24,45 @@
 
 using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using DDPAIDash.Core.Constants;
 using DDPAIDash.Core.Logging;
 using DDPAIDash.Core.Transports;
 using DDPAIDash.Core.Types;
 using Newtonsoft.Json;
-using System.Threading.Tasks;
-using System.Threading;
 
 namespace DDPAIDash.Core
 {
     public class Device : IDevice
     {
         private static readonly CancellationTokenSource cts = new CancellationTokenSource();
-
-        private readonly ITransport _transport;
         private readonly ILogger _logger;
 
-        private object _mailboxTask;
+        private readonly ITransport _transport;
         private int? _antiFog;
         private int? _cycleRecordSpace;
         private string _defaultUser;
         private int? _delayPoweroffTime;
-        private int? _speakerLevel;
         private int? _displayMode;
+        private SwitchState? _edogSwitch;
         private int? _eventAfterTime;
         private int? _eventBeforeTime;
-        private SwitchState? _edogSwitch;
-        private bool? _isNeedUpdate;
         private GSensorMode? _gsmode;
+        private SwitchState? _hmirror;
+        private bool? _isNeedUpdate;
         private SwitchState? _ldc;
+
+        private object _mailboxTask;
         private SwitchState? _mic;
         private SwitchState? _osd;
         private SwitchState? _osdSpeed;
         private SwitchState? _parkingMode;
         private ImageQuality? _quality;
+        private int? _speakerLevel;
         private SwitchState? _startSound;
         private SwitchState? _timeLapse;
         private SwitchState? _wdr;
-        private SwitchState? _hmirror;
 
         public Device() : this(new HttpTransport(), new Logger())
         {
@@ -323,7 +323,7 @@ namespace DDPAIDash.Core
                     });
             }
         }
-        
+
         public SwitchState? TimeLapse
         {
             get { return _timeLapse; }
@@ -379,8 +379,10 @@ namespace DDPAIDash.Core
                     });
             }
         }
-        
+
         public event EventHandler<DeviceStateChangedEventArgs> DeviceStateChanged;
+
+        public event EventHandler<DeviceNewFilesEventArgs> DeviceNewFiles;
 
         public bool Connect(UserInfo userInfo)
         {
@@ -406,7 +408,7 @@ namespace DDPAIDash.Core
             {
 #warning logout
                 ExecuteRequest(ApiConstants.GetMailboxData,
-                    apiCommand => _transport.Execute(apiCommand), (response) => { _logger.Error(response.Data); });
+                    apiCommand => _transport.Execute(apiCommand), response => { _logger.Error(response.Data); });
 
                 _transport.Disconnect();
             }
@@ -424,7 +426,7 @@ namespace DDPAIDash.Core
 
                 // OK
                 ExecuteRequest(ApiConstants.GetMailboxData,
-                    apiCommand => _transport.Execute(apiCommand), (response) => { _logger.Error(response.Data); });
+                    apiCommand => _transport.Execute(apiCommand), response => { _logger.Error(response.Data); });
 
                 //ExecuteRequest("API_GetTestdate",
                 //    apiCommand => _transport.Execute(apiCommand), (response) => {
@@ -452,7 +454,7 @@ namespace DDPAIDash.Core
 
         private bool PerformConnect(UserInfo userInfo)
         {
-            bool result = false;
+            var result = false;
 
             var connectActions = new List<Func<bool>>
             {
@@ -523,7 +525,7 @@ namespace DDPAIDash.Core
 
         private void LoadSettings(ResponseMessage response)
         {
-            Parameters parameters = JsonConvert.DeserializeObject<Parameters>(response.Data);
+            var parameters = JsonConvert.DeserializeObject<Parameters>(response.Data);
 
             foreach (var intParameter in parameters.IntParameters)
             {
@@ -601,7 +603,7 @@ namespace DDPAIDash.Core
                     _timeLapse = (SwitchState) Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
                     break;
                 case PropertyKeys.horizontal_mirror:
-                    _hmirror = (SwitchState)Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
+                    _hmirror = (SwitchState) Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
                     break;
             }
         }

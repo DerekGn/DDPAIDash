@@ -13,9 +13,10 @@
 
     <Page.Resources>
         <Converter:NullableToBooleanConverter x:Key="NullableToBooleanConverter" />
-        <Converter:SwitchStateToValueConvertor x:Key="SwitchStateToValueConvertor"/>
-        <Converter:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
-        <Converter:EnumToBoolConverter x:Key="EnumToBoolConverter"/>
+        <Converter:SwitchStateToValueConvertor x:Key="SwitchStateToValueConvertor" />
+        <Converter:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <Converter:IntToDoubleConverter x:Key="IntToDoubleConverter" />
+        <Converter:EnumToBoolConverter x:Key="EnumToBoolConverter" />
         <model:DeviceModel x:Key="DeviceModelSource" />
     </Page.Resources>
     <Page.DataContext>
@@ -27,19 +28,19 @@
             <PivotItem Header="Device Settings">
                 <ScrollViewer>
                     <StackPanel>
-                        <Slider x:Name="antiFogSlider" Header="Anti Fog Level" Minimum="0" Maximum="10" 
+                        <Slider x:Name="AntiFogSlider" Header="Anti Fog Level" Minimum="0" Maximum="10"
                                 IsEnabled="{Binding DeviceInstance.AntiFog, Converter={StaticResource NullableToBooleanConverter}, Mode=OneWay}"
                                 Visibility="{Binding DeviceInstance.AntiFog, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}"
-                                Value="{Binding DeviceInstance.AntiFog, Mode=TwoWay}" />
-                        
+                                Value="{Binding DeviceInstance.AntiFog, Converter={StaticResource IntToDoubleConverter}, Mode=TwoWay}" />
+
                         <!--DeviceInstance.CycleRecordSpace-->
                         <!--DeviceInstance.DefaultUser-->
-                        
-                        <Slider x:Name="delayPoweroffTimeSlider" Header="Delay Power off Time" Minimum="0" Maximum="10"
+
+                        <Slider x:Name="DelayPoweroffTimeSlider" Header="Delay Power off Time" Minimum="0" Maximum="10"
                                 IsEnabled="{Binding DeviceInstance.DelayPoweroffTime, Converter={StaticResource NullableToBooleanConverter}, Mode=OneWay}"
                                 Visibility="{Binding DeviceInstance.DelayPoweroffTime, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}"
-                                Value="{Binding DeviceInstance.DelayPoweroffTime, Mode=TwoWay}" />
-                        
+                                Value="{Binding DeviceInstance.DelayPoweroffTime, Converter={StaticResource IntToDoubleConverter}, Mode=TwoWay}" />
+
                         <!--<StackPanel Name="displayModePanel" Grid.Row="3" Orientation="Horizontal"
                                     Visibility="{Binding DeviceInstance.DisplayMode, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}">
                             <TextBlock Name="displayModeBlock" Text="Display Mode" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,15,15,0" Grid.Row="3"/>
@@ -49,15 +50,15 @@
                                 <RadioButton IsChecked="{Binding Path=DeviceInstance.DisplayMode, Converter={StaticResource EnumToBoolConverter},ConverterParameter=Low, Mode=TwoWay}" FontSize="25">Low</RadioButton>
                             </StackPanel>
                         </StackPanel>-->
-                        
-                        <ToggleSwitch x:Name="edogToggle" Header="EDog"
+
+                        <ToggleSwitch x:Name="EdogToggle" Header="EDog"
                                       IsEnabled="{Binding DeviceInstance.EDog, Converter={StaticResource NullableToBooleanConverter}, Mode=OneWay}"
                                       Visibility="{Binding DeviceInstance.EDog, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}"
                                       IsOn="{Binding DeviceInstance.EDog, Converter={StaticResource SwitchStateToValueConvertor}, Mode=TwoWay}" />
-                        
+
                         <!--DeviceInstance.EventAfterTime-->
                         <!--DeviceInstance.EventBeforeTime-->
-                        
+
                         <!--<StackPanel Name="gsensorPanel" Grid.Row="3" Orientation="Horizontal" Visibility="{Binding DeviceInstance.GsMode, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}">
                             <TextBlock Name="gsensorBlock" Text="G Sensor" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,15,15,0" Grid.Row="3"/>
                             <StackPanel Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,5,0,0">
@@ -66,37 +67,37 @@
                                 <RadioButton IsChecked="{Binding Path=DeviceInstance.GsMode, Converter={StaticResource EnumToBoolConverter},ConverterParameter=Low, Mode=TwoWay}" FontSize="25">Low</RadioButton>
                             </StackPanel>
                         </StackPanel>-->
-                        
-                        <ToggleSwitch x:Name="hmirrorToggle" Header="Horizontal Mirror"
+
+                        <ToggleSwitch x:Name="HmirrorToggle" Header="Horizontal Mirror"
                                       IsEnabled="{Binding DeviceInstance.HMirror, Converter={StaticResource NullableToBooleanConverter}, Mode=OneWay}"
                                       Visibility="{Binding DeviceInstance.HMirror, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}"
                                       IsOn="{Binding DeviceInstance.HMirror, Converter={StaticResource SwitchStateToValueConvertor}, Mode=TwoWay}" />
-                        
-                        <ToggleSwitch x:Name="ldcToggle" Header="Ldc"
+
+                        <ToggleSwitch x:Name="LdcToggle" Header="Ldc"
                                       IsEnabled="{Binding DeviceInstance.Ldc, Converter={StaticResource NullableToBooleanConverter}, Mode=OneWay}"
                                       Visibility="{Binding DeviceInstance.Ldc, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}"
                                       IsOn="{Binding DeviceInstance.Ldc, Converter={StaticResource SwitchStateToValueConvertor}, Mode=TwoWay}" />
-                        
-                        <ToggleSwitch x:Name="micToggle" Header="Mic" 
+
+                        <ToggleSwitch x:Name="MicToggle" Header="Mic"
                                       IsEnabled="{Binding DeviceInstance.Mic, Converter={StaticResource NullableToBooleanConverter}, Mode=OneWay}"
                                       Visibility="{Binding DeviceInstance.Mic, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}"
                                       IsOn="{Binding DeviceInstance.Mic, Converter={StaticResource SwitchStateToValueConvertor}, Mode=TwoWay}" />
-                        
-                        <ToggleSwitch x:Name="osdToggle" Header="Osd" 
+
+                        <ToggleSwitch x:Name="OsdToggle" Header="Osd"
                                       IsEnabled="{Binding DeviceInstance.Osd, Converter={StaticResource NullableToBooleanConverter}, Mode=OneWay}"
                                       Visibility="{Binding DeviceInstance.Osd, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}"
                                       IsOn="{Binding DeviceInstance.Osd, Converter={StaticResource SwitchStateToValueConvertor}, Mode=TwoWay}" />
-                        
-                        <ToggleSwitch x:Name="osdSpeedToggle" Header="Osd Speed"
+
+                        <ToggleSwitch x:Name="OsdSpeedToggle" Header="Osd Speed"
                                       IsEnabled="{Binding DeviceInstance.OsdSpeed, Converter={StaticResource NullableToBooleanConverter}, Mode=OneWay}"
                                       Visibility="{Binding DeviceInstance.OsdSpeed, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}"
                                       IsOn="{Binding DeviceInstance.OsdSpeed, Converter={StaticResource SwitchStateToValueConvertor}, Mode=TwoWay}" />
-                        
-                        <ToggleSwitch x:Name="parkingModeToggle" Header="Parking Mode"
+
+                        <ToggleSwitch x:Name="ParkingModeToggle" Header="Parking Mode"
                                       IsEnabled="{Binding DeviceInstance.ParkingMode, Converter={StaticResource NullableToBooleanConverter}, Mode=OneWay}"
                                       Visibility="{Binding DeviceInstance.ParkingMode, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}"
                                       IsOn="{Binding DeviceInstance.ParkingMode, Converter={StaticResource SwitchStateToValueConvertor}, Mode=TwoWay}" />
-                        
+
                         <!--<StackPanel Name="qualityPanel" Grid.Row="3" Orientation="Horizontal" Visibility="{Binding DeviceInstance.Quality, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}">
                             <TextBlock Name="qualityBlock" Text="Quality" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,15,15,0" Grid.Row="3"/>
                             <StackPanel Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,5,0,0">
@@ -105,23 +106,23 @@
                                 <RadioButton IsChecked="{Binding Path=DeviceInstance.Quality, Converter={StaticResource EnumToBoolConverter},ConverterParameter=Low, Mode=TwoWay}" FontSize="25">Low</RadioButton>
                             </StackPanel>
                         </StackPanel>-->
-                        
-                        <Slider x:Name="speakerLevelSlider" Header="Speaker Level" Minimum="0" Maximum="100" 
+
+                        <Slider x:Name="SpeakerLevelSlider" Header="Speaker Level" Minimum="0" Maximum="100"
                                 IsEnabled="{Binding DeviceInstance.SpeakerLevel, Converter={StaticResource NullableToBooleanConverter}, Mode=OneWay}"
                                 Visibility="{Binding DeviceInstance.SpeakerLevel, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}"
-                                Value="{Binding DeviceInstance.SpeakerLevel, Mode=TwoWay}"/>
-                        
-                        <ToggleSwitch x:Name="startSoundToggle" Header="Start Sound" 
+                                Value="{Binding DeviceInstance.SpeakerLevel, Converter={StaticResource IntToDoubleConverter}, Mode=TwoWay}" />
+
+                        <ToggleSwitch x:Name="StartSoundToggle" Header="Start Sound"
                                       IsEnabled="{Binding DeviceInstance.StartSound, Converter={StaticResource NullableToBooleanConverter}, Mode=OneWay}"
                                       Visibility="{Binding DeviceInstance.StartSound, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}"
                                       IsOn="{Binding DeviceInstance.StartSound, Converter={StaticResource SwitchStateToValueConvertor}, Mode=TwoWay}" />
-                        
-                        <ToggleSwitch x:Name="timeLapseToggle" Header="Time Lapse" 
+
+                        <ToggleSwitch x:Name="TimeLapseToggle" Header="Time Lapse"
                                       IsEnabled="{Binding DeviceInstance.TimeLapse, Converter={StaticResource NullableToBooleanConverter}, Mode=OneWay}"
-                                      Visibility="{Binding DeviceInstance.TimeLapse, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}" 
+                                      Visibility="{Binding DeviceInstance.TimeLapse, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}"
                                       IsOn="{Binding DeviceInstance.TimeLapse, Converter={StaticResource SwitchStateToValueConvertor}, Mode=TwoWay}" />
-                        
-                        <ToggleSwitch x:Name="wdrToggle" Header="Wdr"
+
+                        <ToggleSwitch x:Name="WdrToggle" Header="Wdr"
                                       IsEnabled="{Binding DeviceInstance.Wdr, Converter={StaticResource NullableToBooleanConverter}, Mode=OneWay}"
                                       Visibility="{Binding DeviceInstance.Wdr, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}"
                                       IsOn="{Binding DeviceInstance.Wdr, Converter={StaticResource SwitchStateToValueConvertor}, Mode=TwoWay}" />
@@ -177,55 +178,54 @@
             <PivotItem Header="Storage Information">
                 <StackPanel>
                     <TextBlock Text="Capacity" Style="{StaticResource BodyTextBlockStyle}" />
-                    <TextBlock Text="{Binding DeviceInstance.Storage.Capacity}"/>
+                    <TextBlock Text="{Binding DeviceInstance.Storage.Capacity}" />
                     <TextBlock Text="Cycle Record Space" Style="{StaticResource BodyTextBlockStyle}" />
-                    <TextBlock Text="{Binding DeviceInstance.Storage.CycleRecordSpace}"/>
+                    <TextBlock Text="{Binding DeviceInstance.Storage.CycleRecordSpace}" />
                     <TextBlock Text="GNumber" Style="{StaticResource BodyTextBlockStyle}" />
-                    <TextBlock Text="{Binding DeviceInstance.Storage.GNumber}"/>
+                    <TextBlock Text="{Binding DeviceInstance.Storage.GNumber}" />
                     <TextBlock Text="IncreaseBadBlock" Style="{StaticResource BodyTextBlockStyle}" />
-                    <TextBlock Text="{Binding DeviceInstance.Storage.IncreaseBadBlock}"/>
+                    <TextBlock Text="{Binding DeviceInstance.Storage.IncreaseBadBlock}" />
                     <TextBlock Text="NNumber" Style="{StaticResource BodyTextBlockStyle}" />
-                    <TextBlock Text="{Binding DeviceInstance.Storage.NNumber}"/>
+                    <TextBlock Text="{Binding DeviceInstance.Storage.NNumber}" />
                     <TextBlock Text="PlaybackSize" Style="{StaticResource BodyTextBlockStyle}" />
-                    <TextBlock Text="{Binding DeviceInstance.Storage.PlaybackSize}"/>
+                    <TextBlock Text="{Binding DeviceInstance.Storage.PlaybackSize}" />
                     <TextBlock Text="ReplaceBlockLeft" Style="{StaticResource BodyTextBlockStyle}" />
-                    <TextBlock Text="{Binding DeviceInstance.Storage.ReplaceBlockLeft}"/>
+                    <TextBlock Text="{Binding DeviceInstance.Storage.ReplaceBlockLeft}" />
                     <TextBlock Text="SmartOk" Style="{StaticResource BodyTextBlockStyle}" />
-                    <TextBlock Text="{Binding DeviceInstance.Storage.SmartOk}"/>
+                    <TextBlock Text="{Binding DeviceInstance.Storage.SmartOk}" />
                     <TextBlock Text="Smart Version" Style="{StaticResource BodyTextBlockStyle}" />
-                    <TextBlock Text="{Binding DeviceInstance.Storage.SmartVersion}"/>
+                    <TextBlock Text="{Binding DeviceInstance.Storage.SmartVersion}" />
                     <TextBlock Text="Spare" Style="{StaticResource BodyTextBlockStyle}" />
-                    <TextBlock Text="{Binding DeviceInstance.Storage.Spare}"/>
+                    <TextBlock Text="{Binding DeviceInstance.Storage.Spare}" />
                     <TextBlock Text="StmSize" Style="{StaticResource BodyTextBlockStyle}" />
-                    <TextBlock Text="{Binding DeviceInstance.Storage.StmSize}"/>
+                    <TextBlock Text="{Binding DeviceInstance.Storage.StmSize}" />
                     <TextBlock Text="Runtime" Style="{StaticResource BodyTextBlockStyle}" />
-                    <TextBlock Text="{Binding DeviceInstance.Storage.Runtime}"/>
+                    <TextBlock Text="{Binding DeviceInstance.Storage.Runtime}" />
                     <TextBlock Text="Total Runtime" Style="{StaticResource BodyTextBlockStyle}" />
-                    <TextBlock Text="{Binding DeviceInstance.Storage.TotalRuntime}"/>
+                    <TextBlock Text="{Binding DeviceInstance.Storage.TotalRuntime}" />
                     <Button x:Name="btnFormat" />
                 </StackPanel>
             </PivotItem>
             <PivotItem Header="Video Information">
                 <StackPanel>
                     <TextBlock Text="Resolution Ratio" Style="{StaticResource BodyTextBlockStyle}" />
-                    <TextBlock Text="{Binding DeviceInstance.Capabilities.ResolutionRatio}"/>
+                    <TextBlock Text="{Binding DeviceInstance.Capabilities.ResolutionRatio}" />
                     <TextBlock Text="Bit Rate" Style="{StaticResource BodyTextBlockStyle}" />
-                    <TextBlock Text="{Binding DeviceInstance.Capabilities.BitRate}"/>
+                    <TextBlock Text="{Binding DeviceInstance.Capabilities.BitRate}" />
                     <TextBlock Text="Frame Rate" Style="{StaticResource BodyTextBlockStyle}" />
-                    <TextBlock Text="{Binding DeviceInstance.Capabilities.FrameRate}"/>
+                    <TextBlock Text="{Binding DeviceInstance.Capabilities.FrameRate}" />
                     <TextBlock Text="Low Resolution Ratio" Style="{StaticResource BodyTextBlockStyle}" />
-                    <TextBlock Text="{Binding DeviceInstance.Capabilities.LowResolutionRatio}"/>
+                    <TextBlock Text="{Binding DeviceInstance.Capabilities.LowResolutionRatio}" />
                     <TextBlock Text="Low Bit Rate" Style="{StaticResource BodyTextBlockStyle}" />
-                    <TextBlock Text="{Binding DeviceInstance.Capabilities.LowBitRate}"/>
+                    <TextBlock Text="{Binding DeviceInstance.Capabilities.LowBitRate}" />
                     <TextBlock Text="Low Frame Rate" Style="{StaticResource BodyTextBlockStyle}" />
-                    <TextBlock Text="{Binding DeviceInstance.Capabilities.LowFrameRate}"/>
+                    <TextBlock Text="{Binding DeviceInstance.Capabilities.LowFrameRate}" />
                     <TextBlock Text="Audio Type" Style="{StaticResource BodyTextBlockStyle}" />
-                    <TextBlock Text="{Binding DeviceInstance.Capabilities.AudioType}"/>
+                    <TextBlock Text="{Binding DeviceInstance.Capabilities.AudioType}" />
                     <TextBlock Text="Audio Sample Rate" Style="{StaticResource BodyTextBlockStyle}" />
-                    <TextBlock Text="{Binding DeviceInstance.Capabilities.SampleRate}"/>
+                    <TextBlock Text="{Binding DeviceInstance.Capabilities.SampleRate}" />
                 </StackPanel>
             </PivotItem>
         </Pivot>
     </Grid>
 </Page>
-    

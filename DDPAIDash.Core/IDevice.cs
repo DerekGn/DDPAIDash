@@ -88,5 +88,7 @@ namespace DDPAIDash.Core
         void Disconnect();
 
         event EventHandler<DeviceStateChangedEventArgs> DeviceStateChanged;
+
+        event EventHandler<DeviceNewFilesEventArgs> DeviceNewFiles;
     }
 }

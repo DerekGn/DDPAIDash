@@ -81,6 +81,7 @@
   <ItemGroup>
     <Compile Include="Constants\ApiConstants.cs" />
     <Compile Include="Device.cs" />
+    <Compile Include="DeviceNewFilesEventArgs.cs" />
     <Compile Include="DeviceStateChangedEventArgs.cs" />
     <Compile Include="Exceptions\DeviceException.cs" />
     <Compile Include="IDevice.cs" />
