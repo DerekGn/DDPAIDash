@@ -95,7 +95,7 @@ namespace DDPAIDash.Core
                     () =>
                     {
                         _defaultUser = value;
-                        SetStringValue("default_user", value);
+                        SetStringValue(PropertyKeys.default_user.ToString(), value);
                     });
             }
         }
@@ -429,7 +429,8 @@ namespace DDPAIDash.Core
                     apiCommand => _transport.Execute(apiCommand), response => { _logger.Error(response.Data); });
 
                 //ExecuteRequest("API_GetTestdate",
-                //    apiCommand => _transport.Execute(apiCommand), (response) => {
+                //    apiCommand => _transport.Execute(apiCommand), (response) =>
+                //    {
                 //        _logger.Error(response.Data);
                 //    });
 

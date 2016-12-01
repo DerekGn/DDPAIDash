@@ -89,7 +89,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Converter\BoolToVisibilityConverter.cs" />
+    <Compile Include="Converter\NullableToVisibilityConverter.cs" />
     <Compile Include="Converter\EnumToBoolConverter.cs" />
     <Compile Include="Converter\IntToDoubleConverter.cs" />
     <Compile Include="Converter\NullableToBooleanConverter.cs" />

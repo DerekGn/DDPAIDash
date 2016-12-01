@@ -22,20 +22,23 @@
 * SOFTWARE.
 */
 
-using DDPAIDash.Core;
-using DDPAIDash.Core.Types;
+using System;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Data;
 
-namespace DDPAIDash.Model
+namespace DDPAIDash.Converter
 {
-    public class DeviceModel
+    public class NullableToVisibilityConverter : IValueConverter
     {
-        static DeviceModel()
+        public object Convert(object value, Type targetType, object parameter, string language)
         {
-            DeviceInstance = new Device();
+            return value == null ? Visibility.Collapsed : Visibility.Visible;
         }
-        
-        public static IDevice DeviceInstance { get; }
-        
-        public bool IsDeviceConnected => DeviceInstance.State == DeviceState.Connected;
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            throw new NotImplementedException();
+        }
     }
+
 }

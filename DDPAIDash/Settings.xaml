@@ -14,7 +14,7 @@
     <Page.Resources>
         <Converter:NullableToBooleanConverter x:Key="NullableToBooleanConverter" />
         <Converter:SwitchStateToValueConvertor x:Key="SwitchStateToValueConvertor" />
-        <Converter:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <Converter:NullableToVisibilityConverter x:Key="NullableToVisibilityConverter" />
         <Converter:IntToDoubleConverter x:Key="IntToDoubleConverter" />
         <Converter:EnumToBoolConverter x:Key="EnumToBoolConverter" />
         <model:DeviceModel x:Key="DeviceModelSource" />
@@ -30,7 +30,7 @@
                     <StackPanel>
                         <Slider x:Name="AntiFogSlider" Header="Anti Fog Level" Minimum="0" Maximum="10"
                                 IsEnabled="{Binding DeviceInstance.AntiFog, Converter={StaticResource NullableToBooleanConverter}, Mode=OneWay}"
-                                Visibility="{Binding DeviceInstance.AntiFog, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}"
+                                Visibility="{Binding DeviceInstance.AntiFog, Converter={StaticResource NullableToVisibilityConverter}, Mode=OneWay}"
                                 Value="{Binding DeviceInstance.AntiFog, Converter={StaticResource IntToDoubleConverter}, Mode=TwoWay}" />
 
                         <!--DeviceInstance.CycleRecordSpace-->
@@ -38,93 +38,93 @@
 
                         <Slider x:Name="DelayPoweroffTimeSlider" Header="Delay Power off Time" Minimum="0" Maximum="10"
                                 IsEnabled="{Binding DeviceInstance.DelayPoweroffTime, Converter={StaticResource NullableToBooleanConverter}, Mode=OneWay}"
-                                Visibility="{Binding DeviceInstance.DelayPoweroffTime, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}"
+                                Visibility="{Binding DeviceInstance.DelayPoweroffTime, Converter={StaticResource NullableToVisibilityConverter}, Mode=OneWay}"
                                 Value="{Binding DeviceInstance.DelayPoweroffTime, Converter={StaticResource IntToDoubleConverter}, Mode=TwoWay}" />
 
                         <!--<StackPanel Name="displayModePanel" Grid.Row="3" Orientation="Horizontal"
-                                    Visibility="{Binding DeviceInstance.DisplayMode, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}">
+                                    Visibility="{Binding DeviceInstance.DisplayMode, Converter={StaticResource NullableToVisibilityConverter}, Mode=OneWay}">
                             <TextBlock Name="displayModeBlock" Text="Display Mode" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,15,15,0" Grid.Row="3"/>
                             <StackPanel Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,5,0,0">
-                                <RadioButton IsChecked="{Binding Path=DeviceInstance.DisplayMode, Converter={StaticResource EnumToBoolConverter},ConverterParameter=High, Mode=TwoWay}" FontSize="25">High</RadioButton>
-                                <RadioButton IsChecked="{Binding Path=DeviceInstance.DisplayMode, Converter={StaticResource EnumToBoolConverter},ConverterParameter=Mid, Mode=TwoWay}" FontSize="25">Mid</RadioButton>
-                                <RadioButton IsChecked="{Binding Path=DeviceInstance.DisplayMode, Converter={StaticResource EnumToBoolConverter},ConverterParameter=Low, Mode=TwoWay}" FontSize="25">Low</RadioButton>
+                                <RadioButton IsChecked="{Binding Path=DeviceInstance.DisplayMode, Converter={StaticResource EnumToBoolConverter},ConverterParameter=High, Mode=TwoWay} >High</RadioButton>
+                                <RadioButton IsChecked="{Binding Path=DeviceInstance.DisplayMode, Converter={StaticResource EnumToBoolConverter},ConverterParameter=Mid, Mode=TwoWay}">Mid</RadioButton>
+                                <RadioButton IsChecked="{Binding Path=DeviceInstance.DisplayMode, Converter={StaticResource EnumToBoolConverter},ConverterParameter=Low, Mode=TwoWay}">Low</RadioButton>
                             </StackPanel>
                         </StackPanel>-->
 
                         <ToggleSwitch x:Name="EdogToggle" Header="EDog"
                                       IsEnabled="{Binding DeviceInstance.EDog, Converter={StaticResource NullableToBooleanConverter}, Mode=OneWay}"
-                                      Visibility="{Binding DeviceInstance.EDog, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}"
+                                      Visibility="{Binding DeviceInstance.EDog, Converter={StaticResource NullableToVisibilityConverter}, Mode=OneWay}"
                                       IsOn="{Binding DeviceInstance.EDog, Converter={StaticResource SwitchStateToValueConvertor}, Mode=TwoWay}" />
 
                         <!--DeviceInstance.EventAfterTime-->
                         <!--DeviceInstance.EventBeforeTime-->
 
-                        <!--<StackPanel Name="gsensorPanel" Grid.Row="3" Orientation="Horizontal" Visibility="{Binding DeviceInstance.GsMode, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}">
+                        <!--<StackPanel Name="gsensorPanel" Grid.Row="3" Orientation="Horizontal" Visibility="{Binding DeviceInstance.GsMode, Converter={StaticResource NullableToVisibilityConverter}, Mode=OneWay}">
                             <TextBlock Name="gsensorBlock" Text="G Sensor" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,15,15,0" Grid.Row="3"/>
                             <StackPanel Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,5,0,0">
-                                <RadioButton IsChecked="{Binding Path=DeviceInstance.GsMode, Converter={StaticResource EnumToBoolConverter},ConverterParameter=High, Mode=TwoWay}" FontSize="25">High</RadioButton>
-                                <RadioButton IsChecked="{Binding Path=DeviceInstance.GsMode, Converter={StaticResource EnumToBoolConverter},ConverterParameter=Mid, Mode=TwoWay}" FontSize="25">Mid</RadioButton>
-                                <RadioButton IsChecked="{Binding Path=DeviceInstance.GsMode, Converter={StaticResource EnumToBoolConverter},ConverterParameter=Low, Mode=TwoWay}" FontSize="25">Low</RadioButton>
+                                <RadioButton IsChecked="{Binding Path=DeviceInstance.GsMode, Converter={StaticResource EnumToBoolConverter},ConverterParameter=High, Mode=TwoWay}">High</RadioButton>
+                                <RadioButton IsChecked="{Binding Path=DeviceInstance.GsMode, Converter={StaticResource EnumToBoolConverter},ConverterParameter=Mid, Mode=TwoWay}">Mid</RadioButton>
+                                <RadioButton IsChecked="{Binding Path=DeviceInstance.GsMode, Converter={StaticResource EnumToBoolConverter},ConverterParameter=Low, Mode=TwoWay}">Low</RadioButton>
                             </StackPanel>
                         </StackPanel>-->
 
                         <ToggleSwitch x:Name="HmirrorToggle" Header="Horizontal Mirror"
                                       IsEnabled="{Binding DeviceInstance.HMirror, Converter={StaticResource NullableToBooleanConverter}, Mode=OneWay}"
-                                      Visibility="{Binding DeviceInstance.HMirror, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}"
+                                      Visibility="{Binding DeviceInstance.HMirror, Converter={StaticResource NullableToVisibilityConverter}, Mode=OneWay}"
                                       IsOn="{Binding DeviceInstance.HMirror, Converter={StaticResource SwitchStateToValueConvertor}, Mode=TwoWay}" />
 
                         <ToggleSwitch x:Name="LdcToggle" Header="Ldc"
                                       IsEnabled="{Binding DeviceInstance.Ldc, Converter={StaticResource NullableToBooleanConverter}, Mode=OneWay}"
-                                      Visibility="{Binding DeviceInstance.Ldc, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}"
+                                      Visibility="{Binding DeviceInstance.Ldc, Converter={StaticResource NullableToVisibilityConverter}, Mode=OneWay}"
                                       IsOn="{Binding DeviceInstance.Ldc, Converter={StaticResource SwitchStateToValueConvertor}, Mode=TwoWay}" />
 
                         <ToggleSwitch x:Name="MicToggle" Header="Mic"
                                       IsEnabled="{Binding DeviceInstance.Mic, Converter={StaticResource NullableToBooleanConverter}, Mode=OneWay}"
-                                      Visibility="{Binding DeviceInstance.Mic, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}"
+                                      Visibility="{Binding DeviceInstance.Mic, Converter={StaticResource NullableToVisibilityConverter}, Mode=OneWay}"
                                       IsOn="{Binding DeviceInstance.Mic, Converter={StaticResource SwitchStateToValueConvertor}, Mode=TwoWay}" />
 
                         <ToggleSwitch x:Name="OsdToggle" Header="Osd"
                                       IsEnabled="{Binding DeviceInstance.Osd, Converter={StaticResource NullableToBooleanConverter}, Mode=OneWay}"
-                                      Visibility="{Binding DeviceInstance.Osd, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}"
+                                      Visibility="{Binding DeviceInstance.Osd, Converter={StaticResource NullableToVisibilityConverter}, Mode=OneWay}"
                                       IsOn="{Binding DeviceInstance.Osd, Converter={StaticResource SwitchStateToValueConvertor}, Mode=TwoWay}" />
 
                         <ToggleSwitch x:Name="OsdSpeedToggle" Header="Osd Speed"
                                       IsEnabled="{Binding DeviceInstance.OsdSpeed, Converter={StaticResource NullableToBooleanConverter}, Mode=OneWay}"
-                                      Visibility="{Binding DeviceInstance.OsdSpeed, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}"
+                                      Visibility="{Binding DeviceInstance.OsdSpeed, Converter={StaticResource NullableToVisibilityConverter}, Mode=OneWay}"
                                       IsOn="{Binding DeviceInstance.OsdSpeed, Converter={StaticResource SwitchStateToValueConvertor}, Mode=TwoWay}" />
 
                         <ToggleSwitch x:Name="ParkingModeToggle" Header="Parking Mode"
                                       IsEnabled="{Binding DeviceInstance.ParkingMode, Converter={StaticResource NullableToBooleanConverter}, Mode=OneWay}"
-                                      Visibility="{Binding DeviceInstance.ParkingMode, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}"
+                                      Visibility="{Binding DeviceInstance.ParkingMode, Converter={StaticResource NullableToVisibilityConverter}, Mode=OneWay}"
                                       IsOn="{Binding DeviceInstance.ParkingMode, Converter={StaticResource SwitchStateToValueConvertor}, Mode=TwoWay}" />
 
-                        <!--<StackPanel Name="qualityPanel" Grid.Row="3" Orientation="Horizontal" Visibility="{Binding DeviceInstance.Quality, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}">
+                        <!--<StackPanel Name="qualityPanel" Grid.Row="3" Orientation="Horizontal" Visibility="{Binding DeviceInstance.Quality, Converter={StaticResource NullableToVisibilityConverter}, Mode=OneWay}">
                             <TextBlock Name="qualityBlock" Text="Quality" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,15,15,0" Grid.Row="3"/>
                             <StackPanel Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,5,0,0">
-                                <RadioButton IsChecked="{Binding Path=DeviceInstance.Quality, Converter={StaticResource EnumToBoolConverter},ConverterParameter=High, Mode=TwoWay}" FontSize="25">High</RadioButton>
-                                <RadioButton IsChecked="{Binding Path=DeviceInstance.Quality, Converter={StaticResource EnumToBoolConverter},ConverterParameter=Mid, Mode=TwoWay}" FontSize="25">Mid</RadioButton>
-                                <RadioButton IsChecked="{Binding Path=DeviceInstance.Quality, Converter={StaticResource EnumToBoolConverter},ConverterParameter=Low, Mode=TwoWay}" FontSize="25">Low</RadioButton>
+                                <RadioButton IsChecked="{Binding Path=DeviceInstance.Quality, Converter={StaticResource EnumToBoolConverter},ConverterParameter=High, Mode=TwoWay}">High</RadioButton>
+                                <RadioButton IsChecked="{Binding Path=DeviceInstance.Quality, Converter={StaticResource EnumToBoolConverter},ConverterParameter=Mid, Mode=TwoWay}">Mid</RadioButton>
+                                <RadioButton IsChecked="{Binding Path=DeviceInstance.Quality, Converter={StaticResource EnumToBoolConverter},ConverterParameter=Low, Mode=TwoWay}">Low</RadioButton>
                             </StackPanel>
                         </StackPanel>-->
 
                         <Slider x:Name="SpeakerLevelSlider" Header="Speaker Level" Minimum="0" Maximum="100"
                                 IsEnabled="{Binding DeviceInstance.SpeakerLevel, Converter={StaticResource NullableToBooleanConverter}, Mode=OneWay}"
-                                Visibility="{Binding DeviceInstance.SpeakerLevel, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}"
+                                Visibility="{Binding DeviceInstance.SpeakerLevel, Converter={StaticResource NullableToVisibilityConverter}, Mode=OneWay}"
                                 Value="{Binding DeviceInstance.SpeakerLevel, Converter={StaticResource IntToDoubleConverter}, Mode=TwoWay}" />
 
                         <ToggleSwitch x:Name="StartSoundToggle" Header="Start Sound"
                                       IsEnabled="{Binding DeviceInstance.StartSound, Converter={StaticResource NullableToBooleanConverter}, Mode=OneWay}"
-                                      Visibility="{Binding DeviceInstance.StartSound, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}"
+                                      Visibility="{Binding DeviceInstance.StartSound, Converter={StaticResource NullableToVisibilityConverter}, Mode=OneWay}"
                                       IsOn="{Binding DeviceInstance.StartSound, Converter={StaticResource SwitchStateToValueConvertor}, Mode=TwoWay}" />
 
                         <ToggleSwitch x:Name="TimeLapseToggle" Header="Time Lapse"
                                       IsEnabled="{Binding DeviceInstance.TimeLapse, Converter={StaticResource NullableToBooleanConverter}, Mode=OneWay}"
-                                      Visibility="{Binding DeviceInstance.TimeLapse, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}"
+                                      Visibility="{Binding DeviceInstance.TimeLapse, Converter={StaticResource NullableToVisibilityConverter}, Mode=OneWay}"
                                       IsOn="{Binding DeviceInstance.TimeLapse, Converter={StaticResource SwitchStateToValueConvertor}, Mode=TwoWay}" />
 
                         <ToggleSwitch x:Name="WdrToggle" Header="Wdr"
                                       IsEnabled="{Binding DeviceInstance.Wdr, Converter={StaticResource NullableToBooleanConverter}, Mode=OneWay}"
-                                      Visibility="{Binding DeviceInstance.Wdr, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}"
+                                      Visibility="{Binding DeviceInstance.Wdr, Converter={StaticResource NullableToVisibilityConverter}, Mode=OneWay}"
                                       IsOn="{Binding DeviceInstance.Wdr, Converter={StaticResource SwitchStateToValueConvertor}, Mode=TwoWay}" />
                     </StackPanel>
                 </ScrollViewer>
