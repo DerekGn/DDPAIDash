@@ -23,6 +23,8 @@
 */
 
 using System;
+using System.Collections.Generic;
+using System.IO;
 using DDPAIDash.Core.Types;
 
 namespace DDPAIDash.Core
@@ -83,12 +85,38 @@ namespace DDPAIDash.Core
 
         SwitchState? TimeLapse { get; set; }
 
+        /// <summary>
+        /// Connect to the <see cref="IDevice"/> instance
+        /// </summary>
+        /// <param name="userInfo"></param>
+        /// <returns></returns>
         bool Connect(UserInfo userInfo);
 
+        /// <summary>
+        /// Disconnect from the <see cref="IDevice"/> instance
+        /// </summary>
         void Disconnect();
 
-        event EventHandler<DeviceStateChangedEventArgs> DeviceStateChanged;
+        /// <summary>
+        /// Get a list of files on the device
+        /// </summary>
+        /// <returns>A list of files stored in the <see cref="IDevice"/> instances memory</returns>
+        IList<string> GetFiles();
+        
+        /// <summary>
+        /// Stream a file from the <see cref="IDevice"/> instance
+        /// </summary>
+        /// <returns>An instance of a <see cref="IStreamDescriptor"/></returns>
+        IStreamDescriptor StreamFile(string filename);
+        
+        /// <summary>
+        /// Raised when the <see cref="IDevice"/> state changes
+        /// </summary>
+        event EventHandler<StateChangedEventArgs> StateChanged;
 
-        event EventHandler<DeviceNewFilesEventArgs> DeviceNewFiles;
+        /// <summary>
+        /// Raised when the <see cref="IDevice"/> creates a new file
+        /// </summary>
+        event EventHandler<NewFilesCreatedEventArgs> NewFilesCreated;
     }
 }

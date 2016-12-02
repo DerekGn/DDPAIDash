@@ -81,10 +81,11 @@
   <ItemGroup>
     <Compile Include="Constants\ApiConstants.cs" />
     <Compile Include="Device.cs" />
-    <Compile Include="DeviceNewFilesEventArgs.cs" />
-    <Compile Include="DeviceStateChangedEventArgs.cs" />
+    <Compile Include="NewFilesCreatedEventArgs.cs" />
+    <Compile Include="StateChangedEventArgs.cs" />
     <Compile Include="Exceptions\DeviceException.cs" />
     <Compile Include="IDevice.cs" />
+    <Compile Include="IStreamDescriptor.cs" />
     <Compile Include="Logging\ILogger.cs" />
     <Compile Include="Logging\EtwLogger.cs" />
     <Compile Include="Transports\HttpTransport.cs" />

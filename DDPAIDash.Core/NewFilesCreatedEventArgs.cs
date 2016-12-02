@@ -23,12 +23,12 @@
 */
 
 using System;
-using DDPAIDash.Core.Types;
+using System.Collections.Generic;
 
 namespace DDPAIDash.Core
 {
-    public class DeviceStateChangedEventArgs : EventArgs
+    public class NewFilesCreatedEventArgs : EventArgs
     {
-        public DeviceState DeviceState { get; set; }
+        public IList<string> FilesList { get; set; }
     }
 }

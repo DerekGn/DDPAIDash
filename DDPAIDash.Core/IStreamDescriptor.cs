@@ -1,7 +1,6 @@
 ﻿namespace DDPAIDash.Core
 {
-    public class DeviceNewFilesEventArgs
+    public interface IStreamDescriptor
     {
-
     }
 }

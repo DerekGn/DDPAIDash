@@ -36,7 +36,8 @@ namespace DDPAIDash.Core
 {
     public class Device : IDevice
     {
-        private static readonly CancellationTokenSource cts = new CancellationTokenSource();
+        private static readonly CancellationTokenSource Cts;
+
         private readonly ILogger _logger;
 
         private readonly ITransport _transport;
@@ -63,6 +64,11 @@ namespace DDPAIDash.Core
         private SwitchState? _startSound;
         private SwitchState? _timeLapse;
         private SwitchState? _wdr;
+
+        static Device()
+        {
+            Cts = new CancellationTokenSource();
+        }
 
         public Device() : this(new HttpTransport(), EtwLogger.Instance)
         {
@@ -380,9 +386,9 @@ namespace DDPAIDash.Core
             }
         }
 
-        public event EventHandler<DeviceStateChangedEventArgs> DeviceStateChanged;
+        public event EventHandler<StateChangedEventArgs> StateChanged;
 
-        public event EventHandler<DeviceNewFilesEventArgs> DeviceNewFiles;
+        public event EventHandler<NewFilesCreatedEventArgs> NewFilesCreated;
 
         public bool Connect(UserInfo userInfo)
         {
@@ -396,8 +402,12 @@ namespace DDPAIDash.Core
             {
                 User = userInfo;
 
-                _mailboxTask = Task.Factory.StartNew(() => PollMailbox(cts.Token), cts.Token);
+                _mailboxTask = Task.Factory.StartNew(() => PollMailbox(Cts.Token), Cts.Token);
             }
+
+            State = DeviceState.Connected;
+
+            OnStateChanged();
 
             return result;
         }
@@ -416,6 +426,11 @@ namespace DDPAIDash.Core
             {
                 throw;
             }
+        }
+
+        protected void OnStateChanged()
+        {
+            StateChanged?.Invoke(this, new StateChangedEventArgs {DeviceState = State});
         }
 
         private void PollMailbox(CancellationToken cancellationToken)
@@ -705,6 +720,16 @@ namespace DDPAIDash.Core
             Dispose(true);
             // TODO: uncomment the following line if the finalizer is overridden above.
             // GC.SuppressFinalize(this);
+        }
+
+        public IList<string> GetFiles()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IStreamDescriptor StreamFile(string filename)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion
