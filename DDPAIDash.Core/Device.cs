@@ -54,7 +54,7 @@ namespace DDPAIDash.Core
         private bool? _isNeedUpdate;
         private SwitchState? _ldc;
 
-        private object _mailboxTask;
+        private Task _mailboxTask;
         private SwitchState? _mic;
         private SwitchState? _osd;
         private SwitchState? _osdSpeed;
