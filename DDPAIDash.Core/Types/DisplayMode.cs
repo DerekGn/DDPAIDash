@@ -22,31 +22,11 @@
 * SOFTWARE.
 */
 
-using System;
-using Windows.UI.Xaml.Data;
-using DDPAIDash.Core.Types;
-
-namespace DDPAIDash.Converter
+namespace DDPAIDash.Core.Types
 {
-    internal class SwitchStateToValueConvertor : IValueConverter
+    public enum DisplayMode
     {
-        public object Convert(object value, Type targetType, object parameter, string language)
-        {
-            bool result = value != null && (SwitchState) value == SwitchState.On;
-
-            return result;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, string language)
-        {
-            SwitchState result = SwitchState.Off;
-
-            if (value != null && System.Convert.ToBoolean(value))
-            {
-                result = SwitchState.On;
-            }
-
-            return result;
-        }
+        Low,
+        High
     }
 }

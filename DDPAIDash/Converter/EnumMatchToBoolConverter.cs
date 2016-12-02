@@ -23,30 +23,36 @@
 */
 
 using System;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
-using DDPAIDash.Core.Types;
 
 namespace DDPAIDash.Converter
 {
-    internal class SwitchStateToValueConvertor : IValueConverter
+    internal class EnumMatchToBoolConverter<T> : IValueConverter where T : struct 
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            bool result = value != null && (SwitchState) value == SwitchState.On;
+            var param = parameter as string;
 
-            return result;
+            if (param == null)
+                return DependencyProperty.UnsetValue;
+
+            if (Enum.IsDefined(typeof(T), value))
+                return DependencyProperty.UnsetValue;
+
+            var paramValue = Enum.Parse(value.GetType(), param);
+
+            return paramValue.Equals(value);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
         {
-            SwitchState result = SwitchState.Off;
+            var param = parameter as string;
 
-            if (value != null && System.Convert.ToBoolean(value))
-            {
-                result = SwitchState.On;
-            }
+            if (parameter == null)
+                return DependencyProperty.UnsetValue;
 
-            return result;
+            return Enum.Parse(targetType, param);
         }
     }
 }

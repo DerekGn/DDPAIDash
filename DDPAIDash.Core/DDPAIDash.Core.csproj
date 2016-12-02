@@ -96,6 +96,7 @@
     <Compile Include="Types\DeviceCapabilities.cs" />
     <Compile Include="Types\DeviceInfo.cs" />
     <Compile Include="Types\DeviceState.cs" />
+    <Compile Include="Types\DisplayMode.cs" />
     <Compile Include="Types\GSensorMode.cs" />
     <Compile Include="Types\ImageQuality.cs" />
     <Compile Include="Types\IntParameter.cs" />
