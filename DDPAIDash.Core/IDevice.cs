@@ -55,7 +55,7 @@ namespace DDPAIDash.Core
 
         int? EventBeforeTime { get; set; }
 
-        int? DisplayMode { get; set; }
+        DisplayMode? DisplayMode { get; set; }
 
         int? DelayPoweroffTime { get; set; }
 

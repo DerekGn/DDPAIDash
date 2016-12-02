@@ -7,6 +7,7 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Phone.UI.Input;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -35,6 +36,8 @@ namespace DDPAIDash
         {
             this.InitializeComponent();
             this.Suspending += this.OnSuspending;
+
+            HardwareButtons.BackPressed += HardwareButtonsOnBackPressed;
         }
 
         /// <summary>
@@ -129,6 +132,17 @@ namespace DDPAIDash
 
             // TODO: Save application state and stop any background activity
             deferral.Complete();
+        }
+
+        private void HardwareButtonsOnBackPressed(object sender, BackPressedEventArgs backPressedEventArgs)
+        {
+            Frame rootFrame = Window.Current.Content as Frame;
+
+            if (rootFrame != null && rootFrame.CanGoBack)
+            {
+                backPressedEventArgs.Handled = true;
+                rootFrame.GoBack();
+            }
         }
     }
 }

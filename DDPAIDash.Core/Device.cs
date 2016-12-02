@@ -44,7 +44,7 @@ namespace DDPAIDash.Core
         private int? _cycleRecordSpace;
         private string _defaultUser;
         private int? _delayPoweroffTime;
-        private int? _displayMode;
+        private DisplayMode? _displayMode;
         private SwitchState? _edogSwitch;
         private int? _eventAfterTime;
         private int? _eventBeforeTime;
@@ -184,7 +184,7 @@ namespace DDPAIDash.Core
             }
         }
 
-        public int? DisplayMode
+        public DisplayMode? DisplayMode
         {
             get { return _displayMode; }
             set
@@ -193,7 +193,7 @@ namespace DDPAIDash.Core
                     () =>
                     {
                         _displayMode = value;
-                        SetIntValue(PropertyKeys.display_mode.ToString(), value.Value);
+                        SetIntValue(PropertyKeys.display_mode.ToString(), (int) value.Value);
                     });
             }
         }
@@ -580,7 +580,7 @@ namespace DDPAIDash.Core
                     _quality = (ImageQuality) Enum.Parse(typeof(ImageQuality), parameter.Value.ToString(), true);
                     break;
                 case PropertyKeys.display_mode:
-                    _displayMode = int.Parse(parameter.Value.ToString());
+                    _displayMode = (DisplayMode) int.Parse(parameter.Value.ToString());
                     break;
                 case PropertyKeys.osd_switch:
                     _osd = (SwitchState) Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
