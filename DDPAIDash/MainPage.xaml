@@ -13,6 +13,18 @@
     <Page.DataContext>
         <Binding Source="{StaticResource DeviceModelSource}"/>
     </Page.DataContext>
+
+    <Grid>
+        <Pivot>
+            <PivotItem Header="Live">
+            </PivotItem>
+            <PivotItem Header="Snapshots">
+            </PivotItem>
+            <PivotItem Header="GSensor">
+            </PivotItem>
+        </Pivot>
+    </Grid>
+    
     <Page.BottomAppBar>
         <CommandBar x:Name="MainCommandBar" ClosedDisplayMode="Minimal">
             <AppBarButton x:Name="BtnCamera" Icon="Camera" Click="btnCamera_Click" />
@@ -21,7 +33,4 @@
             <AppBarButton x:Name="BtnSettings" Icon="Setting" Click="btnSettings_Click" />
         </CommandBar>
     </Page.BottomAppBar>
-
-    <Grid>
-    </Grid>
 </Page>
