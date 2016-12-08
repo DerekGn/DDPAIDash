@@ -100,9 +100,13 @@ namespace DDPAIDash.Core
         /// <summary>
         /// Get a list of files on the device
         /// </summary>
-        /// <returns>A list of files stored in the <see cref="IDevice"/> instances memory</returns>
-        IList<string> GetFiles();
+        /// <returns>An instance of <see cref="DeviceFileList"/> that details all files on the devices ssd</returns>
+        DeviceFileList GetFiles();
         
+        DeviceEventList GetEvents();
+
+        // GetGSensorFiles();
+
         /// <summary>
         /// Stream a file from the <see cref="IDevice"/> instance
         /// </summary>

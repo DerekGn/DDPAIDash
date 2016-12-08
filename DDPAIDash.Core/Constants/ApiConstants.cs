@@ -36,6 +36,7 @@ namespace DDPAIDash.Core.Constants
         public const string PlayModeQuery = "API_PlayModeQuery";
         public const string LockedListReq = "APP_LockedListReq";
         public const string GeneralQuery = "API_GeneralQuery";
+        public const string EventListReq = "APP_EventListReq";
         public const string SetLockFile = "API_SetLockFile";
         public const string ButtonMatch = "API_ButtonMatch";
         public const string GetBaseInfo = "API_GetBaseInfo";

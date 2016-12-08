@@ -386,10 +386,10 @@ namespace DDPAIDash.Core
             }
         }
 
-        public event EventHandler<StateChangedEventArgs> StateChanged;
-
         public event EventHandler<NewFilesCreatedEventArgs> NewFilesCreated;
 
+        public event EventHandler<StateChangedEventArgs> StateChanged;
+        
         public bool Connect(UserInfo userInfo)
         {
             bool result;
@@ -417,15 +417,49 @@ namespace DDPAIDash.Core
             try
             {
 #warning logout
-                ExecuteRequest(ApiConstants.GetMailboxData,
-                    apiCommand => _transport.Execute(apiCommand), response => { _logger.Error(response.Data); });
-
                 _transport.Disconnect();
             }
             catch (Exception exception)
             {
                 throw;
             }
+        }
+
+        public DeviceFileList GetFiles()
+        {
+            DeviceFileList deviceFileList = null;
+
+            ExecuteRequest(ApiConstants.PlaybackListReq,
+                    apiCommand => _transport.Execute(apiCommand), (response) =>
+                    {
+                        deviceFileList = JsonConvert.DeserializeObject<DeviceFileList>(response.Data);
+                    });
+
+            //ExecuteRequest("API_GsensorFileListReq",
+            //        apiCommand => _transport.Execute(apiCommand), (response) =>
+            //        {
+            //            _logger.Info(response.Data);
+            //        });
+
+            return deviceFileList;
+        }
+
+        public DeviceEventList GetEvents()
+        {
+            DeviceEventList deviceEventList = null;
+
+            ExecuteRequest("APP_EventListReq",
+                apiCommand => _transport.Execute(apiCommand), (response) =>
+                {
+                    deviceEventList = JsonConvert.DeserializeObject<DeviceEventList>(response.Data);
+                });
+
+            return deviceEventList;
+        }
+        
+        public IStreamDescriptor StreamFile(string filename)
+        {
+            throw new NotImplementedException();
         }
 
         protected void OnStateChanged()
@@ -441,31 +475,62 @@ namespace DDPAIDash.Core
 
                 // OK
                 ExecuteRequest(ApiConstants.GetMailboxData,
-                    apiCommand => _transport.Execute(apiCommand), response => { _logger.Error(response.Data); });
+                    apiCommand => _transport.Execute(apiCommand),
+                    response =>
+                    {
+                        HandleMailBoxResponse(response.Data);
+                    });
 
                 //ExecuteRequest("API_GetTestdate",
                 //    apiCommand => _transport.Execute(apiCommand), (response) =>
                 //    {
-                //        _logger.Error(response.Data);
+                //        _logger.Info(response.Data);
                 //    });
 
                 ////OK
                 //ExecuteRequest(ApiConstants.PlayModeQuery,
-                //        apiCommand => _transport.Execute(apiCommand), (response) => {
-                //            _logger.Error(response.Data);
+                //        apiCommand => _transport.Execute(apiCommand), (response) =>
+                //        {
+                //            _logger.Info(response.Data);
                 //        });
                 ////ok
                 //ExecuteRequest(ApiConstants.PlaybackListReq,
-                //        apiCommand => _transport.Execute(apiCommand), (response) => {
-                //            _logger.Error(response.Data);
+                //        apiCommand => _transport.Execute(apiCommand), (response) =>
+                //        {
+                //            _logger.Info(response.Data);
                 //        });
 
                 //ExecuteRequest("API_GetModuleState",
                 //        apiCommand => _transport.Execute(apiCommand), (response) =>
                 //        {
-                //            _logger.Error(response.Data);
+                //            _logger.Info(response.Data);
+                //        });
+
+                //NOK
+                //ExecuteRequest("APP_LockedListReq",
+                //        apiCommand => _transport.Execute(apiCommand), (response) =>
+                //        {
+                //            _logger.Info(response.Data);
+                //        });
+                //NOK
+                //ExecuteRequest("API_RecordOpt",
+                //        apiCommand => _transport.Execute(apiCommand), (response) =>
+                //        {
+                //            _logger.Info(response.Data);
+                //        });
+                //NOK
+                //ExecuteRequest("API_GetClipRegion",
+                //        apiCommand => _transport.Execute(apiCommand), (response) =>
+                //        {
+                //            _logger.Info(response.Data);
                 //        });
             } while (!cancellationToken.IsCancellationRequested);
+        }
+
+        private void HandleMailBoxResponse(string data)
+        {
+            _logger.Info(data);
+            //var messages = JsonConvert.DeserializeObject<List<MailBoxMessage>>(data);
         }
 
         private bool PerformConnect(UserInfo userInfo)
@@ -722,15 +787,7 @@ namespace DDPAIDash.Core
             // GC.SuppressFinalize(this);
         }
 
-        public IList<string> GetFiles()
-        {
-            throw new NotImplementedException();
-        }
 
-        public IStreamDescriptor StreamFile(string filename)
-        {
-            throw new NotImplementedException();
-        }
 
         #endregion
     }
