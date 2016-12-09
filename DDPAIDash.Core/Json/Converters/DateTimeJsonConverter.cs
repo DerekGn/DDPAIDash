@@ -22,18 +22,35 @@
 * SOFTWARE.
 */
 
-namespace DDPAIDash.Core.Types
+using System;
+using Newtonsoft.Json;
+
+namespace DDPAIDash.Core.Json.Converters
 {
-    internal enum MailBoxMessageKeys
+    internal class DateTimeJsonConverter : JsonConverter
     {
-        Unknown,
-        MSG_PowerDown,
-        MSG_MMCWarning,
-        MSG_ButtonMatch,
-        MSG_DeleteEvent,
-        MSG_EventOccured,
-        MSG_RecordSizeWarning,
-        MSG_PlaybackListUpdate,
-        MSG_PlaybackLiveSwitch
+        private static readonly long InitialJavaScriptDateTicks = 621355968000000000L;
+
+        public override bool CanConvert(Type objectType)
+        {
+            return objectType == typeof(DateTime) || objectType == typeof(DateTime?);
+        }
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            DateTime? result = null;
+
+            if(!string.IsNullOrWhiteSpace((string) reader.Value))
+            {
+                result = new DateTime(long.Parse((string)reader.Value) * 10000L + InitialJavaScriptDateTicks, DateTimeKind.Utc);
+            }
+
+            return result;
+        }
+
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

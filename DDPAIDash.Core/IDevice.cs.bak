@@ -23,8 +23,9 @@
 */
 
 using System;
+using System.Collections.Generic;
+using System.IO;
 using DDPAIDash.Core.Types;
-using DDPAIDash.Core.Events;
 
 namespace DDPAIDash.Core
 {
@@ -103,7 +104,9 @@ namespace DDPAIDash.Core
         DeviceFileList GetFiles();
         
         DeviceEventList GetEvents();
-        
+
+        // GetGSensorFiles();
+
         /// <summary>
         /// Stream a file from the <see cref="IDevice"/> instance
         /// </summary>
@@ -116,13 +119,8 @@ namespace DDPAIDash.Core
         event EventHandler<StateChangedEventArgs> StateChanged;
 
         /// <summary>
-        /// Raised when the <see cref="IDevice"/> udates its file list
+        /// Raised when the <see cref="IDevice"/> creates a new file
         /// </summary>
-        event EventHandler<FilesChangedEventArgs> FilesChanged;
-
-        /// <summary>
-        /// Raised when a new event occurs <see cref="IDevice"/>
-        /// </summary>
-        event EventHandler<EventOccuredEventArgs> EventOccured;
+        event EventHandler<NewFilesCreatedEventArgs> NewFilesCreated;
     }
 }

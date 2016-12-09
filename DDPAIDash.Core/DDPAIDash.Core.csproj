@@ -81,8 +81,12 @@
   <ItemGroup>
     <Compile Include="Constants\ApiConstants.cs" />
     <Compile Include="Device.cs" />
-    <Compile Include="NewFilesCreatedEventArgs.cs" />
-    <Compile Include="StateChangedEventArgs.cs" />
+    <Compile Include="Events\EventCreatedEventArgs.cs" />
+    <Compile Include="Events\FilesCreatedEventArgs.cs" />
+    <Compile Include="Events\StateChangedEventArgs.cs" />
+    <Compile Include="Json\Converters\DateTimeJsonConverter.cs" />
+    <Compile Include="Json\Converters\EnumConverter.cs" />
+    <Compile Include="Json\Converters\MailBoxMessageKeysConverter.cs" />
     <Compile Include="Exceptions\DeviceException.cs" />
     <Compile Include="IDevice.cs" />
     <Compile Include="IStreamDescriptor.cs" />
@@ -107,8 +111,11 @@
     <Compile Include="Types\IntParameter.cs" />
     <Compile Include="Types\MailBoxMessage.cs" />
     <Compile Include="Types\MailBoxMessageKeys.cs" />
+    <Compile Include="Types\MailBoxMessageList.cs" />
     <Compile Include="Types\Parameter.cs" />
     <Compile Include="Types\Parameters.cs" />
+    <Compile Include="Types\PlaybackAction.cs" />
+    <Compile Include="Types\PlaybackListUpdate.cs" />
     <Compile Include="Types\QueryParameter.cs" />
     <Compile Include="Types\PropertyKeys.cs" />
     <Compile Include="Types\QueryParameterKeys.cs" />

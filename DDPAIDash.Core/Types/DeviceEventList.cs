@@ -29,6 +29,11 @@ namespace DDPAIDash.Core
 {
     public class DeviceEventList
     {
+        public DeviceEventList()
+        {
+            Events = new List<DeviceEvent>();
+        }
+
         [JsonProperty("num")]
         public int Count { get; set; }
 

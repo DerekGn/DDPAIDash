@@ -22,7 +22,9 @@
 * SOFTWARE.
 */
 
+using System;
 using Newtonsoft.Json;
+using DDPAIDash.Core.Json.Converters;
 
 namespace DDPAIDash.Core
 {
@@ -40,25 +42,32 @@ namespace DDPAIDash.Core
         [JsonProperty("svideoname")]
         public string SVideoName { get; set; }
 
-        //[JsonProperty("bstarttime")]
-        //public DateTime BStartTime { get; set; }
-        //[JsonProperty("bendtime")]
-        //public DateTime BEndTime { get; set; }
-        //[JsonProperty("sstarttime")]
-        //public DateTime SStartTime { get; set; }
-        //[JsonProperty("sendtime")]
-        //public DateTime SEndTime { get; set; }
+        [JsonProperty("bstarttime")]
+        [JsonConverter(typeof(DateTimeJsonConverter))]
+        public DateTime? BStartTime { get; set; }
+
+        [JsonProperty("bendtime")]
+        [JsonConverter(typeof(DateTimeJsonConverter))]
+        public DateTime? BEndTime { get; set; }
+
+        [JsonProperty("sstarttime")]
+        [JsonConverter(typeof(DateTimeJsonConverter))]
+        public DateTime? SStartTime { get; set; }
+
+        [JsonProperty("sendtime")]
+        [JsonConverter(typeof(DateTimeJsonConverter))]
+        public DateTime? SEndTime { get; set; }
 
         [JsonProperty("eventtype")]
         public int Type { get; set; }
 
         [JsonProperty("imgsize")]
-        public int ImageSize { get; set; }
+        public int? ImageSize { get; set; }
 
         [JsonProperty("bvideosize")]
-        public int BVideoSize { get; set; }
+        public int? BVideoSize { get; set; }
 
         [JsonProperty("svideosize")]
-        public int SVideoSize { get; set; }
+        public int? SVideoSize { get; set; }
     }
 }

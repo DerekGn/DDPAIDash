@@ -22,13 +22,14 @@
 * SOFTWARE.
 */
 
-using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
-namespace DDPAIDash.Core
+namespace DDPAIDash.Core.Types
 {
-    public class NewFilesCreatedEventArgs : EventArgs
+    internal class MailBoxMessageList
     {
-        public IList<string> FilesList { get; set; }
+        [JsonProperty("msg")]
+        public List<MailBoxMessage> Messages { get; set; }
     }
 }

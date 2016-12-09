@@ -22,10 +22,18 @@
 * SOFTWARE.
 */
 
+using Newtonsoft.Json;
+using DDPAIDash.Core.Json.Converters;
+
 namespace DDPAIDash.Core.Types
 {
     internal class MailBoxMessage
     {
-        
+        [JsonProperty("msgid")]
+        [JsonConverter(typeof(MailBoxMessageKeysConverter))]
+        public MailBoxMessageKeys Key { get; set; }
+
+        [JsonProperty("data")]
+        public string Data { get; set; }
     }
 }

@@ -24,6 +24,7 @@
 
 using System;
 using Newtonsoft.Json;
+using DDPAIDash.Core.Json.Converters;
 
 namespace DDPAIDash.Core.Types
 {
@@ -38,12 +39,13 @@ namespace DDPAIDash.Core.Types
         [JsonProperty("type")]
         public int Type { get; set; }
 
-#warning TODO
-        //[JsonProperty("starttime")]
-        //public DateTime StartTime { get; set; }
+        [JsonProperty("starttime")]
+        [JsonConverter(typeof(DateTimeJsonConverter))]
+        public DateTime? StartTime { get; set; }
 
-        //[JsonProperty("endtime")]
-        //public DateTime EndTime { get; set; }
+        [JsonProperty("endtime")]
+        [JsonConverter(typeof(DateTimeJsonConverter))]
+        public DateTime? EndTime { get; set; }
 
         [JsonProperty("event")]
         public int Event { get; set; }

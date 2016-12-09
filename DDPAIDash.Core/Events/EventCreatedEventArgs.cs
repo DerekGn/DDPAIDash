@@ -22,18 +22,15 @@
 * SOFTWARE.
 */
 
-namespace DDPAIDash.Core.Types
+namespace DDPAIDash.Core.Events
 {
-    internal enum MailBoxMessageKeys
+    public class EventOccuredEventArgs
     {
-        Unknown,
-        MSG_PowerDown,
-        MSG_MMCWarning,
-        MSG_ButtonMatch,
-        MSG_DeleteEvent,
-        MSG_EventOccured,
-        MSG_RecordSizeWarning,
-        MSG_PlaybackListUpdate,
-        MSG_PlaybackLiveSwitch
+        private DeviceEvent deviceEvent;
+
+        public EventOccuredEventArgs(DeviceEvent deviceEvent)
+        {
+            this.deviceEvent = deviceEvent;
+        }
     }
 }

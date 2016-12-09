@@ -29,6 +29,11 @@ namespace DDPAIDash.Core.Types
 {
     public class DeviceFileList
     {
+        public DeviceFileList()
+        {
+            DeviceFiles = new List<DeviceFile>();
+        }
+
         [JsonProperty("num")]
         public int Count { get; set; }
 
