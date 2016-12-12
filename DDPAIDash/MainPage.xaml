@@ -19,7 +19,7 @@
 
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <ItemsWrapGrid ItemWidth="146" ItemHeight="146"/>
+                                <ItemsWrapGrid Orientation="Horizontal"/>
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
 
@@ -44,12 +44,12 @@
                     </ItemsControl>
                 </ScrollViewer>
             </PivotItem>
-            <PivotItem Header="GSensor Events">
+            <PivotItem Header="Events">
                 <ScrollViewer x:Name="GSensorPanel" Margin="12,0,2,0" Visibility="Visible">
                     <ItemsControl ItemsSource="{Binding DeviceEvents}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <ItemsWrapGrid ItemWidth="146" ItemHeight="146"/>
+                                <ItemsWrapGrid Orientation="Horizontal"/>
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
 

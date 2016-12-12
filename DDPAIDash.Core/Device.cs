@@ -449,7 +449,7 @@ namespace DDPAIDash.Core
 
             return deviceFileList;
         }
-        
+
         public DeviceEventList GetEvents()
         {
             DeviceEventList deviceEventList = null;
@@ -474,7 +474,23 @@ namespace DDPAIDash.Core
 
         private void LoadDeviceEventThumbnails(DeviceEventList deviceEventList)
         {
-            throw new NotImplementedException();
+            foreach (var deviceFile in deviceEventList.Events)
+            {
+                var imageFileName = deviceFile.ImageName.Replace("_L", "_T");
+
+                if (!_imageCache.Contains(imageFileName))
+                {
+                    _logger.Verbose($"Cache does not contain [{imageFileName}] retrieving from device");
+
+                    using (var imageStream = _transport.GetFile(imageFileName))
+                    {
+                        _imageCache.Cache(imageFileName, imageStream);
+                    }
+                }
+
+                deviceFile.ImageStream = _imageCache.GetThumbnailStream(imageFileName);
+                deviceFile.VideoStream = _imageCache.GetThumbnailStream(imageFileName);
+            }
         }
 
         private void LoadDeviceFileThumbnails(DeviceFileList deviceFileList)

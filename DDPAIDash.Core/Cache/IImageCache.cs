@@ -31,12 +31,12 @@ namespace DDPAIDash.Core.Cache
     {
         Stream Get(string name);
 
-        //StorageFile GetStorageFile(string name);
-
         Stream GetThumbnailStream(string name);
 
         bool Contains(string name);
 
         void Cache(Stream stream);
+
+        void Cache(string imageFileName, Stream imageStream);
     }
 }

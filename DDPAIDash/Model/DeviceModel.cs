@@ -22,12 +22,11 @@
 * SOFTWARE.
 */
 
+using System;
+using System.Collections.ObjectModel;
 using DDPAIDash.Core;
 using DDPAIDash.Core.Types;
-using System.Collections.ObjectModel;
-using System;
-using Windows.Storage;
-using System.IO;
+
 
 namespace DDPAIDash.Model
 {

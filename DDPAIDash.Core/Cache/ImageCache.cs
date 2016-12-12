@@ -55,6 +55,16 @@ namespace DDPAIDash.Core.Cache
             }
         }
 
+        public void Cache(string imageFileName, Stream stream)
+        {
+            StorageFile newFile = ApplicationData.Current.LocalFolder.CreateFileAsync(imageFileName).AsTask().Result;
+
+            using (Stream outStream = newFile.OpenStreamForWriteAsync().Result)
+            {
+                stream.CopyTo(outStream);
+            }
+        }
+
         public bool Contains(string name)
         {
 #warning TOASYNC
