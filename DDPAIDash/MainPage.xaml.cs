@@ -59,16 +59,60 @@ namespace DDPAIDash
             // Windows.Phone.UI.Input.HardwareButtons.BackPressed event.
             // If you are using the NavigationHelper provided by some templates,
             // this event is handled for you.
+
+            DataContext = DeviceModel.Instance;
         }
 
         private void btnCamera_Click(object sender, RoutedEventArgs e)
         {
-            DeviceModel.DeviceInstance.Connect(new UserInfo("012345678912345", "admin", "admin", 0));
+            DeviceModel.Instance.DeviceInstance.Connect(new UserInfo("012345678912345", "admin", "admin", 0));
+
+            DeviceModel.Instance.LoadFilesAndEvents();
         }
 
         private void btnSettings_Click(object sender, RoutedEventArgs e)
         {
             Frame.Navigate(typeof(Settings));
+        }
+
+        private void ViewButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        
+        private void Video_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+        {
+
+        }
+
+        private void Event_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+        {
+
+        }
+
+        private void ViewEventVideoButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void SaveEventImageButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void SaveEventVideoButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ViewEventImageButton_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

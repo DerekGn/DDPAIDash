@@ -23,10 +23,11 @@
 */
 
 using System;
+using System.IO;
 using System.Net;
+using System.Text;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text;
 using Newtonsoft.Json;
 using DDPAIDash.Core.Constants;
 
@@ -80,6 +81,11 @@ namespace DDPAIDash.Core.Transports
             return ExecuteInternal(apiCommand, sc);
         }
 
+        public Stream GetFile(string fileName)
+        {
+            return _httpClient.GetStreamAsync(fileName).Result;
+        }
+
         private ResponseMessage ExecuteInternal(string apiCommand, HttpContent content)
         {
             ResponseMessage result;
@@ -110,7 +116,7 @@ namespace DDPAIDash.Core.Transports
 
             return result;
         }
-
+        
         #region IDisposable Support
 
         private bool _disposedValue;
@@ -145,7 +151,7 @@ namespace DDPAIDash.Core.Transports
             // TODO: uncomment the following line if the finalizer is overridden above.
             // GC.SuppressFinalize(this);
         }
-
+        
         #endregion
     }
 }

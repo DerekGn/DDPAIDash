@@ -79,6 +79,8 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Cache\IImageCache.cs" />
+    <Compile Include="Cache\ImageCache.cs" />
     <Compile Include="Constants\ApiConstants.cs" />
     <Compile Include="Device.cs" />
     <Compile Include="Events\EventCreatedEventArgs.cs" />
@@ -130,6 +132,10 @@
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SharpCompress, Version=0.14.1.0, Culture=neutral, PublicKeyToken=afb0a02973931d96, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpCompress.0.14.1\lib\portable45-net45+win8+wp8+wpa81\SharpCompress.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>

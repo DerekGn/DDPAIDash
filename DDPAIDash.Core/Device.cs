@@ -26,11 +26,12 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using DDPAIDash.Core.Constants;
+using DDPAIDash.Core.Types;
+using DDPAIDash.Core.Cache;
 using DDPAIDash.Core.Events;
 using DDPAIDash.Core.Logging;
+using DDPAIDash.Core.Constants;
 using DDPAIDash.Core.Transports;
-using DDPAIDash.Core.Types;
 using Newtonsoft.Json;
 
 namespace DDPAIDash.Core
@@ -43,6 +44,7 @@ namespace DDPAIDash.Core
 
         private readonly ITransport _transport;
         private readonly ILogger _logger;
+        private IImageCache _imageCache;
 
         private int? _antiFog;
         private int? _cycleRecordSpace;
@@ -73,12 +75,13 @@ namespace DDPAIDash.Core
             Cts = new CancellationTokenSource();
         }
 
-        public Device() : this(new HttpTransport(), EtwLogger.Instance)
+        public Device() : this(new HttpTransport(), new ImageCache(), EtwLogger.Instance)
         {
         }
 
-        public Device(ITransport transport, ILogger logger)
+        public Device(ITransport transport, IImageCache imageCache, ILogger logger)
         {
+            _imageCache = imageCache;
             _transport = transport;
             _logger = logger;
         }
@@ -440,11 +443,13 @@ namespace DDPAIDash.Core
                         deviceFileList = JsonConvert.DeserializeObject<DeviceFileList>(response.Data);
 
                         deviceFileList = deviceFileList ?? new DeviceFileList();
+
+                        LoadDeviceFileThumbnails(deviceFileList);
                     });
 
             return deviceFileList;
         }
-
+        
         public DeviceEventList GetEvents()
         {
             DeviceEventList deviceEventList = null;
@@ -455,6 +460,8 @@ namespace DDPAIDash.Core
                     deviceEventList = JsonConvert.DeserializeObject<DeviceEventList>(response.Data);
 
                     deviceEventList = deviceEventList ?? new DeviceEventList();
+
+                    LoadDeviceEventThumbnails(deviceEventList);
                 });
 
             return deviceEventList;
@@ -463,6 +470,31 @@ namespace DDPAIDash.Core
         public IStreamDescriptor StreamFile(string filename)
         {
             throw new NotImplementedException();
+        }
+
+        private void LoadDeviceEventThumbnails(DeviceEventList deviceEventList)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void LoadDeviceFileThumbnails(DeviceFileList deviceFileList)
+        {
+            foreach (var deviceFile in deviceFileList.Files)
+            {
+                var baseFileName = deviceFile.Name.Substring(0, 14);
+
+                if (!_imageCache.Contains(baseFileName))
+                {
+                    _logger.Verbose($"Cache does not contain [{baseFileName}] retrieving from device");
+
+                    using (var tarStream = _transport.GetFile(string.Concat(baseFileName, ".tar")))
+                    {
+                        _imageCache.Cache(tarStream);
+                    }
+                }
+
+                deviceFile.ImageStream = _imageCache.GetThumbnailStream(baseFileName);
+            }
         }
 
         private void PollMailbox(CancellationToken cancellationToken)
@@ -761,7 +793,7 @@ namespace DDPAIDash.Core
         #region IDisposable Support
 
         private bool _disposedValue;
-
+        
         protected virtual void Dispose(bool disposing)
         {
             if (!_disposedValue)

@@ -3,28 +3,92 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    
     xmlns:model="using:DDPAIDash.Model"
     x:Class="DDPAIDash.MainPage"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-    <Page.Resources>
-        <model:DeviceModel x:Key="DeviceModelSource"/>
-    </Page.Resources>
-    <Page.DataContext>
-        <Binding Source="{StaticResource DeviceModelSource}"/>
-    </Page.DataContext>
 
     <Grid>
         <Pivot>
             <PivotItem Header="Live">
             </PivotItem>
-            <PivotItem Header="Snapshots">
+            <PivotItem Header="Videos">
+                <ScrollViewer x:Name="VideosPanel" Margin="12,0,2,0" Visibility="Visible">
+                    <ItemsControl ItemsSource="{Binding DeviceFiles}">
+
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <ItemsWrapGrid ItemWidth="146" ItemHeight="146"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0,0,8,8">
+                                    <Image Source="{Binding ImageThumbnail}" CacheMode="BitmapCache" Tag="{Binding Name}" Tapped="Video_Tapped">
+                                        <FlyoutBase.AttachedFlyout>
+                                            <MenuFlyout>
+                                                <MenuFlyoutItem x:Name="ViewButton"
+                                                            Text="View"
+                                                            Click="ViewButton_Click"/>
+                                                <MenuFlyoutItem x:Name="SaveButton"
+                                                            Text="Save"
+                                                            Click="SaveButton_Click"/>
+                                            </MenuFlyout>
+                                        </FlyoutBase.AttachedFlyout>
+                                    </Image>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
             </PivotItem>
-            <PivotItem Header="GSensor">
+            <PivotItem Header="GSensor Events">
+                <ScrollViewer x:Name="GSensorPanel" Margin="12,0,2,0" Visibility="Visible">
+                    <ItemsControl ItemsSource="{Binding DeviceEvents}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <ItemsWrapGrid ItemWidth="146" ItemHeight="146"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0,0,8,8">
+                                    <Image Source="{Binding VideoThumbnail}" CacheMode="BitmapCache" Tag="{Binding BVideoName}" Tapped="Event_Tapped">
+                                        <FlyoutBase.AttachedFlyout>
+                                            <MenuFlyout>
+                                                <MenuFlyoutItem x:Name="ViewEventVideoButton"
+                                                            Text="View"
+                                                            Click="ViewEventVideoButton_Click"/>
+                                                <MenuFlyoutItem x:Name="SaveEventVideoButton"
+                                                            Text="Save"
+                                                            Click="SaveEventVideoButton_Click"/>
+                                            </MenuFlyout>
+                                        </FlyoutBase.AttachedFlyout>
+                                    </Image>
+                                    <Image Source="{Binding ImageThumbnail}" CacheMode="BitmapCache" Tag="{Binding ImageName}" Tapped="Event_Tapped">
+                                        <FlyoutBase.AttachedFlyout>
+                                            <MenuFlyout>
+                                                <MenuFlyoutItem x:Name="ViewEventImageButton"
+                                                            Text="View"
+                                                            Click="ViewEventImageButton_Click"/>
+                                                <MenuFlyoutItem x:Name="SaveImageEventButton"
+                                                            Text="Save"
+                                                            Click="SaveEventImageButton_Click"/>
+                                            </MenuFlyout>
+                                        </FlyoutBase.AttachedFlyout>
+                                    </Image>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
             </PivotItem>
         </Pivot>
     </Grid>
-    
+
     <Page.BottomAppBar>
         <CommandBar x:Name="MainCommandBar" ClosedDisplayMode="Minimal">
             <AppBarButton x:Name="BtnCamera" Icon="Camera" Click="btnCamera_Click" />

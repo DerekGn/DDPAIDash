@@ -23,6 +23,7 @@
 */
 
 using System;
+using System.IO;
 
 namespace DDPAIDash.Core.Transports
 {
@@ -31,6 +32,8 @@ namespace DDPAIDash.Core.Transports
         string SessionId { get; set; }
 
         void Connect(string address, int port);
+
+        Stream GetFile(string fileName);
 
         ResponseMessage Execute(string apiCommand);
 

@@ -23,13 +23,20 @@
 */
 
 using System;
+using System.IO;
 using Newtonsoft.Json;
 using DDPAIDash.Core.Json.Converters;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace DDPAIDash.Core
 {
     public class DeviceEvent
     {
+        private Stream _imageStream;
+        private BitmapImage _bitmap;
+        private BitmapImage _videoBitmap;
+        private Stream _videoStream;
+
         [JsonProperty("index")]
         public int Index { get; set; }
 
@@ -69,5 +76,47 @@ namespace DDPAIDash.Core
 
         [JsonProperty("svideosize")]
         public int? SVideoSize { get; set; }
+
+        [JsonIgnore]
+        public Stream ImageStream
+        {
+            get { return _imageStream; }
+            set
+            {
+                _imageStream = value;
+                _bitmap = new BitmapImage();
+                _bitmap.SetSource(_imageStream.AsRandomAccessStream());
+            }
+        }
+
+        [JsonIgnore]
+        public BitmapImage ImageThumbnail
+        {
+            get
+            {
+                return _bitmap;
+            }
+        }
+
+        [JsonIgnore]
+        public Stream VideoStream
+        {
+            get { return _imageStream; }
+            set
+            {
+                _videoStream = value;
+                _videoBitmap = new BitmapImage();
+                _videoBitmap.SetSource(_videoStream.AsRandomAccessStream());
+            }
+        }
+
+        [JsonIgnore]
+        public BitmapImage VideoThumbnail
+        {
+            get
+            {
+                return _videoBitmap;
+            }
+        }
     }
 }

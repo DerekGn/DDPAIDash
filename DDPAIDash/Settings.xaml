@@ -18,11 +18,7 @@
         <converter:SwitchStateToValueConvertor x:Key="SwitchStateToValueConvertor" />
         <converter:NullableToBooleanConverter x:Key="NullableToBooleanConverter" />
         <converter:IntToDoubleConverter x:Key="IntToDoubleConverter" />
-        <model:DeviceModel x:Key="DeviceModelSource" />
     </Page.Resources>
-    <Page.DataContext>
-        <Binding Source="{StaticResource DeviceModelSource}" />
-    </Page.DataContext>
 
     <Grid>
         <Pivot Title="Settings">

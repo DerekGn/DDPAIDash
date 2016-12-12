@@ -24,18 +24,45 @@
 
 using DDPAIDash.Core;
 using DDPAIDash.Core.Types;
+using System.Collections.ObjectModel;
+using System;
+using Windows.Storage;
+using System.IO;
 
 namespace DDPAIDash.Model
 {
     public class DeviceModel
     {
-        static DeviceModel()
+        private static Lazy<DeviceModel> _instance = new Lazy<DeviceModel>();
+        
+        public DeviceModel()
         {
+            DeviceEvents = new ObservableCollection<DeviceEvent>();
+            DeviceFiles = new ObservableCollection<DeviceFile>();
             DeviceInstance = new Device();
         }
-        
-        public static IDevice DeviceInstance { get; }
-        
+
+        public static DeviceModel Instance { get { return _instance.Value; } }
+
+        public IDevice DeviceInstance { get; }
+
+        public ObservableCollection<DeviceFile> DeviceFiles { get; private set; }
+
+        public ObservableCollection<DeviceEvent> DeviceEvents { get; private set; }
+
         public bool IsDeviceConnected => DeviceInstance.State == DeviceState.Connected;
+
+        public void LoadFilesAndEvents()
+        {
+            foreach (var deviceFile in DeviceInstance.GetFiles().Files)
+            {
+                DeviceFiles.Add(deviceFile);
+            }
+
+            foreach (var deviceEvent in DeviceInstance.GetEvents().Events)
+            {
+                DeviceEvents.Add(deviceEvent);
+            }
+        }
     }
 }

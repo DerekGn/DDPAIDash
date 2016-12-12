@@ -22,22 +22,21 @@
 * SOFTWARE.
 */
 
-using Newtonsoft.Json;
-using System.Collections.Generic;
+using System.IO;
+using Windows.Storage;
 
-namespace DDPAIDash.Core.Types
+namespace DDPAIDash.Core.Cache
 {
-    public class DeviceFileList
+    public interface IImageCache
     {
-        public DeviceFileList()
-        {
-            Files = new List<DeviceFile>();
-        }
+        Stream Get(string name);
 
-        [JsonProperty("num")]
-        public int Count { get; set; }
+        //StorageFile GetStorageFile(string name);
 
-        [JsonProperty("file")]
-        public List<DeviceFile> Files { get; set; }
+        Stream GetThumbnailStream(string name);
+
+        bool Contains(string name);
+
+        void Cache(Stream stream);
     }
 }
