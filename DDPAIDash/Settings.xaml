@@ -17,6 +17,7 @@
         <converter:GSensorModeEnumMatchToBoolConverter x:Key="GSensorModeEnumMatchConverter" />
         <converter:SwitchStateToValueConvertor x:Key="SwitchStateToValueConvertor" />
         <converter:NullableToBooleanConverter x:Key="NullableToBooleanConverter" />
+        <converter:SizeToStringConverter x:Key="SizeToStringConverter" />
         <converter:IntToDoubleConverter x:Key="IntToDoubleConverter" />
     </Page.Resources>
 
@@ -194,9 +195,9 @@
                         <TextBlock Text="LbBitrate" Style="{StaticResource BaseTextBlockStyle}" />
                         <TextBlock Text="{Binding DeviceInstance.Info.LsBitrate}" />
                         <TextBlock Text="SdCapacity" Style="{StaticResource BaseTextBlockStyle}" />
-                        <TextBlock Text="{Binding DeviceInstance.Info.SdCapacity}" />
+                        <TextBlock Text="{Binding DeviceInstance.Info.SdCapacity, Converter={StaticResource SizeToStringConverter}, ConverterParameter=GB, Mode=OneWay}" />
                         <TextBlock Text="SdSpare" Style="{StaticResource BaseTextBlockStyle}" />
-                        <TextBlock Text="{Binding DeviceInstance.Info.SdSpare}" />
+                        <TextBlock Text="{Binding DeviceInstance.Info.SdSpare, Converter={StaticResource SizeToStringConverter}, ConverterParameter=KB, Mode=OneWay}" />
                     </StackPanel>
                 </ScrollViewer>
             </PivotItem>
@@ -204,9 +205,9 @@
                 <ScrollViewer>
                     <StackPanel>
                         <TextBlock Text="Capacity" Style="{StaticResource BodyTextBlockStyle}" />
-                        <TextBlock Text="{Binding DeviceInstance.Storage.Capacity}" />
+                        <TextBlock Text="{Binding DeviceInstance.Storage.Capacity, Converter={StaticResource SizeToStringConverter}, ConverterParameter=GB, Mode=OneWay}" />
                         <TextBlock Text="Cycle Record Space" Style="{StaticResource BodyTextBlockStyle}" />
-                        <TextBlock Text="{Binding DeviceInstance.Storage.CycleRecordSpace}" />
+                        <TextBlock Text="{Binding DeviceInstance.Storage.CycleRecordSpace, Converter={StaticResource SizeToStringConverter}, ConverterParameter=GB, Mode=OneWay}" />
                         <TextBlock Text="GNumber" Style="{StaticResource BodyTextBlockStyle}" />
                         <TextBlock Text="{Binding DeviceInstance.Storage.GNumber}" />
                         <TextBlock Text="IncreaseBadBlock" Style="{StaticResource BodyTextBlockStyle}" />
@@ -214,7 +215,7 @@
                         <TextBlock Text="NNumber" Style="{StaticResource BodyTextBlockStyle}" />
                         <TextBlock Text="{Binding DeviceInstance.Storage.NNumber}" />
                         <TextBlock Text="PlaybackSize" Style="{StaticResource BodyTextBlockStyle}" />
-                        <TextBlock Text="{Binding DeviceInstance.Storage.PlaybackSize}" />
+                        <TextBlock Text="{Binding DeviceInstance.Storage.PlaybackSize, Converter={StaticResource SizeToStringConverter}, ConverterParameter=KB, Mode=OneWay}" />
                         <TextBlock Text="ReplaceBlockLeft" Style="{StaticResource BodyTextBlockStyle}" />
                         <TextBlock Text="{Binding DeviceInstance.Storage.ReplaceBlockLeft}" />
                         <TextBlock Text="SmartOk" Style="{StaticResource BodyTextBlockStyle}" />
@@ -222,7 +223,7 @@
                         <TextBlock Text="Smart Version" Style="{StaticResource BodyTextBlockStyle}" />
                         <TextBlock Text="{Binding DeviceInstance.Storage.SmartVersion}" />
                         <TextBlock Text="Spare" Style="{StaticResource BodyTextBlockStyle}" />
-                        <TextBlock Text="{Binding DeviceInstance.Storage.Spare}" />
+                        <TextBlock Text="{Binding DeviceInstance.Storage.Spare, Converter={StaticResource SizeToStringConverter}, ConverterParameter=KB, Mode=OneWay}" />
                         <TextBlock Text="StmSize" Style="{StaticResource BodyTextBlockStyle}" />
                         <TextBlock Text="{Binding DeviceInstance.Storage.StmSize}" />
                         <TextBlock Text="Runtime" Style="{StaticResource BodyTextBlockStyle}" />

@@ -97,6 +97,7 @@
     <Compile Include="Converter\EnumToBoolConverter.cs" />
     <Compile Include="Converter\IntToDoubleConverter.cs" />
     <Compile Include="Converter\NullableToBooleanConverter.cs" />
+    <Compile Include="Converter\SizeToStringConverter.cs" />
     <Compile Include="Converter\SwitchStateToValueConvertor.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
@@ -136,6 +137,15 @@
   </ItemGroup>
   <ItemGroup>
     <PRIResource Include="Strings\en\Resources.resw" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="ByteSizeLib, Version=1.2.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ByteSize.1.2.4\lib\portable-net45+win8+wpa81+wp8\ByteSizeLib.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
