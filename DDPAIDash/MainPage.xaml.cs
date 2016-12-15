@@ -28,6 +28,8 @@ using Windows.UI.Xaml.Navigation;
 
 using DDPAIDash.Core.Types;
 using DDPAIDash.Model;
+using DDPAIDash.Controls;
+using Windows.Foundation;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=391641
 
@@ -38,6 +40,8 @@ namespace DDPAIDash
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        private TypedEventHandler<ListViewBase, ContainerContentChangingEventArgs> _delegate;
+
         public MainPage()
         {
             this.InitializeComponent();
@@ -60,7 +64,7 @@ namespace DDPAIDash
             // If you are using the NavigationHelper provided by some templates,
             // this event is handled for you.
 
-            DataContext = DeviceModel.Instance;
+            VideoGridView.ItemsSource = DeviceModel.Instance.DeviceFiles;
         }
 
         private void btnCamera_Click(object sender, RoutedEventArgs e)
@@ -75,44 +79,50 @@ namespace DDPAIDash
             Frame.Navigate(typeof(Settings));
         }
 
-        private void ViewButton_Click(object sender, RoutedEventArgs e)
+        private void VideoGridView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
+        {
+            DeviceFileViewer iv = args.ItemContainer.ContentTemplateRoot as DeviceFileViewer;
+
+            if (args.InRecycleQueue == true)
+            {
+                iv.ClearData();
+            }
+            else if (args.Phase == 0)
+            {
+                iv.ShowPlaceholder(args.Item as DeviceFile);
+
+                // Register for async callback to visualize Title asynchronously
+                args.RegisterUpdateCallback(ContainerContentChangingDelegate);
+            }
+            else if (args.Phase == 1)
+            {
+                iv.ShowName();
+                args.RegisterUpdateCallback(ContainerContentChangingDelegate);
+            }
+            else if (args.Phase == 2)
+            {
+                iv.ShowImage();
+            }
+
+            args.Handled = true;
+        }
+
+        private void Video_ItemClickHandler(object sender, ItemClickEventArgs e)
         {
 
         }
 
-        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        private TypedEventHandler<ListViewBase, ContainerContentChangingEventArgs> ContainerContentChangingDelegate
         {
-
+            get
+            {
+                if (_delegate == null)
+                {
+                    _delegate = new TypedEventHandler<ListViewBase, ContainerContentChangingEventArgs>(VideoGridView_ContainerContentChanging);
+                }
+                return _delegate;
+            }
         }
         
-        private void Video_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
-        {
-
-        }
-
-        private void Event_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
-        {
-
-        }
-
-        private void ViewEventVideoButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void SaveEventImageButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void SaveEventVideoButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void ViewEventImageButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
     }
 }

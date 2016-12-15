@@ -27,13 +27,14 @@ using System.IO;
 using Newtonsoft.Json;
 using DDPAIDash.Core.Json.Converters;
 using Windows.UI.Xaml.Media.Imaging;
+using Windows.UI.Xaml.Media;
 
 namespace DDPAIDash.Core.Types
 {
     public class DeviceFile
     {
-        private Stream _imageStream;
-        private BitmapImage _bitmap;
+        private BitmapImage _image;
+        private Stream _stream;
 
         [JsonProperty("index")]
         public int Index { get; set; }
@@ -62,23 +63,23 @@ namespace DDPAIDash.Core.Types
         public string ParentFile { get; set; }
 
         [JsonIgnore]
-        public Stream ImageStream
+        public Stream Stream
         {
-            get { return _imageStream; }
+            get { return _stream; }
             set
             {
-                _imageStream = value;
-                _bitmap = new BitmapImage();
-                _bitmap.SetSource(_imageStream.AsRandomAccessStream());
+                _stream = value;
+                _image = new BitmapImage();
+                _image.SetSource(_stream.AsRandomAccessStream());
             }
         }
 
         [JsonIgnore]
-        public BitmapImage ImageThumbnail
+        public BitmapImage Image
         {
             get
             {
-                return _bitmap;
+                return _image;
             }
         }
     }

@@ -509,7 +509,7 @@ namespace DDPAIDash.Core
                     }
                 }
 
-                deviceFile.ImageStream = _imageCache.GetThumbnailStream(baseFileName);
+                deviceFile.Stream = _imageCache.GetThumbnailStream(baseFileName);
             }
         }
 
