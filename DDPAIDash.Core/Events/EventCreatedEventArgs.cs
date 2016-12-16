@@ -22,6 +22,8 @@
 * SOFTWARE.
 */
 
+using DDPAIDash.Core.Types;
+
 namespace DDPAIDash.Core.Events
 {
     public class EventOccuredEventArgs

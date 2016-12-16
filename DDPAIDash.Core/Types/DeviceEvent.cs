@@ -28,7 +28,7 @@ using Newtonsoft.Json;
 using DDPAIDash.Core.Json.Converters;
 using Windows.UI.Xaml.Media.Imaging;
 
-namespace DDPAIDash.Core
+namespace DDPAIDash.Core.Types
 {
     public class DeviceEvent
     {

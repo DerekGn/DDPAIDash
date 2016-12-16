@@ -10,12 +10,12 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Page.Resources>
-        <DataTemplate x:Key="VideoTileTemplate">
+        <DataTemplate x:Key="DeviceFileTileTemplate">
             <controls:DeviceFileViewer />
         </DataTemplate>
-        <Style x:Key="VideoTileStyle" TargetType="GridViewItem">
+        <Style x:Key="DeviceFileTileStyle" TargetType="GridViewItem">
             <Setter Property="FontFamily" Value="Segoe UI"/>
-            <Setter Property="Height" Value="96"/>
+            <!--<Setter Property="Height" Value="96"/>-->
             <Setter Property="Padding" Value="0"/>
             <Setter Property="Margin" Value="0,0,8,8"/>
             <Setter Property="HorizontalContentAlignment" Value="Left"/>
@@ -30,26 +30,69 @@
             <PivotItem Header="Live">
             </PivotItem>
             <PivotItem Header="Videos">
-                <Grid x:Name="LayoutRoot">
+                <Grid x:Name="DeviceFileGridRoot">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <Grid x:Name="Output" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1">
-                        <!-- This shows a hard-coded width to show within the SDK Sample framework.  In a real application you likely wouldn't set a width on the GridView -->
-                        <GridView x:Name="VideoGridView"
+                    <Grid x:Name="DeviceFileGrid" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1">
+                        <GridView x:Name="DeviceFileGridView"
                                   Background="{StaticResource ApplicationPageBackgroundThemeBrush}"
-                                  ItemTemplate="{StaticResource VideoTileTemplate}"
-                                  ItemContainerStyle="{StaticResource VideoTileStyle}"
+                                  ItemTemplate="{StaticResource DeviceFileTileTemplate}"
+                                  ItemContainerStyle="{StaticResource DeviceFileTileStyle}"
                                   ShowsScrollingPlaceholders="False" 
                                   HorizontalAlignment="Stretch"
                                   VerticalAlignment="Stretch" 
                                   ScrollViewer.VerticalScrollBarVisibility="Auto" 
                                   ScrollViewer.HorizontalScrollBarVisibility="Auto" 
                                   IsItemClickEnabled="True"
-                                  ContainerContentChanging="VideoGridView_ContainerContentChanging" 
-                                  ItemClick="Video_ItemClickHandler"/>
+                                  ContainerContentChanging="DeviceFileGridView_ContainerContentChanging" 
+                                  ItemClick="DeviceFileItem_ItemClickHandler"/>
                         </Grid>
+                </Grid>
+            </PivotItem>
+            <PivotItem Header="GSensor Videos">
+                <Grid x:Name="GSensorVideosGridRoot">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid x:Name="GSensorVideosGrid" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1">
+                        <GridView x:Name="GSensorVideosGridView"
+                                  Background="{StaticResource ApplicationPageBackgroundThemeBrush}"
+                                  ItemTemplate="{StaticResource DeviceFileTileTemplate}"
+                                  ItemContainerStyle="{StaticResource DeviceFileTileStyle}"
+                                  ShowsScrollingPlaceholders="False" 
+                                  HorizontalAlignment="Stretch"
+                                  VerticalAlignment="Stretch" 
+                                  ScrollViewer.VerticalScrollBarVisibility="Auto" 
+                                  ScrollViewer.HorizontalScrollBarVisibility="Auto" 
+                                  IsItemClickEnabled="True"
+                                  ContainerContentChanging="GSensorVideosGridView_ContainerContentChanging" 
+                                  ItemClick="GSensorVideosItem_ItemClickHandler"/>
+                    </Grid>
+                </Grid>
+            </PivotItem>
+            <PivotItem Header="GSensor Images">
+                <Grid x:Name="GSensorImageGridRoot">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid x:Name="GSensorImageGrid" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1">
+                        <GridView x:Name="GSensorImageGridView"
+                                  Background="{StaticResource ApplicationPageBackgroundThemeBrush}"
+                                  ItemTemplate="{StaticResource DeviceFileTileTemplate}"
+                                  ItemContainerStyle="{StaticResource DeviceFileTileStyle}"
+                                  ShowsScrollingPlaceholders="False" 
+                                  HorizontalAlignment="Stretch"
+                                  VerticalAlignment="Stretch" 
+                                  ScrollViewer.VerticalScrollBarVisibility="Auto" 
+                                  ScrollViewer.HorizontalScrollBarVisibility="Auto" 
+                                  IsItemClickEnabled="True"
+                                  ContainerContentChanging="GSensorImageGridView_ContainerContentChanging" 
+                                  ItemClick="GSensorImageGridView_ItemClickHandler"/>
+                    </Grid>
                 </Grid>
             </PivotItem>
             <!--<PivotItem Header="Videos">

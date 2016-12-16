@@ -25,7 +25,7 @@
 using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace DDPAIDash.Core
+namespace DDPAIDash.Core.Types
 {
     public class DeviceEventList
     {

@@ -58,10 +58,10 @@ namespace DDPAIDash.Model
                 DeviceFiles.Add(deviceFile);
             }
 
-            //foreach (var deviceEvent in DeviceInstance.GetEvents().Events)
-            //{
-            //    DeviceEvents.Add(deviceEvent);
-            //}
+            foreach (var deviceEvent in DeviceInstance.GetEvents().Events)
+            {
+                DeviceEvents.Add(deviceEvent);
+            }
         }
     }
 }
