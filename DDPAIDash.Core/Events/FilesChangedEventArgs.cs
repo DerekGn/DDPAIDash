@@ -29,11 +29,11 @@ namespace DDPAIDash.Core.Events
 {
     public class FilesChangedEventArgs : EventArgs
     {
-        public FilesChangedEventArgs(PlaybackListUpdate files)
+        public FilesChangedEventArgs(FilesListUpdate filesList)
         {
-            Files = files;
+            FilesList = filesList;
         }
 
-        public PlaybackListUpdate Files { get; set; }
+        public FilesListUpdate FilesList { get; set; }
     }
 }

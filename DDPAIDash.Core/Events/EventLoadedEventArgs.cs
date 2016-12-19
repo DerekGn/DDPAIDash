@@ -27,13 +27,13 @@ using DDPAIDash.Core.Types;
 
 namespace DDPAIDash.Core.Events
 {
-    public class StateChangedEventArgs : EventArgs
+    public class EventLoadedEventArgs : EventArgs
     {
-        public StateChangedEventArgs(DeviceState state)
-        {
-            State = state;
-        }
+        private DeviceEvent deviceEvent;
 
-        public DeviceState State { get; set; }
+        public EventLoadedEventArgs(DeviceEvent deviceEvent)
+        {
+            this.deviceEvent = deviceEvent;
+        }
     }
 }

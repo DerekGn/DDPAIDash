@@ -78,7 +78,7 @@ namespace DDPAIDash
         {
             DeviceModel.Instance.DeviceInstance.Connect(new UserInfo("012345678912345", "admin", "admin", 0));
 
-            DeviceModel.Instance.LoadFilesAndEvents();
+            //DeviceModel.Instance.LoadFilesAndEvents();
         }
 
         private void btnSettings_Click(object sender, RoutedEventArgs e)

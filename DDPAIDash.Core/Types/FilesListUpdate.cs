@@ -4,7 +4,7 @@ using DDPAIDash.Core.Json.Converters;
 
 namespace DDPAIDash.Core.Types
 {
-    public class PlaybackListUpdate
+    public class FilesListUpdate
     {
         [JsonProperty("action")]
         [JsonConverter(typeof(EnumConverter<PlaybackAction>))]

@@ -99,14 +99,6 @@ namespace DDPAIDash.Core
         void Disconnect();
 
         /// <summary>
-        /// Get a list of files on the device
-        /// </summary>
-        /// <returns>An instance of <see cref="DeviceFileList"/> that details all files on the devices ssd</returns>
-        DeviceFileList GetFiles();
-        
-        DeviceEventList GetEvents();
-        
-        /// <summary>
         /// Stream a file from the <see cref="IDevice"/> instance
         /// </summary>
         /// <returns>An instance of a <see cref="IStreamDescriptor"/></returns>
@@ -121,10 +113,14 @@ namespace DDPAIDash.Core
         /// Raised when the <see cref="IDevice"/> udates its file list
         /// </summary>
         event EventHandler<FilesChangedEventArgs> FilesChanged;
+        
+        event EventHandler<FileLoadedEventArgs> FileLoaded;
 
         /// <summary>
         /// Raised when a new event occurs <see cref="IDevice"/>
         /// </summary>
         event EventHandler<EventOccuredEventArgs> EventOccured;
+
+        event EventHandler<EventLoadedEventArgs> EventLoaded;
     }
 }

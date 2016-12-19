@@ -51,17 +51,17 @@ namespace DDPAIDash.Model
 
         public bool IsDeviceConnected => DeviceInstance.State == DeviceState.Connected;
 
-        public void LoadFilesAndEvents()
-        {
-            foreach (var deviceFile in DeviceInstance.GetFiles().Files)
-            {
-                DeviceFiles.Add(deviceFile);
-            }
+        //public void LoadFilesAndEvents()
+        //{
+        //    foreach (var deviceFile in DeviceInstance.GetFiles().Files)
+        //    {
+        //        DeviceFiles.Add(deviceFile);
+        //    }
 
-            foreach (var deviceEvent in DeviceInstance.GetEvents().Events)
-            {
-                DeviceEvents.Add(deviceEvent);
-            }
-        }
+        //    foreach (var deviceEvent in DeviceInstance.GetEvents().Events)
+        //    {
+        //        DeviceEvents.Add(deviceEvent);
+        //    }
+        //}
     }
 }

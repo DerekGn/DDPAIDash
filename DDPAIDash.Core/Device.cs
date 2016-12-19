@@ -406,6 +406,10 @@ namespace DDPAIDash.Core
 
         public event EventHandler<EventOccuredEventArgs> EventOccured;
 
+        public event EventHandler<EventLoadedEventArgs> EventLoaded;
+
+        public event EventHandler<FileLoadedEventArgs> FileLoaded;
+
         public bool Connect(UserInfo userInfo)
         {
             bool result;
@@ -414,16 +418,17 @@ namespace DDPAIDash.Core
 
             result = PerformConnect(userInfo);
 
+            State = DeviceState.Connected;
+
+            OnStateChanged();
+
             if (result)
             {
                 User = userInfo;
 
-                _mailboxTask = Task.Factory.StartNew(() => PollMailbox(Cts.Token), Cts.Token);
+                _mailboxTask = Task.Factory.StartNew(() => LoadDeviceData(Cts.Token))
+                    .ContinueWith((t) => PollMailbox(Cts.Token));
             }
-
-            State = DeviceState.Connected;
-
-            OnStateChanged();
 
             return result;
         }
@@ -441,7 +446,21 @@ namespace DDPAIDash.Core
             }
         }
 
-        public DeviceFileList GetFiles()
+        public IStreamDescriptor StreamFile(string filename)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void LoadDeviceData(CancellationToken token)
+        {
+            _logger.Verbose("Loading Device Files");
+
+            GetDeviceFiles();
+
+            _logger.Verbose("Loading Device Event Files");
+        }
+
+        private void GetDeviceFiles()
         {
             DeviceFileList deviceFileList = null;
 
@@ -451,14 +470,34 @@ namespace DDPAIDash.Core
                         deviceFileList = JsonConvert.DeserializeObject<DeviceFileList>(response.Data);
 
                         deviceFileList = deviceFileList ?? new DeviceFileList();
-
-                        LoadDeviceFileThumbnails(deviceFileList);
                     });
 
-            return deviceFileList;
+            foreach (var deviceFile in deviceFileList.Files)
+            {
+                LoadDeviceFileThumbnail(deviceFile);
+
+                OnFileLoaded(deviceFile);
+            }
         }
 
-        public DeviceEventList GetEvents()
+        private void LoadDeviceFileThumbnail(DeviceFile deviceFile)
+        {
+            var baseFileName = deviceFile.Name.Substring(0, 14);
+
+            if (!_imageCache.Contains(baseFileName))
+            {
+                _logger.Verbose($"Cache does not contain [{baseFileName}] retrieving from device");
+
+                using (var tarStream = _transport.GetFile(string.Concat(baseFileName, ".tar")))
+                {
+                    _imageCache.Cache(tarStream);
+                }
+            }
+
+            deviceFile.Stream = _imageCache.GetThumbnailStream(baseFileName);
+        }
+
+        public void GetDeviceEvents()
         {
             DeviceEventList deviceEventList = null;
 
@@ -468,57 +507,30 @@ namespace DDPAIDash.Core
                     deviceEventList = JsonConvert.DeserializeObject<DeviceEventList>(response.Data);
 
                     deviceEventList = deviceEventList ?? new DeviceEventList();
-
-                    LoadDeviceEventThumbnails(deviceEventList);
                 });
 
-            return deviceEventList;
-        }
-
-        public IStreamDescriptor StreamFile(string filename)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void LoadDeviceEventThumbnails(DeviceEventList deviceEventList)
-        {
-            foreach (var deviceFile in deviceEventList.Events)
+            foreach (var deviceEvent in deviceEventList.Events)
             {
-                var imageFileName = deviceFile.ImageName.Replace("_L", "_T");
-
-                if (!_imageCache.Contains(imageFileName))
-                {
-                    _logger.Verbose($"Cache does not contain [{imageFileName}] retrieving from device");
-
-                    using (var imageStream = _transport.GetFile(imageFileName))
-                    {
-                        _imageCache.Cache(imageFileName, imageStream);
-                    }
-                }
-
-                deviceFile.ImageStream = _imageCache.GetThumbnailStream(imageFileName);
-                deviceFile.VideoStream = _imageCache.GetThumbnailStream(imageFileName);
+                LoadDeviceEventThumbnail(deviceEvent);
             }
         }
 
-        private void LoadDeviceFileThumbnails(DeviceFileList deviceFileList)
+        private void LoadDeviceEventThumbnail(DeviceEvent deviceEvent)
         {
-            foreach (var deviceFile in deviceFileList.Files)
+            var imageFileName = deviceEvent.ImageName.Replace("_L", "_T").Replace("_X", "_T");
+
+            if (!_imageCache.Contains(imageFileName))
             {
-                var baseFileName = deviceFile.Name.Substring(0, 14);
+                _logger.Verbose($"Cache does not contain [{imageFileName}] retrieving from device");
 
-                if (!_imageCache.Contains(baseFileName))
+                using (var imageStream = _transport.GetFile(imageFileName))
                 {
-                    _logger.Verbose($"Cache does not contain [{baseFileName}] retrieving from device");
-
-                    using (var tarStream = _transport.GetFile(string.Concat(baseFileName, ".tar")))
-                    {
-                        _imageCache.Cache(tarStream);
-                    }
+                    _imageCache.Cache(imageFileName, imageStream);
                 }
-
-                deviceFile.Stream = _imageCache.GetThumbnailStream(baseFileName);
             }
+
+            deviceEvent.ImageStream = _imageCache.GetThumbnailStream(imageFileName);
+            deviceEvent.VideoStream = _imageCache.GetThumbnailStream(imageFileName);
         }
 
         private void PollMailbox(CancellationToken cancellationToken)
@@ -562,7 +574,7 @@ namespace DDPAIDash.Core
                         OnEventOccured(JsonConvert.DeserializeObject<DeviceEvent>(message.Data));
                         break;
                     case MailBoxMessageKeys.MSG_PlaybackListUpdate:
-                        OnFilesChanged(JsonConvert.DeserializeObject<PlaybackListUpdate>(message.Data));
+                        OnFilesChanged(JsonConvert.DeserializeObject<FilesListUpdate>(message.Data));
                         break;
                     case MailBoxMessageKeys.MSG_PlaybackLiveSwitch:
                         _logger.Info($"Key: {message.Key} Data: {message.Data}");
@@ -801,12 +813,12 @@ namespace DDPAIDash.Core
 
         protected void OnStateChanged()
         {
-            StateChanged?.Invoke(this, new StateChangedEventArgs { DeviceState = State });
+            StateChanged?.Invoke(this, new StateChangedEventArgs(State));
         }
 
-        protected void OnFilesChanged(PlaybackListUpdate playbackListUpdate)
+        protected void OnFilesChanged(FilesListUpdate filesListUpdate)
         {
-            FilesChanged?.Invoke(this, new FilesChangedEventArgs(playbackListUpdate));
+            FilesChanged?.Invoke(this, new FilesChangedEventArgs(filesListUpdate));
         }
 
         protected void OnEventOccured(DeviceEvent deviceEvent)
@@ -814,10 +826,20 @@ namespace DDPAIDash.Core
             EventOccured?.Invoke(this, new EventOccuredEventArgs(deviceEvent));
         }
 
+        protected void OnFileLoaded(DeviceFile deviceFile)
+        {
+            FileLoaded?.Invoke(this, new FileLoadedEventArgs(deviceFile));
+        }
+
+        protected void OnEventLoad(DeviceEvent deviceEvent)
+        {
+            EventLoaded?.Invoke(this, new EventLoadedEventArgs(deviceEvent));
+        }
+
         #region IDisposable Support
 
         private bool _disposedValue;
-        
+
         protected virtual void Dispose(bool disposing)
         {
             if (!_disposedValue)
