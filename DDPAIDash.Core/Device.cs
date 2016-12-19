@@ -392,6 +392,14 @@ namespace DDPAIDash.Core
             }
         }
 
+        public Uri BaseAddress
+        {
+            get
+            {
+                return _transport.BaseAddress;
+            }
+        }
+
         public event EventHandler<StateChangedEventArgs> StateChanged;
 
         public event EventHandler<FilesChangedEventArgs> FilesChanged;

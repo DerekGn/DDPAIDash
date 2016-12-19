@@ -24,9 +24,20 @@
             <Setter Property="TabNavigation" Value="Local"/>
         </Style>
     </Page.Resources>
-    
+
     <Grid>
-        <Pivot>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="200"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <MediaElement x:Name="VideoMediaElement"
+                      Grid.Row="0"
+                      AutoPlay="true"
+                      AreTransportControlsEnabled="True"
+                      MediaFailed="MediaElement_MediaFailed"
+                      Height="200">
+        </MediaElement>
+        <Pivot x:Name="MainPivot" Grid.Row="1">
             <PivotItem Header="Live">
             </PivotItem>
             <PivotItem Header="Videos">
@@ -47,8 +58,15 @@
                                   ScrollViewer.HorizontalScrollBarVisibility="Auto" 
                                   IsItemClickEnabled="True"
                                   ContainerContentChanging="DeviceFileGridView_ContainerContentChanging" 
-                                  ItemClick="DeviceFileItem_ItemClickHandler"/>
-                        </Grid>
+                                  ItemClick="DeviceFileItem_ItemClickHandler" 
+                                  Holding="DisplayFlyoutOnHolding">
+                            <FlyoutBase.AttachedFlyout>
+                                <MenuFlyout>
+                                    <MenuFlyoutItem x:Name="VideoSaveButton" Text="Save" Click="VideoSaveButton_Click"/>
+                                </MenuFlyout>
+                            </FlyoutBase.AttachedFlyout>
+                        </GridView>
+                    </Grid>
                 </Grid>
             </PivotItem>
             <PivotItem Header="GSensor Videos">
@@ -57,6 +75,10 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
+                    <MediaElement x:Name="GsensorVideoMediaElement" AutoPlay="False" 
+                                  AreTransportControlsEnabled="True"
+                                  MediaFailed="MediaElement_MediaFailed" >
+                    </MediaElement>
                     <Grid x:Name="GSensorVideosGrid" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1">
                         <GridView x:Name="GSensorVideosGridView"
                                   Background="{StaticResource ApplicationPageBackgroundThemeBrush}"
@@ -69,7 +91,14 @@
                                   ScrollViewer.HorizontalScrollBarVisibility="Auto" 
                                   IsItemClickEnabled="True"
                                   ContainerContentChanging="GSensorVideosGridView_ContainerContentChanging" 
-                                  ItemClick="GSensorVideosItem_ItemClickHandler"/>
+                                  ItemClick="GSensorVideosItem_ItemClickHandler"
+                                  Holding="DisplayFlyoutOnHolding">
+                            <FlyoutBase.AttachedFlyout>
+                                <MenuFlyout>
+                                    <MenuFlyoutItem x:Name="SaveGSensorVideoButton" Text="Save" Click="GSensorSaveVideoButton_Click"/>
+                                </MenuFlyout>
+                            </FlyoutBase.AttachedFlyout>
+                        </GridView>
                     </Grid>
                 </Grid>
             </PivotItem>
@@ -91,83 +120,17 @@
                                   ScrollViewer.HorizontalScrollBarVisibility="Auto" 
                                   IsItemClickEnabled="True"
                                   ContainerContentChanging="GSensorImageGridView_ContainerContentChanging" 
-                                  ItemClick="GSensorImageGridView_ItemClickHandler"/>
+                                  ItemClick="GSensorImageGridView_ItemClickHandler"
+                                  Holding="DisplayFlyoutOnHolding">
+                            <FlyoutBase.AttachedFlyout>
+                                <MenuFlyout>
+                                    <MenuFlyoutItem x:Name="SaveGSensorImageButton" Text="Save" Click="GSensorImageSaveButton_Click"/>
+                                </MenuFlyout>
+                            </FlyoutBase.AttachedFlyout>
+                        </GridView>
                     </Grid>
                 </Grid>
             </PivotItem>
-            <!--<PivotItem Header="Videos">
-                <ScrollViewer x:Name="VideosPanel" Margin="12,0,2,0" Visibility="Visible">
-                    <ItemsControl ItemsSource="{Binding DeviceFiles}">
-
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <ItemsWrapGrid Orientation="Horizontal"/>
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Grid Margin="0,0,8,8">
-                                    <Image Source="{Binding ImageThumbnail}" CacheMode="BitmapCache" Tag="{Binding Name}" Tapped="Video_Tapped">
-                                        <FlyoutBase.AttachedFlyout>
-                                            <MenuFlyout>
-                                                <MenuFlyoutItem x:Name="ViewButton"
-                                                            Text="View"
-                                                            Click="ViewButton_Click"/>
-                                                <MenuFlyoutItem x:Name="SaveButton"
-                                                            Text="Save"
-                                                            Click="SaveButton_Click"/>
-                                            </MenuFlyout>
-                                        </FlyoutBase.AttachedFlyout>
-                                    </Image>
-                                </Grid>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </ScrollViewer>
-            </PivotItem>
-            <PivotItem Header="Events">
-                <ScrollViewer x:Name="GSensorPanel" Margin="12,0,2,0" Visibility="Visible">
-                    <ItemsControl ItemsSource="{Binding DeviceEvents}">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <ItemsWrapGrid Orientation="Horizontal"/>
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Grid Margin="0,0,8,8">
-                                    <Image Source="{Binding VideoThumbnail}" CacheMode="BitmapCache" Tag="{Binding BVideoName}" Tapped="Event_Tapped">
-                                        <FlyoutBase.AttachedFlyout>
-                                            <MenuFlyout>
-                                                <MenuFlyoutItem x:Name="ViewEventVideoButton"
-                                                            Text="View"
-                                                            Click="ViewEventVideoButton_Click"/>
-                                                <MenuFlyoutItem x:Name="SaveEventVideoButton"
-                                                            Text="Save"
-                                                            Click="SaveEventVideoButton_Click"/>
-                                            </MenuFlyout>
-                                        </FlyoutBase.AttachedFlyout>
-                                    </Image>
-                                    <Image Source="{Binding ImageThumbnail}" CacheMode="BitmapCache" Tag="{Binding ImageName}" Tapped="Event_Tapped">
-                                        <FlyoutBase.AttachedFlyout>
-                                            <MenuFlyout>
-                                                <MenuFlyoutItem x:Name="ViewEventImageButton"
-                                                            Text="View"
-                                                            Click="ViewEventImageButton_Click"/>
-                                                <MenuFlyoutItem x:Name="SaveImageEventButton"
-                                                            Text="Save"
-                                                            Click="SaveEventImageButton_Click"/>
-                                            </MenuFlyout>
-                                        </FlyoutBase.AttachedFlyout>
-                                    </Image>
-                                </Grid>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </ScrollViewer>
-            </PivotItem>-->
         </Pivot>
     </Grid>
 

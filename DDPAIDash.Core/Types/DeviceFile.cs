@@ -76,6 +76,7 @@ namespace DDPAIDash.Core.Types
         [JsonIgnore]
         public BitmapImage Image
         {
+            set { _image = value; }
             get
             {
                 return _image;

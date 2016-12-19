@@ -22,16 +22,17 @@
 * SOFTWARE.
 */
 
+using System;
+using Windows.Foundation;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+using Windows.UI.Xaml.Controls.Primitives;
 
-using DDPAIDash.Core.Types;
 using DDPAIDash.Model;
 using DDPAIDash.Controls;
-using Windows.Foundation;
-using DDPAIDash.Core;
-using System;
+using DDPAIDash.Core.Types;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=391641
 
@@ -87,7 +88,7 @@ namespace DDPAIDash
 
         private void DeviceFileGridView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
         {
-            Handle_DeviceFileGridView_ContainerContentChanging(args, (deviceFileViewer) => 
+            HandleDeviceFileGridViewContainerContentChanging(args, (deviceFileViewer) => 
             {
                 var deviceFile = args.Item as DeviceFile;
 
@@ -97,7 +98,7 @@ namespace DDPAIDash
 
         private void GSensorVideosGridView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
         {
-            Handle_DeviceFileGridView_ContainerContentChanging(args, (deviceFileViewer) =>
+            HandleDeviceFileGridViewContainerContentChanging(args, (deviceFileViewer) =>
             {
                 var deviceEvent = args.Item as DeviceEvent;
 
@@ -107,7 +108,7 @@ namespace DDPAIDash
 
         private void GSensorImageGridView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
         {
-            Handle_DeviceFileGridView_ContainerContentChanging(args, (deviceFileViewer) =>
+            HandleDeviceFileGridViewContainerContentChanging(args, (deviceFileViewer) =>
             {
                 var deviceEvent = args.Item as DeviceEvent;
 
@@ -115,7 +116,54 @@ namespace DDPAIDash
             });
         }
 
-        private void Handle_DeviceFileGridView_ContainerContentChanging(ContainerContentChangingEventArgs args, Action<DeviceFileViewer> mapFile)
+        private void DeviceFileItem_ItemClickHandler(object sender, ItemClickEventArgs e)
+        {
+            VideoMediaElement.Source = new Uri(string.Format("{0}/{1}", DeviceModel.Instance.DeviceInstance.BaseAddress, ((DeviceFile) e.ClickedItem).Name));
+        }
+
+        private void GSensorVideosItem_ItemClickHandler(object sender, ItemClickEventArgs e)
+        {
+            VideoMediaElement.Source = new Uri(string.Format("{0}/{1}", DeviceModel.Instance.DeviceInstance.BaseAddress, ((DeviceEvent)e.ClickedItem).BVideoName));
+        }
+
+        private void GSensorImageGridView_ItemClickHandler(object sender, ItemClickEventArgs e)
+        {
+
+        }
+
+        private void DisplayFlyoutOnHolding(object sender, HoldingRoutedEventArgs e)
+        {
+            FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
+        }
+
+        private void VideoSaveButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void GSensorSaveVideoButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void GSensorImageSaveButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private TypedEventHandler<ListViewBase, ContainerContentChangingEventArgs> ContainerContentChangingDelegate
+        {
+            get
+            {
+                if (_delegate == null)
+                {
+                    _delegate = new TypedEventHandler<ListViewBase, ContainerContentChangingEventArgs>(DeviceFileGridView_ContainerContentChanging);
+                }
+                return _delegate;
+            }
+        }
+
+        private void HandleDeviceFileGridViewContainerContentChanging(ContainerContentChangingEventArgs args, Action<DeviceFileViewer> mapFile)
         {
             DeviceFileViewer deviceFileViewer = args.ItemContainer.ContentTemplateRoot as DeviceFileViewer;
 
@@ -142,31 +190,8 @@ namespace DDPAIDash
             args.Handled = true;
         }
 
-        private TypedEventHandler<ListViewBase, ContainerContentChangingEventArgs> ContainerContentChangingDelegate
+        private void MediaElement_MediaFailed(object sender, ExceptionRoutedEventArgs e)
         {
-            get
-            {
-                if (_delegate == null)
-                {
-                    _delegate = new TypedEventHandler<ListViewBase, ContainerContentChangingEventArgs>(DeviceFileGridView_ContainerContentChanging);
-                }
-                return _delegate;
-            }
-        }
-
-        private void DeviceFileItem_ItemClickHandler(object sender, ItemClickEventArgs e)
-        {
-
-        }
-
-        private void GSensorVideosItem_ItemClickHandler(object sender, ItemClickEventArgs e)
-        {
-
-        }
-
-        private void GSensorImageGridView_ItemClickHandler(object sender, ItemClickEventArgs e)
-        {
-
         }
     }
 }

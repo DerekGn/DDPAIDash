@@ -23,20 +23,17 @@
 */
 
 using System;
-using System.Collections.Generic;
 using DDPAIDash.Core.Types;
 
 namespace DDPAIDash.Core.Events
 {
     public class FilesChangedEventArgs : EventArgs
     {
-        private PlaybackListUpdate playbackListUpdate;
-
-        public FilesChangedEventArgs(PlaybackListUpdate playbackListUpdate)
+        public FilesChangedEventArgs(PlaybackListUpdate files)
         {
-            this.playbackListUpdate = playbackListUpdate;
+            Files = files;
         }
 
-        public IList<string> Files { get; set; }
+        public PlaybackListUpdate Files { get; set; }
     }
 }

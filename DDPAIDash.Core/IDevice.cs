@@ -84,6 +84,8 @@ namespace DDPAIDash.Core
 
         SwitchState? TimeLapse { get; set; }
 
+        Uri BaseAddress { get; }
+
         /// <summary>
         /// Connect to the <see cref="IDevice"/> instance
         /// </summary>

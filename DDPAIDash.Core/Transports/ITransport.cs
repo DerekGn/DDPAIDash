@@ -31,6 +31,8 @@ namespace DDPAIDash.Core.Transports
     {
         string SessionId { get; set; }
 
+        Uri BaseAddress { get; }
+
         void Connect(string address, int port);
 
         Stream GetFile(string fileName);

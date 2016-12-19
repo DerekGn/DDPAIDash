@@ -84,7 +84,7 @@
     <Compile Include="Constants\ApiConstants.cs" />
     <Compile Include="Device.cs" />
     <Compile Include="Events\EventCreatedEventArgs.cs" />
-    <Compile Include="Events\FilesCreatedEventArgs.cs" />
+    <Compile Include="Events\FilesChangedEventArgs.cs" />
     <Compile Include="Events\StateChangedEventArgs.cs" />
     <Compile Include="Json\Converters\DateTimeJsonConverter.cs" />
     <Compile Include="Json\Converters\EnumConverter.cs" />

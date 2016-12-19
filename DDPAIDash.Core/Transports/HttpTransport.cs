@@ -59,6 +59,14 @@ namespace DDPAIDash.Core.Transports
             }
         }
 
+        public Uri BaseAddress
+        {
+            get
+            {
+                return _httpClient.BaseAddress;
+            }
+        }
+
         public void Connect(string address, int port)
         {
             _httpClient.BaseAddress = new Uri($"http://{address}:{port}");
