@@ -26,6 +26,7 @@ using System;
 using System.Collections.ObjectModel;
 using DDPAIDash.Core;
 using DDPAIDash.Core.Events;
+using DDPAIDash.Core.Types;
 
 namespace DDPAIDash.Model
 {
@@ -64,15 +65,7 @@ namespace DDPAIDash.Model
 
         private void DeviceInstance_EventLoaded(object sender, EventLoadedEventArgs e)
         {
-            if(!string.IsNullOrWhiteSpace(e.Event.BVideoName))
-            {
-                EventVideos.Add(new EventVideo(e.Event));
-            }
-
-            if (!string.IsNullOrWhiteSpace(e.Event.ImageName))
-            {
-                EventImages.Add(new EventImage(e.Event));
-            }
+            AddDeviceEvent(e.Event);
         }
 
         private void DeviceInstance_StateChanged(object sender, StateChangedEventArgs e)
@@ -85,6 +78,20 @@ namespace DDPAIDash.Model
 
         private void DeviceInstance_EventOccured(object sender, EventOccuredEventArgs e)
         {
+            AddDeviceEvent(e.Event);
+        }
+
+        private void AddDeviceEvent(DeviceEvent deviceEvent)
+        {
+            if (!string.IsNullOrWhiteSpace(deviceEvent.BVideoName))
+            {
+                EventVideos.Add(new EventVideo(deviceEvent));
+            }
+
+            if (!string.IsNullOrWhiteSpace(deviceEvent.ImageName))
+            {
+                EventImages.Add(new EventImage(deviceEvent));
+            }
         }
     }
 }
