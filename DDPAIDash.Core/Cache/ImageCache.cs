@@ -24,12 +24,14 @@
 
 using System;
 using System.IO;
-using Windows.Storage;
-using SharpCompress.Readers;
 using System.Linq;
+using Windows.Storage;
+using Windows.Storage.FileProperties;
+using SharpCompress.Readers;
 
 namespace DDPAIDash.Core.Cache
 {
+#warning TODO make async
     internal class ImageCache : IImageCache
     {
         public void Cache(Stream stream)
@@ -38,15 +40,18 @@ namespace DDPAIDash.Core.Cache
             {
                 while (reader.MoveToNextEntry())
                 {
-                    if(reader.Entry.IsDirectory)
+                    if (reader.Entry.IsDirectory)
                     {
-                        StorageFolder newfolder = ApplicationData.Current.LocalFolder.CreateFolderAsync(reader.Entry.Key).AsTask().Result;
+                        ApplicationData.Current.LocalCacheFolder.CreateFolderAsync(reader.Entry.Key).AsTask();
                     }
                     else
                     {
-                        StorageFile newFile = ApplicationData.Current.LocalFolder.CreateFileAsync(reader.Entry.Key.Replace('/', '\\')).AsTask().Result;
+                        var newFile =
+                            ApplicationData.Current.LocalCacheFolder.CreateFileAsync(reader.Entry.Key.Replace('/', '\\'))
+                                .AsTask()
+                                .Result;
 
-                        using (Stream outStream = newFile.OpenStreamForWriteAsync().Result)
+                        using (var outStream = newFile.OpenStreamForWriteAsync().Result)
                         {
                             reader.WriteEntryTo(outStream);
                         }
@@ -57,9 +62,9 @@ namespace DDPAIDash.Core.Cache
 
         public void Cache(string imageFileName, Stream stream)
         {
-            StorageFile newFile = ApplicationData.Current.LocalFolder.CreateFileAsync(imageFileName).AsTask().Result;
+            var newFile = ApplicationData.Current.LocalCacheFolder.CreateFileAsync(imageFileName).AsTask().Result;
 
-            using (Stream outStream = newFile.OpenStreamForWriteAsync().Result)
+            using (var outStream = newFile.OpenStreamForWriteAsync().Result)
             {
                 stream.CopyTo(outStream);
             }
@@ -67,13 +72,41 @@ namespace DDPAIDash.Core.Cache
 
         public bool Contains(string name)
         {
-#warning TOASYNC
-            return ApplicationData.Current.LocalFolder.GetItemsAsync().AsTask().Result.FirstOrDefault(i => i.Name == name) != null;
+            return
+                ApplicationData.Current.LocalCacheFolder.GetItemsAsync()
+                    .AsTask()
+                    .Result.FirstOrDefault(i => i.Name == name) != null;
+        }
+
+        public void Flush(TimeSpan olderThan)
+        {
+            var files = ApplicationData.Current.LocalCacheFolder.GetFilesAsync().AsTask().Result;
+
+            foreach (var storageFile in files)
+            {
+                if (DateTime.Now.Subtract(storageFile.DateCreated.UtcDateTime) >= olderThan)
+                {
+                    storageFile.DeleteAsync().AsTask();
+                }
+            }
+
+            var folders = ApplicationData.Current.LocalCacheFolder.GetFoldersAsync().AsTask().Result;
+
+            foreach (var folder in folders)
+            {
+                if (DateTime.Now.Subtract(folder.DateCreated.UtcDateTime) >= olderThan)
+                {
+                    folder.DeleteAsync(StorageDeleteOption.PermanentDelete).AsTask();
+                }
+            }
         }
 
         public Stream Get(string name)
         {
-            var folder = ApplicationData.Current.LocalFolder.GetFoldersAsync().AsTask().Result.FirstOrDefault(f => f.Name == name);
+            var folder =
+                ApplicationData.Current.LocalCacheFolder.GetFoldersAsync()
+                    .AsTask()
+                    .Result.FirstOrDefault(f => f.Name == name);
             StorageFile file;
 
             if (folder != null)
@@ -82,7 +115,7 @@ namespace DDPAIDash.Core.Cache
             }
             else
             {
-                file = ApplicationData.Current.LocalFolder.GetFileAsync(name).AsTask().Result;
+                file = ApplicationData.Current.LocalCacheFolder.GetFileAsync(name).AsTask().Result;
 
                 if (file == null)
                     throw new FileNotFoundException("File not found in cache", name);
@@ -90,10 +123,13 @@ namespace DDPAIDash.Core.Cache
 
             return file.OpenStreamForReadAsync().Result;
         }
-        
+
         public Stream GetThumbnailStream(string name)
         {
-            var folder = ApplicationData.Current.LocalFolder.GetFoldersAsync().AsTask().Result.FirstOrDefault(f => f.Name == name);
+            var folder =
+                ApplicationData.Current.LocalCacheFolder.GetFoldersAsync()
+                    .AsTask()
+                    .Result.FirstOrDefault(f => f.Name == name);
             StorageFile file;
 
             if (folder != null)
@@ -102,13 +138,13 @@ namespace DDPAIDash.Core.Cache
             }
             else
             {
-                file = ApplicationData.Current.LocalFolder.GetFileAsync(name).AsTask().Result;
+                file = ApplicationData.Current.LocalCacheFolder.GetFileAsync(name).AsTask().Result;
 
                 if (file == null)
                     throw new FileNotFoundException("File not found in cache", name);
             }
 
-            return file.GetThumbnailAsync(Windows.Storage.FileProperties.ThumbnailMode.ListView).AsTask().Result.AsStream();
+            return file.GetThumbnailAsync(ThumbnailMode.ListView).AsTask().Result.AsStream();
         }
     }
 }

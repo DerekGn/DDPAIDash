@@ -84,6 +84,8 @@ namespace DDPAIDash.Core
             _imageCache = imageCache;
             _transport = transport;
             _logger = logger;
+
+            _imageCache.Flush(new TimeSpan(30, 0, 0, 0));
         }
 
         public DeviceInfo Info { get; private set; }

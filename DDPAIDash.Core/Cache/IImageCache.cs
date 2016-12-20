@@ -22,13 +22,15 @@
 * SOFTWARE.
 */
 
+using System;
 using System.IO;
-using Windows.Storage;
 
 namespace DDPAIDash.Core.Cache
 {
     public interface IImageCache
     {
+        void Flush(TimeSpan olderThan);
+
         Stream Get(string name);
 
         Stream GetThumbnailStream(string name);
