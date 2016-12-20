@@ -22,30 +22,21 @@
 * SOFTWARE.
 */
 
-using System;
-using Newtonsoft.Json;
-using DDPAIDash.Core.Json.Converters;
+using DDPAIDash.Core.Types;
 
-namespace DDPAIDash.Core.Types
+namespace DDPAIDash.Model
 {
-    public class FilesListUpdate
+    public class EventVideo
     {
-        [JsonProperty("action")]
-        [JsonConverter(typeof(EnumConverter<PlaybackAction>))]
-        public PlaybackAction Action  { get; set; }
+        public EventVideo(DeviceEvent @event)
+        {
+            Event = @event;
+#warning TODO clean up name for display
+            DisplayName = Event.BVideoName;
+        }
 
-        [JsonProperty("name")]
-        public string Name { get; set; }
+        public DeviceEvent Event { get; }
 
-        [JsonProperty("type")]
-        public int Type { get; set; }
-
-        [JsonProperty("starttime")]
-        [JsonConverter(typeof(DateTimeJsonConverter))]
-        public DateTime? StartTime { get; set; }
-
-        [JsonProperty("endtime")]
-        [JsonConverter(typeof(DateTimeJsonConverter))]
-        public DateTime? EndTime { get; set; }
+        public string DisplayName { get; }
     }
 }

@@ -23,20 +23,16 @@
 */
 
 using System;
-using System.IO;
 using Newtonsoft.Json;
 using DDPAIDash.Core.Json.Converters;
-using Windows.UI.Xaml.Media.Imaging;
 
 namespace DDPAIDash.Core.Types
 {
-    public class DeviceFile
+    public class VideosListUpdate
     {
-        private BitmapImage _image;
-        private Stream _stream;
-
-        [JsonProperty("index")]
-        public int Index { get; set; }
+        [JsonProperty("action")]
+        [JsonConverter(typeof(EnumConverter<PlaybackAction>))]
+        public PlaybackAction Action  { get; set; }
 
         [JsonProperty("name")]
         public string Name { get; set; }
@@ -51,36 +47,5 @@ namespace DDPAIDash.Core.Types
         [JsonProperty("endtime")]
         [JsonConverter(typeof(DateTimeJsonConverter))]
         public DateTime? EndTime { get; set; }
-
-        [JsonProperty("event")]
-        public int Event { get; set; }
-
-        [JsonProperty("matchval")]
-        public int MatchValue { get; set; }
-
-        [JsonProperty("parentfile")]
-        public string ParentFile { get; set; }
-
-        [JsonIgnore]
-        public Stream Stream
-        {
-            get { return _stream; }
-            set
-            {
-                _stream = value;
-                _image = new BitmapImage();
-                _image.SetSource(_stream.AsRandomAccessStream());
-            }
-        }
-
-        [JsonIgnore]
-        public BitmapImage Image
-        {
-            set { _image = value; }
-            get
-            {
-                return _image;
-            }
-        }
     }
 }

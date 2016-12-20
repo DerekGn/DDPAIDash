@@ -85,9 +85,9 @@
     <Compile Include="Device.cs" />
     <Compile Include="Events\EventLoadedEventArgs.cs" />
     <Compile Include="Events\EventCreatedEventArgs.cs" />
-    <Compile Include="Events\FilesChangedEventArgs.cs" />
+    <Compile Include="Events\VideosChangedEventArgs.cs" />
     <Compile Include="Events\StateChangedEventArgs.cs" />
-    <Compile Include="Events\FileLoadedEventArgs.cs" />
+    <Compile Include="Events\VideoLoadedEventArgs.cs" />
     <Compile Include="Json\Converters\DateTimeJsonConverter.cs" />
     <Compile Include="Json\Converters\EnumConverter.cs" />
     <Compile Include="Json\Converters\MailBoxMessageKeysConverter.cs" />
@@ -105,8 +105,8 @@
     <Compile Include="Types\DeviceCapabilities.cs" />
     <Compile Include="Types\DeviceEvent.cs" />
     <Compile Include="Types\DeviceEventList.cs" />
-    <Compile Include="Types\DeviceFile.cs" />
-    <Compile Include="Types\DeviceFileList.cs" />
+    <Compile Include="Types\DeviceVideo.cs" />
+    <Compile Include="Types\DeviceVideoList.cs" />
     <Compile Include="Types\DeviceInfo.cs" />
     <Compile Include="Types\DeviceState.cs" />
     <Compile Include="Types\DisplayMode.cs" />
@@ -119,7 +119,7 @@
     <Compile Include="Types\Parameter.cs" />
     <Compile Include="Types\Parameters.cs" />
     <Compile Include="Types\PlaybackAction.cs" />
-    <Compile Include="Types\FilesListUpdate.cs" />
+    <Compile Include="Types\VideosListUpdate.cs" />
     <Compile Include="Types\QueryParameter.cs" />
     <Compile Include="Types\PropertyKeys.cs" />
     <Compile Include="Types\QueryParameterKeys.cs" />

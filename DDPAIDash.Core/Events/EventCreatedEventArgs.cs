@@ -28,11 +28,11 @@ namespace DDPAIDash.Core.Events
 {
     public class EventOccuredEventArgs
     {
-        private DeviceEvent deviceEvent;
+        public DeviceEvent Event { get; set; }
 
-        public EventOccuredEventArgs(DeviceEvent deviceEvent)
+        public EventOccuredEventArgs(DeviceEvent @event)
         {
-            this.deviceEvent = deviceEvent;
+            Event = @event;
         }
     }
 }

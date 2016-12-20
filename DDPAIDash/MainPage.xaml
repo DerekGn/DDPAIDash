@@ -4,18 +4,16 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:model="using:DDPAIDash.Model"
     x:Class="DDPAIDash.MainPage"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Page.Resources>
-        <DataTemplate x:Key="DeviceFileTileTemplate">
-            <controls:DeviceFileViewer />
+        <DataTemplate x:Key="TileTemplate">
+            <controls:DeviceVideoViewer />
         </DataTemplate>
-        <Style x:Key="DeviceFileTileStyle" TargetType="GridViewItem">
+        <Style x:Key="TileStyle" TargetType="GridViewItem">
             <Setter Property="FontFamily" Value="Segoe UI"/>
-            <!--<Setter Property="Height" Value="96"/>-->
             <Setter Property="Padding" Value="0"/>
             <Setter Property="Margin" Value="0,0,8,8"/>
             <Setter Property="HorizontalContentAlignment" Value="Left"/>
@@ -41,24 +39,24 @@
             <PivotItem Header="Live">
             </PivotItem>
             <PivotItem Header="Videos">
-                <Grid x:Name="DeviceFileGridRoot">
+                <Grid x:Name="VideosGridRoot">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <Grid x:Name="DeviceFileGrid" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1">
-                        <GridView x:Name="DeviceFileGridView"
+                    <Grid x:Name="VideoGrid" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1">
+                        <GridView x:Name="VideoGridView"
                                   Background="{StaticResource ApplicationPageBackgroundThemeBrush}"
-                                  ItemTemplate="{StaticResource DeviceFileTileTemplate}"
-                                  ItemContainerStyle="{StaticResource DeviceFileTileStyle}"
+                                  ItemTemplate="{StaticResource TileTemplate}"
+                                  ItemContainerStyle="{StaticResource TileStyle}"
                                   ShowsScrollingPlaceholders="False" 
                                   HorizontalAlignment="Stretch"
                                   VerticalAlignment="Stretch" 
                                   ScrollViewer.VerticalScrollBarVisibility="Auto" 
                                   ScrollViewer.HorizontalScrollBarVisibility="Auto" 
                                   IsItemClickEnabled="True"
-                                  ContainerContentChanging="DeviceFileGridView_ContainerContentChanging" 
-                                  ItemClick="DeviceFileItem_ItemClickHandler" 
+                                  ContainerContentChanging="VideoGridView_ContainerContentChanging" 
+                                  ItemClick="VideoGridView_ItemClickHandler" 
                                   Holding="DisplayFlyoutOnHolding">
                             <FlyoutBase.AttachedFlyout>
                                 <MenuFlyout>
@@ -69,62 +67,57 @@
                     </Grid>
                 </Grid>
             </PivotItem>
-            <PivotItem Header="GSensor Videos">
-                <Grid x:Name="GSensorVideosGridRoot">
+            <PivotItem Header="Event Videos">
+                <Grid x:Name="EventVideosGridRoot">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <MediaElement x:Name="GsensorVideoMediaElement" AutoPlay="False" 
-                                  AreTransportControlsEnabled="True"
-                                  MediaFailed="MediaElement_MediaFailed" >
-                    </MediaElement>
-                    <Grid x:Name="GSensorVideosGrid" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1">
-                        <GridView x:Name="GSensorVideosGridView"
+                    <Grid x:Name="EventVideosGrid" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1">
+                        <GridView x:Name="EventVideosGridView"
                                   Background="{StaticResource ApplicationPageBackgroundThemeBrush}"
-                                  ItemTemplate="{StaticResource DeviceFileTileTemplate}"
-                                  ItemContainerStyle="{StaticResource DeviceFileTileStyle}"
+                                  ItemTemplate="{StaticResource TileTemplate}"
+                                  ItemContainerStyle="{StaticResource TileStyle}"
                                   ShowsScrollingPlaceholders="False" 
                                   HorizontalAlignment="Stretch"
                                   VerticalAlignment="Stretch" 
                                   ScrollViewer.VerticalScrollBarVisibility="Auto" 
                                   ScrollViewer.HorizontalScrollBarVisibility="Auto" 
                                   IsItemClickEnabled="True"
-                                  ContainerContentChanging="GSensorVideosGridView_ContainerContentChanging" 
-                                  ItemClick="GSensorVideosItem_ItemClickHandler"
-                                  Holding="DisplayFlyoutOnHolding">
+                                  ContainerContentChanging="EventVideosGridView_ContainerContentChanging" 
+                                  Holding="DisplayFlyoutOnHolding" ItemClick="EventVideosGridView_ItemClick">
                             <FlyoutBase.AttachedFlyout>
                                 <MenuFlyout>
-                                    <MenuFlyoutItem x:Name="SaveGSensorVideoButton" Text="Save" Click="GSensorSaveVideoButton_Click"/>
+                                    <MenuFlyoutItem x:Name="EventVideoSaveButton" Text="Save" Click="EventVideoSaveButton_Click"/>
                                 </MenuFlyout>
                             </FlyoutBase.AttachedFlyout>
                         </GridView>
                     </Grid>
                 </Grid>
             </PivotItem>
-            <PivotItem Header="GSensor Images">
-                <Grid x:Name="GSensorImageGridRoot">
+            <PivotItem Header="Event Images">
+                <Grid x:Name="EventImageGridRoot">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <Grid x:Name="GSensorImageGrid" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1">
-                        <GridView x:Name="GSensorImageGridView"
+                    <Grid x:Name="EventImageGrid" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1">
+                        <GridView x:Name="EventImageGridView"
                                   Background="{StaticResource ApplicationPageBackgroundThemeBrush}"
-                                  ItemTemplate="{StaticResource DeviceFileTileTemplate}"
-                                  ItemContainerStyle="{StaticResource DeviceFileTileStyle}"
+                                  ItemTemplate="{StaticResource TileTemplate}"
+                                  ItemContainerStyle="{StaticResource TileStyle}"
                                   ShowsScrollingPlaceholders="False" 
                                   HorizontalAlignment="Stretch"
                                   VerticalAlignment="Stretch" 
                                   ScrollViewer.VerticalScrollBarVisibility="Auto" 
                                   ScrollViewer.HorizontalScrollBarVisibility="Auto" 
                                   IsItemClickEnabled="True"
-                                  ContainerContentChanging="GSensorImageGridView_ContainerContentChanging" 
-                                  ItemClick="GSensorImageGridView_ItemClickHandler"
-                                  Holding="DisplayFlyoutOnHolding">
+                                  ContainerContentChanging="EventImageGridView_ContainerContentChanging" 
+                                  Holding="DisplayFlyoutOnHolding"
+                                  ItemClick="EventImageGridView_ItemClick">
                             <FlyoutBase.AttachedFlyout>
                                 <MenuFlyout>
-                                    <MenuFlyoutItem x:Name="SaveGSensorImageButton" Text="Save" Click="GSensorImageSaveButton_Click"/>
+                                    <MenuFlyoutItem x:Name="EventImageSaveButton" Text="Save" Click="EventImageSaveButton_Click"/>
                                 </MenuFlyout>
                             </FlyoutBase.AttachedFlyout>
                         </GridView>

@@ -22,18 +22,21 @@
 * SOFTWARE.
 */
 
-using System;
 using DDPAIDash.Core.Types;
 
-namespace DDPAIDash.Core.Events
+namespace DDPAIDash.Model
 {
-    public class FileLoadedEventArgs : EventArgs
+    public class Video
     {
-        public DeviceFile File { get; }
-
-        public FileLoadedEventArgs(DeviceFile deviceFile)
+        public Video(DeviceVideo video)
         {
-            File = deviceFile;
+            DeviceVideo = video;
+#warning TODO clean up name for display
+            DisplayName = video.Name;
         }
+
+        public DeviceVideo DeviceVideo { get; set; }
+
+        public string DisplayName { get; private set; }
     }
 }

@@ -22,17 +22,20 @@
 * SOFTWARE.
 */
 
-using System;
 using DDPAIDash.Core.Types;
 
-namespace DDPAIDash.Core.Events
+namespace DDPAIDash.Model
 {
-    public class EventLoadedEventArgs : EventArgs
+    public class EventImage
     {
-        public EventLoadedEventArgs(DeviceEvent @event)
+        public EventImage(DeviceEvent @event)
         {
             Event = @event;
+#warning TODO clean up name for display
+            DisplayName = Event.ImageName;
         }
+
+        public string DisplayName { get; }
 
         public DeviceEvent Event { get; }
     }

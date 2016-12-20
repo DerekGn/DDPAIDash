@@ -25,43 +25,66 @@
 using System;
 using System.Collections.ObjectModel;
 using DDPAIDash.Core;
-using DDPAIDash.Core.Types;
-
+using DDPAIDash.Core.Events;
 
 namespace DDPAIDash.Model
 {
     public class DeviceModel
     {
-        private static Lazy<DeviceModel> _instance = new Lazy<DeviceModel>();
-        
+        private static readonly Lazy<DeviceModel> DeviceModelInstance = new Lazy<DeviceModel>();
+
         public DeviceModel()
         {
-            DeviceEvents = new ObservableCollection<DeviceEvent>();
-            DeviceFiles = new ObservableCollection<DeviceFile>();
+            EventImages = new ObservableCollection<EventImage>();
+            EventVideos = new ObservableCollection<EventVideo>();
+            Videos = new ObservableCollection<Video>();
             DeviceInstance = new Device();
+
+            DeviceInstance.VideosChanged += DeviceInstanceVideosChanged;
+            DeviceInstance.StateChanged += DeviceInstance_StateChanged;
+            DeviceInstance.EventOccured += DeviceInstance_EventOccured;
+            DeviceInstance.EventLoaded += DeviceInstance_EventLoaded;
+            DeviceInstance.VideoLoaded += DeviceInstance_VideoLoaded;
         }
 
-        public static DeviceModel Instance { get { return _instance.Value; } }
+        public static DeviceModel Instance => DeviceModelInstance.Value;
 
         public IDevice DeviceInstance { get; }
 
-        public ObservableCollection<DeviceFile> DeviceFiles { get; private set; }
+        public ObservableCollection<Video> Videos { get; }
 
-        public ObservableCollection<DeviceEvent> DeviceEvents { get; private set; }
+        public ObservableCollection<EventImage> EventImages { get; }
 
-        public bool IsDeviceConnected => DeviceInstance.State == DeviceState.Connected;
+        public ObservableCollection<EventVideo> EventVideos { get; }
 
-        //public void LoadFilesAndEvents()
-        //{
-        //    foreach (var deviceFile in DeviceInstance.GetFiles().Files)
-        //    {
-        //        DeviceFiles.Add(deviceFile);
-        //    }
+        private void DeviceInstance_VideoLoaded(object sender, VideoLoadedEventArgs e)
+        {
+            Videos.Add(new Video(e.Video));
+        }
 
-        //    foreach (var deviceEvent in DeviceInstance.GetEvents().Events)
-        //    {
-        //        DeviceEvents.Add(deviceEvent);
-        //    }
-        //}
+        private void DeviceInstance_EventLoaded(object sender, EventLoadedEventArgs e)
+        {
+            if(!string.IsNullOrWhiteSpace(e.Event.BVideoName))
+            {
+                EventVideos.Add(new EventVideo(e.Event));
+            }
+
+            if (!string.IsNullOrWhiteSpace(e.Event.ImageName))
+            {
+                EventImages.Add(new EventImage(e.Event));
+            }
+        }
+
+        private void DeviceInstance_StateChanged(object sender, StateChangedEventArgs e)
+        {
+        }
+
+        private void DeviceInstanceVideosChanged(object sender, VideosChangedEventArgs e)
+        {
+        }
+
+        private void DeviceInstance_EventOccured(object sender, EventOccuredEventArgs e)
+        {
+        }
     }
 }

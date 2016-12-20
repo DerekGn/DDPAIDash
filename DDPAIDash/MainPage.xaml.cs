@@ -25,21 +25,20 @@
 using System;
 using Windows.Foundation;
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml.Controls.Primitives;
-
-using DDPAIDash.Model;
+using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Navigation;
 using DDPAIDash.Controls;
 using DDPAIDash.Core.Types;
+using DDPAIDash.Model;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=391641
 
 namespace DDPAIDash
 {
     /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
+    ///     An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
     public sealed partial class MainPage : Page
     {
@@ -47,16 +46,18 @@ namespace DDPAIDash
 
         public MainPage()
         {
-            this.InitializeComponent();
+            InitializeComponent();
 
-            this.NavigationCacheMode = NavigationCacheMode.Required;
+            NavigationCacheMode = NavigationCacheMode.Required;
         }
 
         /// <summary>
-        /// Invoked when this page is about to be displayed in a Frame.
+        ///     Invoked when this page is about to be displayed in a Frame.
         /// </summary>
-        /// <param name="e">Event data that describes how this page was reached.
-        /// This parameter is typically used to configure the page.</param>
+        /// <param name="e">
+        ///     Event data that describes how this page was reached.
+        ///     This parameter is typically used to configure the page.
+        /// </param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             // TODO: Prepare page for display here.
@@ -67,18 +68,16 @@ namespace DDPAIDash
             // If you are using the NavigationHelper provided by some templates,
             // this event is handled for you.
 
-            DeviceFileGridView.ItemsSource = DeviceModel.Instance.DeviceFiles;
-
-            GSensorImageGridView.ItemsSource = DeviceModel.Instance.DeviceEvents;
-
-            GSensorVideosGridView.ItemsSource = DeviceModel.Instance.DeviceEvents;
+            VideoGridView.ItemsSource = DeviceModel.Instance.Videos;
+            EventImageGridView.ItemsSource = DeviceModel.Instance.EventImages;
+            EventVideosGridView.ItemsSource = DeviceModel.Instance.EventVideos;
         }
 
         private void btnCamera_Click(object sender, RoutedEventArgs e)
         {
+#warning TODO load user info from settings
+#warning TODO async
             DeviceModel.Instance.DeviceInstance.Connect(new UserInfo("012345678912345", "admin", "admin", 0));
-
-            //DeviceModel.Instance.LoadFilesAndEvents();
         }
 
         private void btnSettings_Click(object sender, RoutedEventArgs e)
@@ -86,88 +85,78 @@ namespace DDPAIDash
             Frame.Navigate(typeof(Settings));
         }
 
-        private void DeviceFileGridView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
+        private void VideoGridView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
         {
-            HandleDeviceFileGridViewContainerContentChanging(args, (deviceFileViewer) => 
+            HandleDeviceVideoGridViewContainerContentChanging(args, deviceFileViewer =>
             {
-                var deviceFile = args.Item as DeviceFile;
+                var video = args.Item as Video;
 
-                deviceFileViewer.ShowPlaceholder(deviceFile.Image, deviceFile.Name);
+                deviceFileViewer.ShowPlaceholder(video.DeviceVideo.Image, video.DisplayName);
             });
         }
 
-        private void GSensorVideosGridView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
+        private void EventVideosGridView_ContainerContentChanging(ListViewBase sender,
+            ContainerContentChangingEventArgs args)
         {
-            HandleDeviceFileGridViewContainerContentChanging(args, (deviceFileViewer) =>
+            HandleDeviceVideoGridViewContainerContentChanging(args, deviceFileViewer =>
             {
-                var deviceEvent = args.Item as DeviceEvent;
+                var video = args.Item as EventVideo;
 
-                deviceFileViewer.ShowPlaceholder(deviceEvent.VideoThumbnail, deviceEvent.BVideoName);
+                deviceFileViewer.ShowPlaceholder(video.Event.VideoThumbnail, video.DisplayName);
             });
         }
 
-        private void GSensorImageGridView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
+        private void EventImageGridView_ContainerContentChanging(ListViewBase sender,
+            ContainerContentChangingEventArgs args)
         {
-            HandleDeviceFileGridViewContainerContentChanging(args, (deviceFileViewer) =>
+            HandleDeviceVideoGridViewContainerContentChanging(args, deviceFileViewer =>
             {
-                var deviceEvent = args.Item as DeviceEvent;
+                var image = args.Item as EventImage;
 
-                deviceFileViewer.ShowPlaceholder(deviceEvent.ImageThumbnail, deviceEvent.ImageName);
+                deviceFileViewer.ShowPlaceholder(image.Event.ImageThumbnail, image.DisplayName);
             });
         }
 
-        private void DeviceFileItem_ItemClickHandler(object sender, ItemClickEventArgs e)
+        private void VideoGridView_ItemClickHandler(object sender, ItemClickEventArgs e)
         {
-            VideoMediaElement.Source = new Uri(string.Format("{0}/{1}", DeviceModel.Instance.DeviceInstance.BaseAddress, ((DeviceFile) e.ClickedItem).Name));
+            VideoMediaElement.Source =
+                new Uri(string.Format("{0}/{1}", DeviceModel.Instance.DeviceInstance.BaseAddress,
+                    ((Video) e.ClickedItem).DeviceVideo.Name));
         }
 
-        private void GSensorVideosItem_ItemClickHandler(object sender, ItemClickEventArgs e)
+        private void EventVideosGridView_ItemClick(object sender, ItemClickEventArgs e)
         {
-            VideoMediaElement.Source = new Uri(string.Format("{0}/{1}", DeviceModel.Instance.DeviceInstance.BaseAddress, ((DeviceEvent)e.ClickedItem).BVideoName));
+            VideoMediaElement.Source =
+                new Uri(string.Format("{0}/{1}", DeviceModel.Instance.DeviceInstance.BaseAddress,
+                    ((EventVideo)e.ClickedItem).Event.BVideoName));
         }
 
-        private void GSensorImageGridView_ItemClickHandler(object sender, ItemClickEventArgs e)
+        private void EventImageGridView_ItemClick(object sender, ItemClickEventArgs e)
         {
-
-        }
-
-        private void DisplayFlyoutOnHolding(object sender, HoldingRoutedEventArgs e)
-        {
-            FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
         }
 
         private void VideoSaveButton_Click(object sender, RoutedEventArgs e)
         {
-
         }
 
-        private void GSensorSaveVideoButton_Click(object sender, RoutedEventArgs e)
+        private void EventVideoSaveButton_Click(object sender, RoutedEventArgs e)
         {
-
         }
 
-        private void GSensorImageSaveButton_Click(object sender, RoutedEventArgs e)
+        private void EventImageSaveButton_Click(object sender, RoutedEventArgs e)
         {
-
         }
 
-        private TypedEventHandler<ListViewBase, ContainerContentChangingEventArgs> ContainerContentChangingDelegate
+        private void MediaElement_MediaFailed(object sender, ExceptionRoutedEventArgs e)
         {
-            get
-            {
-                if (_delegate == null)
-                {
-                    _delegate = new TypedEventHandler<ListViewBase, ContainerContentChangingEventArgs>(DeviceFileGridView_ContainerContentChanging);
-                }
-                return _delegate;
-            }
         }
 
-        private void HandleDeviceFileGridViewContainerContentChanging(ContainerContentChangingEventArgs args, Action<DeviceFileViewer> mapFile)
+        private void HandleDeviceVideoGridViewContainerContentChanging(ContainerContentChangingEventArgs args,
+            Action<DeviceVideoViewer> mapFile)
         {
-            DeviceFileViewer deviceFileViewer = args.ItemContainer.ContentTemplateRoot as DeviceFileViewer;
+            var deviceFileViewer = args.ItemContainer.ContentTemplateRoot as DeviceVideoViewer;
 
-            if (args.InRecycleQueue == true)
+            if (args.InRecycleQueue)
             {
                 deviceFileViewer.ClearData();
             }
@@ -190,8 +179,21 @@ namespace DDPAIDash
             args.Handled = true;
         }
 
-        private void MediaElement_MediaFailed(object sender, ExceptionRoutedEventArgs e)
+        private void DisplayFlyoutOnHolding(object sender, HoldingRoutedEventArgs e)
         {
+            FlyoutBase.ShowAttachedFlyout((FrameworkElement) sender);
+        }
+
+        private TypedEventHandler<ListViewBase, ContainerContentChangingEventArgs> ContainerContentChangingDelegate
+        {
+            get
+            {
+                if (_delegate == null)
+                {
+                    _delegate = VideoGridView_ContainerContentChanging;
+                }
+                return _delegate;
+            }
         }
     }
 }

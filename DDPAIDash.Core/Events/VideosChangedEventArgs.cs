@@ -22,22 +22,18 @@
 * SOFTWARE.
 */
 
-using Newtonsoft.Json;
-using System.Collections.Generic;
+using System;
+using DDPAIDash.Core.Types;
 
-namespace DDPAIDash.Core.Types
+namespace DDPAIDash.Core.Events
 {
-    public class DeviceFileList
+    public class VideosChangedEventArgs : EventArgs
     {
-        public DeviceFileList()
+        public VideosChangedEventArgs(VideosListUpdate videosUpdated)
         {
-            Files = new List<DeviceFile>();
+            VideosUpdated = videosUpdated;
         }
 
-        [JsonProperty("num")]
-        public int Count { get; set; }
-
-        [JsonProperty("file")]
-        public List<DeviceFile> Files { get; set; }
+        public VideosListUpdate VideosUpdated { get; set; }
     }
 }

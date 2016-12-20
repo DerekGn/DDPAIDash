@@ -6,12 +6,12 @@ using Windows.UI.Xaml.Media;
 
 namespace DDPAIDash.Controls
 {
-    public sealed partial class DeviceFileViewer : UserControl
+    public sealed partial class DeviceVideoViewer : UserControl
     {
         ImageSource _source;
         string _text;
 
-        public DeviceFileViewer()
+        public DeviceVideoViewer()
         {
             this.InitializeComponent();
         }

@@ -1,5 +1,5 @@
 ﻿<UserControl
-    x:Class="DDPAIDash.Controls.DeviceFileViewer"
+    x:Class="DDPAIDash.Controls.DeviceVideoViewer"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:DDPAIDash.Controls"

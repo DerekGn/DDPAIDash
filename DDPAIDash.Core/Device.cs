@@ -42,9 +42,9 @@ namespace DDPAIDash.Core
 
         private static readonly CancellationTokenSource Cts;
 
+        private readonly IImageCache _imageCache;
         private readonly ITransport _transport;
         private readonly ILogger _logger;
-        private IImageCache _imageCache;
 
         private int? _antiFog;
         private int? _cycleRecordSpace;
@@ -402,13 +402,13 @@ namespace DDPAIDash.Core
 
         public event EventHandler<StateChangedEventArgs> StateChanged;
 
-        public event EventHandler<FilesChangedEventArgs> FilesChanged;
+        public event EventHandler<VideosChangedEventArgs> VideosChanged;
 
         public event EventHandler<EventOccuredEventArgs> EventOccured;
 
         public event EventHandler<EventLoadedEventArgs> EventLoaded;
 
-        public event EventHandler<FileLoadedEventArgs> FileLoaded;
+        public event EventHandler<VideoLoadedEventArgs> VideoLoaded;
 
         public bool Connect(UserInfo userInfo)
         {
@@ -462,25 +462,25 @@ namespace DDPAIDash.Core
 
         private void GetDeviceFiles()
         {
-            DeviceFileList deviceFileList = null;
+            DeviceVideoList deviceFileList = null;
 
             ExecuteRequest(ApiConstants.PlaybackListReq,
                     apiCommand => _transport.Execute(apiCommand), (response) =>
                     {
-                        deviceFileList = JsonConvert.DeserializeObject<DeviceFileList>(response.Data);
+                        deviceFileList = JsonConvert.DeserializeObject<DeviceVideoList>(response.Data);
 
-                        deviceFileList = deviceFileList ?? new DeviceFileList();
+                        deviceFileList = deviceFileList ?? new DeviceVideoList();
                     });
 
             foreach (var deviceFile in deviceFileList.Files)
             {
                 LoadDeviceFileThumbnail(deviceFile);
 
-                OnFileLoaded(deviceFile);
+                OnVideoLoaded(deviceFile);
             }
         }
 
-        private void LoadDeviceFileThumbnail(DeviceFile deviceFile)
+        private void LoadDeviceFileThumbnail(DeviceVideo deviceFile)
         {
             var baseFileName = deviceFile.Name.Substring(0, 14);
 
@@ -512,6 +512,8 @@ namespace DDPAIDash.Core
             foreach (var deviceEvent in deviceEventList.Events)
             {
                 LoadDeviceEventThumbnail(deviceEvent);
+
+                OnEventLoad(deviceEvent);
             }
         }
 
@@ -574,7 +576,7 @@ namespace DDPAIDash.Core
                         OnEventOccured(JsonConvert.DeserializeObject<DeviceEvent>(message.Data));
                         break;
                     case MailBoxMessageKeys.MSG_PlaybackListUpdate:
-                        OnFilesChanged(JsonConvert.DeserializeObject<FilesListUpdate>(message.Data));
+                        OnFilesChanged(JsonConvert.DeserializeObject<VideosListUpdate>(message.Data));
                         break;
                     case MailBoxMessageKeys.MSG_PlaybackLiveSwitch:
                         _logger.Info($"Key: {message.Key} Data: {message.Data}");
@@ -816,9 +818,9 @@ namespace DDPAIDash.Core
             StateChanged?.Invoke(this, new StateChangedEventArgs(State));
         }
 
-        protected void OnFilesChanged(FilesListUpdate filesListUpdate)
+        protected void OnFilesChanged(VideosListUpdate filesListUpdate)
         {
-            FilesChanged?.Invoke(this, new FilesChangedEventArgs(filesListUpdate));
+            VideosChanged?.Invoke(this, new VideosChangedEventArgs(filesListUpdate));
         }
 
         protected void OnEventOccured(DeviceEvent deviceEvent)
@@ -826,9 +828,9 @@ namespace DDPAIDash.Core
             EventOccured?.Invoke(this, new EventOccuredEventArgs(deviceEvent));
         }
 
-        protected void OnFileLoaded(DeviceFile deviceFile)
+        protected void OnVideoLoaded(DeviceVideo deviceFile)
         {
-            FileLoaded?.Invoke(this, new FileLoadedEventArgs(deviceFile));
+            VideoLoaded?.Invoke(this, new VideoLoadedEventArgs(deviceFile));
         }
 
         protected void OnEventLoad(DeviceEvent deviceEvent)
