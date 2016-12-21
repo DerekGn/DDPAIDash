@@ -24,6 +24,7 @@
 
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using DDPAIDash.Core;
 using DDPAIDash.Core.Events;
 using DDPAIDash.Core.Types;
@@ -63,6 +64,16 @@ namespace DDPAIDash.Model
             Videos.Add(new Video(e.Video));
         }
 
+        private void DeviceInstanceVideoDeleted(object sender, VideoDeletedEventArgs e)
+        {
+            var video = Videos.FirstOrDefault(v => v.DeviceVideo.Name == e.Name);
+
+            if (video != null)
+            {
+                Videos.Remove(video);
+            }
+        }
+
         private void DeviceInstanceEventAdded(object sender, EventAddedEventArgs e)
         {
             AddDeviceEvent(e.Event);
@@ -72,17 +83,9 @@ namespace DDPAIDash.Model
         {
         }
 
-        private void DeviceInstanceVideosChanged(object sender, VideoAddedEventArgs e)
-        {
-        }
-
         private void DeviceInstanceEventDeleted(object sender, EventDeletedEventArgs e)
         {
             AddDeviceEvent(e.Event);
-        }
-
-        private void DeviceInstanceVideoDeleted(object sender, VideoDeletedEventArgs e)
-        {
         }
 
         private void AddDeviceEvent(DeviceEvent deviceEvent)

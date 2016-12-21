@@ -31,11 +31,7 @@ namespace DDPAIDash.Model
         public EventImage(DeviceEvent @event)
         {
             Event = @event;
-#warning TODO clean up name for display
-            DisplayName = Event.ImageName;
         }
-
-        public string DisplayName { get; }
 
         public DeviceEvent Event { get; }
     }

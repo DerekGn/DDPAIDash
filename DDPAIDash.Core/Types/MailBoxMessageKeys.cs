@@ -22,6 +22,7 @@
 * SOFTWARE.
 */
 
+// ReSharper disable InconsistentNaming
 namespace DDPAIDash.Core.Types
 {
     internal enum MailBoxMessageKeys

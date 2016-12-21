@@ -1,4 +1,27 @@
-﻿using DDPAIDash.Core.Types;
+﻿/**
+* MIT License
+*
+* Copyright (c) 2016 Derek Goslin < http://corememorydump.blogspot.ie/ >
+*
+* Permission is hereby granted, free of charge, to any person obtaining a copy
+* of this software and associated documentation files (the "Software"), to deal
+* in the Software without restriction, including without limitation the rights
+* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+* copies of the Software, and to permit persons to whom the Software is
+* furnished to do so, subject to the following conditions:
+*
+* The above copyright notice and this permission notice shall be included in all
+* copies or substantial portions of the Software.
+*
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+* SOFTWARE.
+*/
+
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 
@@ -6,7 +29,7 @@ using Windows.UI.Xaml.Media;
 
 namespace DDPAIDash.Controls
 {
-    public sealed partial class DeviceVideoViewer : UserControl
+    public sealed partial class DeviceVideoViewer
     {
         ImageSource _source;
         string _text;
@@ -21,26 +44,26 @@ namespace DDPAIDash.Controls
             _source = source;
             _text = text;
 
-            nameTextBlock.Opacity = 0;
-            image.Opacity = 0;
+            NameTextBlock.Opacity = 0;
+            Image.Opacity = 0;
         }
         public void ShowName()
         {
-            nameTextBlock.Text = _text;
-            nameTextBlock.Opacity = 1;
+            NameTextBlock.Text = _text;
+            NameTextBlock.Opacity = 1;
         }
         public void ShowImage()
         {
-            image.Source = _source;
-            image.Opacity = 1;
+            Image.Source = _source;
+            Image.Opacity = 1;
         }
         public void ClearData()
         {
             _source = null;
             _text = string.Empty;
 
-            nameTextBlock.ClearValue(TextBlock.TextProperty);
-            image.ClearValue(Image.SourceProperty);
+            NameTextBlock.ClearValue(TextBlock.TextProperty);
+            Image.ClearValue(Image.SourceProperty);
         }
     }
 }

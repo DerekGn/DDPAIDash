@@ -23,6 +23,7 @@
 */
 
 using System;
+using System.Globalization;
 using Windows.Foundation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -91,7 +92,8 @@ namespace DDPAIDash
             {
                 var video = args.Item as Video;
 
-                deviceVideoViewer.ShowPlaceholder(video.DeviceVideo.Image, video.DisplayName);
+                deviceVideoViewer.ShowPlaceholder(video.DeviceVideo.Image,
+                    ParseVideoName(video.DeviceVideo.Name).ToString(CultureInfo.CurrentUICulture));
             });
         }
 
@@ -102,7 +104,8 @@ namespace DDPAIDash
             {
                 var video = args.Item as EventVideo;
 
-                deviceVideoViewer.ShowPlaceholder(video.Event.VideoThumbnail, video.DisplayName);
+                deviceVideoViewer.ShowPlaceholder(video.Event.VideoThumbnail,
+                    FormatEventName(video.Event.BVideoName).ToString(CultureInfo.CurrentUICulture));
             });
         }
 
@@ -113,22 +116,22 @@ namespace DDPAIDash
             {
                 var image = args.Item as EventImage;
 
-                deviceVideoViewer.ShowPlaceholder(image.Event.ImageThumbnail, image.DisplayName);
+                deviceVideoViewer.ShowPlaceholder(image.Event.ImageThumbnail,
+                    FormatEventName(image.Event.ImageName).ToString(CultureInfo.CurrentUICulture));
             });
         }
 
         private void VideoGridView_ItemClickHandler(object sender, ItemClickEventArgs e)
         {
             VideoMediaElement.Source =
-                new Uri(string.Format("{0}/{1}", DeviceModel.Instance.DeviceInstance.BaseAddress,
-                    ((Video) e.ClickedItem).DeviceVideo.Name));
+                new Uri($"{DeviceModel.Instance.DeviceInstance.BaseAddress}/{((Video) e.ClickedItem).DeviceVideo.Name}");
         }
 
         private void EventVideosGridView_ItemClick(object sender, ItemClickEventArgs e)
         {
             VideoMediaElement.Source =
-                new Uri(string.Format("{0}/{1}", DeviceModel.Instance.DeviceInstance.BaseAddress,
-                    ((EventVideo)e.ClickedItem).Event.BVideoName));
+                new Uri(
+                    $"{DeviceModel.Instance.DeviceInstance.BaseAddress}/{((EventVideo) e.ClickedItem).Event.BVideoName}");
         }
 
         private void EventImageGridView_ItemClick(object sender, ItemClickEventArgs e)
@@ -185,15 +188,20 @@ namespace DDPAIDash
         }
 
         private TypedEventHandler<ListViewBase, ContainerContentChangingEventArgs> ContainerContentChangingDelegate
+            => _delegate ?? (_delegate = VideoGridView_ContainerContentChanging);
+
+        private static DateTime ParseVideoName(string name)
         {
-            get
-            {
-                if (_delegate == null)
-                {
-                    _delegate = VideoGridView_ContainerContentChanging;
-                }
-                return _delegate;
-            }
+            var result = name.Substring(0, 14);
+
+            return DateTime.ParseExact(result, "yyyyMMddHHmmss", CultureInfo.CurrentUICulture);
+        }
+
+        private static DateTime FormatEventName(string name)
+        {
+            var result = name.Substring(2, 14);
+
+            return DateTime.ParseExact(result, "yyyyMMddHHmmss", CultureInfo.CurrentUICulture);
         }
     }
 }

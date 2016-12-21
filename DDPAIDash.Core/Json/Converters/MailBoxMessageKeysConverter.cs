@@ -15,7 +15,7 @@ namespace DDPAIDash.Core.Json.Converters
         {
             MailBoxMessageKeys result;
 
-            if(!Enum.TryParse<MailBoxMessageKeys>((string) reader.Value, out result))
+            if(!Enum.TryParse((string) reader.Value, out result))
             {
                 result = MailBoxMessageKeys.Unknown;
             }

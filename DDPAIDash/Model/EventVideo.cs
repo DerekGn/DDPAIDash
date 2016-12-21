@@ -31,12 +31,8 @@ namespace DDPAIDash.Model
         public EventVideo(DeviceEvent @event)
         {
             Event = @event;
-#warning TODO clean up name for display
-            DisplayName = Event.BVideoName;
         }
 
         public DeviceEvent Event { get; }
-
-        public string DisplayName { get; }
     }
 }

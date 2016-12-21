@@ -51,10 +51,5 @@ namespace DDPAIDash
         {
             DataContext = DeviceModel.Instance;
         }
-
-        private void antiFogSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
-        {
-
-        }
     }
 }

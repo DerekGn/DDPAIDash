@@ -38,7 +38,7 @@ namespace DDPAIDash.Core.Json.Converters
         {
             T result;
 
-            Enum.TryParse<T>((string)reader.Value, out result);
+            Enum.TryParse((string)reader.Value, out result);
             
             return result;
         }

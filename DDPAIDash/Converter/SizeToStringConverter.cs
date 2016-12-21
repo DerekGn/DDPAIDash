@@ -25,6 +25,7 @@ using System;
 * SOFTWARE.
 */
 using Windows.UI.Xaml.Data;
+// ReSharper disable InconsistentNaming
 
 namespace DDPAIDash.Converter
 {
@@ -39,7 +40,7 @@ namespace DDPAIDash.Converter
         {
             SizeUnits units = (SizeUnits) Enum.Parse(typeof(SizeUnits), (string) parameter, true);
 
-            return String.Format("{0} {1}", ((int)value / Math.Pow(1024, (long)units - 1)).ToString("0.00"), units);
+            return $"{((int) value/Math.Pow(1024, (long) units - 1)).ToString("0.00")} {units}";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

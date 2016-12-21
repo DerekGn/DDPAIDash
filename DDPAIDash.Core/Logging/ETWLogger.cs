@@ -61,7 +61,7 @@ namespace DDPAIDash.Core.Logging
             }
             catch (Exception ex)
             {
-                _logChannel.LogMessage(string.Format("Exception Message: {0}", ex.Message));
+                _logChannel.LogMessage($"Exception Message: {ex.Message}");
             }
         }
 
@@ -82,7 +82,7 @@ namespace DDPAIDash.Core.Logging
 
         public void Critical(string message, Exception exception)
         {
-            _logChannel.LogMessage(string.Format("Message: {0} Exception: {1}", message, exception), LoggingLevel.Critical);
+            _logChannel.LogMessage($"Message: {message} Exception: {exception}", LoggingLevel.Critical);
         }
     }
 }

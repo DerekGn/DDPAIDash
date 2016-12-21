@@ -90,13 +90,7 @@ namespace DDPAIDash.Core.Types
         }
 
         [JsonIgnore]
-        public BitmapImage ImageThumbnail
-        {
-            get
-            {
-                return _bitmap;
-            }
-        }
+        public BitmapImage ImageThumbnail => _bitmap;
 
         [JsonIgnore]
         public Stream VideoStream
@@ -111,12 +105,6 @@ namespace DDPAIDash.Core.Types
         }
 
         [JsonIgnore]
-        public BitmapImage VideoThumbnail
-        {
-            get
-            {
-                return _videoBitmap;
-            }
-        }
+        public BitmapImage VideoThumbnail => _videoBitmap;
     }
 }

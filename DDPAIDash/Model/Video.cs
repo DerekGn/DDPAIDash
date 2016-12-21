@@ -31,12 +31,8 @@ namespace DDPAIDash.Model
         public Video(DeviceVideo video)
         {
             DeviceVideo = video;
-#warning TODO clean up name for display
-            DisplayName = video.Name;
         }
 
         public DeviceVideo DeviceVideo { get; set; }
-
-        public string DisplayName { get; private set; }
     }
 }

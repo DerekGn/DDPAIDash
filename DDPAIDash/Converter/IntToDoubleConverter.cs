@@ -42,7 +42,7 @@ namespace DDPAIDash.Converter
                       
             }
 
-            return System.Convert.ToDouble(value);
+            return result;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
