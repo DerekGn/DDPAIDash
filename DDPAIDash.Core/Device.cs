@@ -26,12 +26,12 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using DDPAIDash.Core.Types;
 using DDPAIDash.Core.Cache;
+using DDPAIDash.Core.Constants;
 using DDPAIDash.Core.Events;
 using DDPAIDash.Core.Logging;
-using DDPAIDash.Core.Constants;
 using DDPAIDash.Core.Transports;
+using DDPAIDash.Core.Types;
 using Newtonsoft.Json;
 
 namespace DDPAIDash.Core
@@ -43,8 +43,8 @@ namespace DDPAIDash.Core
         private static readonly CancellationTokenSource Cts;
 
         private readonly IImageCache _imageCache;
-        private readonly ITransport _transport;
         private readonly ILogger _logger;
+        private readonly ITransport _transport;
 
         private int? _antiFog;
         private int? _cycleRecordSpace;
@@ -207,7 +207,7 @@ namespace DDPAIDash.Core
                     () =>
                     {
                         _displayMode = value;
-                        SetIntValue(PropertyKeys.display_mode.ToString(), (int)value.Value);
+                        SetIntValue(PropertyKeys.display_mode.ToString(), (int) value.Value);
                     });
             }
         }
@@ -396,21 +396,18 @@ namespace DDPAIDash.Core
 
         public Uri BaseAddress
         {
-            get
-            {
-                return _transport.BaseAddress;
-            }
+            get { return _transport.BaseAddress; }
         }
 
         public event EventHandler<StateChangedEventArgs> StateChanged;
 
-        public event EventHandler<VideosChangedEventArgs> VideosChanged;
+        public event EventHandler<VideoDeletedEventArgs> VideoDeleted;
 
-        public event EventHandler<EventOccuredEventArgs> EventOccured;
+        public event EventHandler<EventDeletedEventArgs> EventDeleted;
 
-        public event EventHandler<EventLoadedEventArgs> EventLoaded;
-
-        public event EventHandler<VideoLoadedEventArgs> VideoLoaded;
+        public event EventHandler<EventAddedEventArgs> EventAdded;
+        
+        public event EventHandler<VideoAddedEventArgs> VideoAdded;
 
         public bool Connect(UserInfo userInfo)
         {
@@ -429,7 +426,7 @@ namespace DDPAIDash.Core
                 User = userInfo;
 
                 _mailboxTask = Task.Factory.StartNew(() => LoadDeviceData(Cts.Token))
-                    .ContinueWith((t) => PollMailbox(Cts.Token));
+                    .ContinueWith(t => PollMailbox(Cts.Token));
             }
 
             return result;
@@ -457,34 +454,57 @@ namespace DDPAIDash.Core
         {
             _logger.Verbose("Loading Device Files");
 
-            GetDeviceFiles();
+            GetDeviceVideosAndProcess(deviceVideoList =>
+            {
+                foreach (var deviceVideo in deviceVideoList.Files)
+                {
+                    LoadDeviceVideoThumbnail(deviceVideo);
+
+                    OnVideoAdded(new VideoAddedEventArgs(deviceVideo));
+                }
+            });
 
             _logger.Verbose("Loading Device Event Files");
         }
 
-        private void GetDeviceFiles()
+        private void GetDeviceVideosAndProcess(Action<DeviceVideoList> processingAction)
         {
-            DeviceVideoList deviceFileList = null;
+            DeviceVideoList deviceVideoList = null;
 
             ExecuteRequest(ApiConstants.PlaybackListReq,
-                    apiCommand => _transport.Execute(apiCommand), (response) =>
-                    {
-                        deviceFileList = JsonConvert.DeserializeObject<DeviceVideoList>(response.Data);
+                apiCommand => _transport.Execute(apiCommand), response =>
+                {
+                    deviceVideoList = JsonConvert.DeserializeObject<DeviceVideoList>(response.Data);
 
-                        deviceFileList = deviceFileList ?? new DeviceVideoList();
-                    });
+                    deviceVideoList = deviceVideoList ?? new DeviceVideoList();
+                });
 
-            foreach (var deviceFile in deviceFileList.Files)
+            processingAction(deviceVideoList);
+        }
+
+        public void GetDeviceEvents()
+        {
+            DeviceEventList deviceEventList = null;
+
+            ExecuteRequest(ApiConstants.EventListReq,
+                apiCommand => _transport.Execute(apiCommand), response =>
+                {
+                    deviceEventList = JsonConvert.DeserializeObject<DeviceEventList>(response.Data);
+
+                    deviceEventList = deviceEventList ?? new DeviceEventList();
+                });
+
+            foreach (var deviceEvent in deviceEventList.Events)
             {
-                LoadDeviceFileThumbnail(deviceFile);
+                LoadDeviceEventThumbnail(deviceEvent);
 
-                OnVideoLoaded(deviceFile);
+                OnEventAdded(new EventAddedEventArgs(deviceEvent));
             }
         }
 
-        private void LoadDeviceFileThumbnail(DeviceVideo deviceFile)
+        private void LoadDeviceVideoThumbnail(DeviceVideo deviceVideo)
         {
-            var baseFileName = deviceFile.Name.Substring(0, 14);
+            var baseFileName = deviceVideo.Name.Substring(0, 14);
 
             if (!_imageCache.Contains(baseFileName))
             {
@@ -496,27 +516,7 @@ namespace DDPAIDash.Core
                 }
             }
 
-            deviceFile.Stream = _imageCache.GetThumbnailStream(baseFileName);
-        }
-
-        public void GetDeviceEvents()
-        {
-            DeviceEventList deviceEventList = null;
-
-            ExecuteRequest(ApiConstants.EventListReq,
-                apiCommand => _transport.Execute(apiCommand), (response) =>
-                {
-                    deviceEventList = JsonConvert.DeserializeObject<DeviceEventList>(response.Data);
-
-                    deviceEventList = deviceEventList ?? new DeviceEventList();
-                });
-
-            foreach (var deviceEvent in deviceEventList.Events)
-            {
-                LoadDeviceEventThumbnail(deviceEvent);
-
-                OnEventLoad(deviceEvent);
-            }
+            deviceVideo.Stream = _imageCache.GetThumbnailStream(baseFileName);
         }
 
         private void LoadDeviceEventThumbnail(DeviceEvent deviceEvent)
@@ -545,11 +545,7 @@ namespace DDPAIDash.Core
 
                 ExecuteRequest(ApiConstants.GetMailboxData,
                     apiCommand => _transport.Execute(apiCommand),
-                    response =>
-                    {
-                        HandleMailBoxResponse(response.Data);
-                    });
-
+                    response => { HandleMailBoxResponse(response.Data); });
             } while (!cancellationToken.IsCancellationRequested);
 
             _logger.Info("Mailbox polling task completed");
@@ -575,10 +571,10 @@ namespace DDPAIDash.Core
                         _logger.Info($"Key: {message.Key} Data: {message.Data}");
                         break;
                     case MailBoxMessageKeys.MSG_EventOccured:
-                        OnEventOccured(JsonConvert.DeserializeObject<DeviceEvent>(message.Data));
+                        OnEventAdded(new EventAddedEventArgs(JsonConvert.DeserializeObject<DeviceEvent>(message.Data)));
                         break;
                     case MailBoxMessageKeys.MSG_PlaybackListUpdate:
-                        OnFilesChanged(JsonConvert.DeserializeObject<VideosListUpdate>(message.Data));
+                        HandlePlaybackListUpdate(JsonConvert.DeserializeObject<VideosListUpdate>(message.Data));
                         break;
                     case MailBoxMessageKeys.MSG_PlaybackLiveSwitch:
                         _logger.Info($"Key: {message.Key} Data: {message.Data}");
@@ -593,6 +589,28 @@ namespace DDPAIDash.Core
                         _logger.Info($"Key: {message.Key} Data: {message.Data}");
                         break;
                 }
+            }
+        }
+
+        private void HandlePlaybackListUpdate(VideosListUpdate videosListUpdate)
+        {
+            if (videosListUpdate.Action == PlaybackAction.Add)
+            {
+                GetDeviceVideosAndProcess(deviceVideoList =>
+                {
+                    var deviceVideo = deviceVideoList.Files.Find(df => df.Name == videosListUpdate.Name);
+
+                    if(deviceVideo != null)
+                    {
+                        LoadDeviceVideoThumbnail(deviceVideo);
+
+                        OnVideoAdded(new VideoAddedEventArgs(deviceVideo));
+                    }
+                });
+            }
+            else if(videosListUpdate.Action == PlaybackAction.Delete)
+            {
+                OnVideoDeleted(new VideoDeletedEventArgs(videosListUpdate.Name));
             }
         }
 
@@ -684,13 +702,13 @@ namespace DDPAIDash.Core
 
         private void LoadSetting<T>(Parameter<T> parameter)
         {
-            switch ((PropertyKeys)Enum.Parse(typeof(PropertyKeys), parameter.Key))
+            switch ((PropertyKeys) Enum.Parse(typeof(PropertyKeys), parameter.Key))
             {
                 case PropertyKeys.wdr_enable:
-                    _wdr = (SwitchState)Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
+                    _wdr = (SwitchState) Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
                     break;
                 case PropertyKeys.gsensor_mode:
-                    _gsmode = (GSensorMode)Enum.Parse(typeof(GSensorMode), parameter.Value.ToString(), true);
+                    _gsmode = (GSensorMode) Enum.Parse(typeof(GSensorMode), parameter.Value.ToString(), true);
                     break;
                 case PropertyKeys.cycle_record_space:
                     _cycleRecordSpace = int.Parse(parameter.Value.ToString());
@@ -702,7 +720,7 @@ namespace DDPAIDash.Core
                     _defaultUser = parameter.Value.ToString();
                     break;
                 case PropertyKeys.ldc_switch:
-                    _ldc = (SwitchState)Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
+                    _ldc = (SwitchState) Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
                     break;
                 case PropertyKeys.anti_fog:
                     _antiFog = int.Parse(parameter.Value.ToString());
@@ -717,37 +735,37 @@ namespace DDPAIDash.Core
                     _eventBeforeTime = int.Parse(parameter.Value.ToString());
                     break;
                 case PropertyKeys.mic_switch:
-                    _mic = (SwitchState)Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
+                    _mic = (SwitchState) Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
                     break;
                 case PropertyKeys.image_quality:
-                    _quality = (ImageQuality)Enum.Parse(typeof(ImageQuality), parameter.Value.ToString(), true);
+                    _quality = (ImageQuality) Enum.Parse(typeof(ImageQuality), parameter.Value.ToString(), true);
                     break;
                 case PropertyKeys.display_mode:
-                    _displayMode = (DisplayMode)int.Parse(parameter.Value.ToString());
+                    _displayMode = (DisplayMode) int.Parse(parameter.Value.ToString());
                     break;
                 case PropertyKeys.osd_switch:
-                    _osd = (SwitchState)Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
+                    _osd = (SwitchState) Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
                     break;
                 case PropertyKeys.osd_speedswitch:
-                    _osdSpeed = (SwitchState)Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
+                    _osdSpeed = (SwitchState) Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
                     break;
                 case PropertyKeys.start_sound_switch:
-                    _startSound = (SwitchState)Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
+                    _startSound = (SwitchState) Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
                     break;
                 case PropertyKeys.delay_poweroff_time:
                     _delayPoweroffTime = int.Parse(parameter.Value.ToString());
                     break;
                 case PropertyKeys.edog_switch:
-                    _edogSwitch = (SwitchState)Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
+                    _edogSwitch = (SwitchState) Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
                     break;
                 case PropertyKeys.parking_mode_switch:
-                    _parkingMode = (SwitchState)Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
+                    _parkingMode = (SwitchState) Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
                     break;
                 case PropertyKeys.timelapse_rec_switch:
-                    _timeLapse = (SwitchState)Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
+                    _timeLapse = (SwitchState) Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
                     break;
                 case PropertyKeys.horizontal_mirror:
-                    _hmirror = (SwitchState)Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
+                    _hmirror = (SwitchState) Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
                     break;
             }
         }
@@ -783,19 +801,19 @@ namespace DDPAIDash.Core
 
         private void SetStringValue(string key, string state)
         {
-            var parameter = new Parameters { StringParameters = { new Parameter<string> { Key = key, Value = state } } };
+            var parameter = new Parameters {StringParameters = {new Parameter<string> {Key = key, Value = state}}};
             ExecuteRequest(ApiConstants.GeneralSave,
                 apiCommand => _transport.Execute(apiCommand, JsonConvert.SerializeObject(parameter)), null);
         }
 
         private void SetIntValue(string key, int state)
         {
-            var parameter = new Parameters { IntParameters = { new Parameter<int> { Key = key, Value = state } } };
+            var parameter = new Parameters {IntParameters = {new Parameter<int> {Key = key, Value = state}}};
             ExecuteRequest(ApiConstants.GeneralSave,
                 apiCommand => _transport.Execute(apiCommand, JsonConvert.SerializeObject(parameter)), null);
         }
 
-        private void GuardPropertySet(string propertyName, string value, Action assignValue)
+        private static void GuardPropertySet(string propertyName, string value, Action assignValue)
         {
             if (value == null)
             {
@@ -805,7 +823,7 @@ namespace DDPAIDash.Core
             assignValue();
         }
 
-        private void GuardPropertySet<T>(string propertyName, T? value, Action assignValue) where T : struct
+        private static void GuardPropertySet<T>(string propertyName, T? value, Action assignValue) where T : struct
         {
             if (!value.HasValue)
             {
@@ -817,27 +835,37 @@ namespace DDPAIDash.Core
 
         protected void OnStateChanged()
         {
-            StateChanged?.Invoke(this, new StateChangedEventArgs(State));
+            var temp = StateChanged;
+
+            temp?.Invoke(this, new StateChangedEventArgs(State));
         }
 
-        protected void OnFilesChanged(VideosListUpdate filesListUpdate)
+        protected void OnVideoAdded(VideoAddedEventArgs addedEventArgs)
         {
-            VideosChanged?.Invoke(this, new VideosChangedEventArgs(filesListUpdate));
+            var temp = VideoAdded;
+
+            temp?.Invoke(this, addedEventArgs);
         }
 
-        protected void OnEventOccured(DeviceEvent deviceEvent)
+        protected void OnVideoDeleted(VideoDeletedEventArgs deletedEventArgs)
         {
-            EventOccured?.Invoke(this, new EventOccuredEventArgs(deviceEvent));
+            var temp = VideoDeleted;
+
+            temp?.Invoke(this, deletedEventArgs);
         }
 
-        protected void OnVideoLoaded(DeviceVideo deviceFile)
+        protected void OnEventDeleted(EventDeletedEventArgs eventDeletedEventArgs)
         {
-            VideoLoaded?.Invoke(this, new VideoLoadedEventArgs(deviceFile));
+            var temp = EventDeleted;
+
+            temp?.Invoke(this, eventDeletedEventArgs);
         }
 
-        protected void OnEventLoad(DeviceEvent deviceEvent)
+        protected void OnEventAdded(EventAddedEventArgs eventAddedEventArgs)
         {
-            EventLoaded?.Invoke(this, new EventLoadedEventArgs(deviceEvent));
+            var temp = EventAdded;
+
+            temp?.Invoke(this, eventAddedEventArgs);
         }
 
         #region IDisposable Support
@@ -874,8 +902,6 @@ namespace DDPAIDash.Core
             // TODO: uncomment the following line if the finalizer is overridden above.
             // GC.SuppressFinalize(this);
         }
-
-
 
         #endregion
     }

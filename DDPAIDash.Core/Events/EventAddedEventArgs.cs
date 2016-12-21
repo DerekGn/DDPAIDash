@@ -22,17 +22,18 @@
 * SOFTWARE.
 */
 
+using System;
 using DDPAIDash.Core.Types;
 
 namespace DDPAIDash.Core.Events
 {
-    public class EventOccuredEventArgs
+    public class EventAddedEventArgs : EventArgs
     {
-        public DeviceEvent Event { get; set; }
-
-        public EventOccuredEventArgs(DeviceEvent @event)
+        public EventAddedEventArgs(DeviceEvent @event)
         {
             Event = @event;
         }
+
+        public DeviceEvent Event { get; }
     }
 }

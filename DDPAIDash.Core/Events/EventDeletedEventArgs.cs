@@ -22,18 +22,17 @@
 * SOFTWARE.
 */
 
-using System;
 using DDPAIDash.Core.Types;
 
 namespace DDPAIDash.Core.Events
 {
-    public class VideosChangedEventArgs : EventArgs
+    public class EventDeletedEventArgs
     {
-        public VideosChangedEventArgs(VideosListUpdate videosUpdated)
-        {
-            VideosUpdated = videosUpdated;
-        }
+        public DeviceEvent Event { get; set; }
 
-        public VideosListUpdate VideosUpdated { get; set; }
+        public EventDeletedEventArgs(DeviceEvent @event)
+        {
+            Event = @event;
+        }
     }
 }

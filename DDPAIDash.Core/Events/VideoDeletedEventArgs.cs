@@ -23,17 +23,16 @@
 */
 
 using System;
-using DDPAIDash.Core.Types;
 
 namespace DDPAIDash.Core.Events
 {
-    public class EventLoadedEventArgs : EventArgs
+    public class VideoDeletedEventArgs : EventArgs
     {
-        public EventLoadedEventArgs(DeviceEvent @event)
+        public VideoDeletedEventArgs(string name)
         {
-            Event = @event;
+            Name = name;
         }
 
-        public DeviceEvent Event { get; }
+        public string Name { get; set; }
     }
 }

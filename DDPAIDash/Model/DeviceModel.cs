@@ -41,11 +41,11 @@ namespace DDPAIDash.Model
             Videos = new ObservableCollection<Video>();
             DeviceInstance = new Device();
 
-            DeviceInstance.VideosChanged += DeviceInstanceVideosChanged;
-            DeviceInstance.StateChanged += DeviceInstance_StateChanged;
-            DeviceInstance.EventOccured += DeviceInstance_EventOccured;
-            DeviceInstance.EventLoaded += DeviceInstance_EventLoaded;
-            DeviceInstance.VideoLoaded += DeviceInstance_VideoLoaded;
+            DeviceInstance.VideoDeleted += DeviceInstanceVideoDeleted;
+            DeviceInstance.StateChanged += DeviceInstanceStateChanged;
+            DeviceInstance.EventDeleted += DeviceInstanceEventDeleted;
+            DeviceInstance.EventAdded += DeviceInstanceEventAdded;
+            DeviceInstance.VideoAdded += DeviceInstanceVideoAdded;
         }
 
         public static DeviceModel Instance => DeviceModelInstance.Value;
@@ -58,27 +58,31 @@ namespace DDPAIDash.Model
 
         public ObservableCollection<EventVideo> EventVideos { get; }
 
-        private void DeviceInstance_VideoLoaded(object sender, VideoLoadedEventArgs e)
+        private void DeviceInstanceVideoAdded(object sender, VideoAddedEventArgs e)
         {
             Videos.Add(new Video(e.Video));
         }
 
-        private void DeviceInstance_EventLoaded(object sender, EventLoadedEventArgs e)
+        private void DeviceInstanceEventAdded(object sender, EventAddedEventArgs e)
         {
             AddDeviceEvent(e.Event);
         }
 
-        private void DeviceInstance_StateChanged(object sender, StateChangedEventArgs e)
+        private void DeviceInstanceStateChanged(object sender, StateChangedEventArgs e)
         {
         }
 
-        private void DeviceInstanceVideosChanged(object sender, VideosChangedEventArgs e)
+        private void DeviceInstanceVideosChanged(object sender, VideoAddedEventArgs e)
         {
         }
 
-        private void DeviceInstance_EventOccured(object sender, EventOccuredEventArgs e)
+        private void DeviceInstanceEventDeleted(object sender, EventDeletedEventArgs e)
         {
             AddDeviceEvent(e.Event);
+        }
+
+        private void DeviceInstanceVideoDeleted(object sender, VideoDeletedEventArgs e)
+        {
         }
 
         private void AddDeviceEvent(DeviceEvent deviceEvent)

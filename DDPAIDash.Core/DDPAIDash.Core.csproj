@@ -83,11 +83,11 @@
     <Compile Include="Cache\ImageCache.cs" />
     <Compile Include="Constants\ApiConstants.cs" />
     <Compile Include="Device.cs" />
-    <Compile Include="Events\EventLoadedEventArgs.cs" />
-    <Compile Include="Events\EventCreatedEventArgs.cs" />
-    <Compile Include="Events\VideosChangedEventArgs.cs" />
+    <Compile Include="Events\EventAddedEventArgs.cs" />
+    <Compile Include="Events\EventDeletedEventArgs.cs" />
+    <Compile Include="Events\VideoAddedEventArgs.cs" />
     <Compile Include="Events\StateChangedEventArgs.cs" />
-    <Compile Include="Events\VideoLoadedEventArgs.cs" />
+    <Compile Include="Events\VideoDeletedEventArgs.cs" />
     <Compile Include="Json\Converters\DateTimeJsonConverter.cs" />
     <Compile Include="Json\Converters\EnumConverter.cs" />
     <Compile Include="Json\Converters\MailBoxMessageKeysConverter.cs" />

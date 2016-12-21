@@ -109,18 +109,12 @@ namespace DDPAIDash.Core
         /// </summary>
         event EventHandler<StateChangedEventArgs> StateChanged;
 
-        /// <summary>
-        /// Raised when the <see cref="IDevice"/> udates its file list
-        /// </summary>
-        event EventHandler<VideosChangedEventArgs> VideosChanged;
-        
-        event EventHandler<VideoLoadedEventArgs> VideoLoaded;
+        event EventHandler<VideoDeletedEventArgs> VideoDeleted;
 
-        /// <summary>
-        /// Raised when a new event occurs <see cref="IDevice"/>
-        /// </summary>
-        event EventHandler<EventOccuredEventArgs> EventOccured;
+        event EventHandler<VideoAddedEventArgs> VideoAdded;
 
-        event EventHandler<EventLoadedEventArgs> EventLoaded;
+        event EventHandler<EventDeletedEventArgs> EventDeleted;
+
+        event EventHandler<EventAddedEventArgs> EventAdded;
     }
 }

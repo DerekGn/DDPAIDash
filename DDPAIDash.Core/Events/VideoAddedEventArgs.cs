@@ -27,13 +27,13 @@ using DDPAIDash.Core.Types;
 
 namespace DDPAIDash.Core.Events
 {
-    public class VideoLoadedEventArgs : EventArgs
+    public class VideoAddedEventArgs : EventArgs
     {
-        public DeviceVideo Video { get; }
+        public DeviceVideo Video { get; set; }
 
-        public VideoLoadedEventArgs(DeviceVideo deviceVideo)
+        public VideoAddedEventArgs(DeviceVideo video)
         {
-            Video = deviceVideo;
+            Video = video;
         }
     }
 }

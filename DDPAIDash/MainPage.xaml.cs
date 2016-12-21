@@ -87,33 +87,33 @@ namespace DDPAIDash
 
         private void VideoGridView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
         {
-            HandleDeviceVideoGridViewContainerContentChanging(args, deviceFileViewer =>
+            HandleDeviceVideoGridViewContainerContentChanging(args, deviceVideoViewer =>
             {
                 var video = args.Item as Video;
 
-                deviceFileViewer.ShowPlaceholder(video.DeviceVideo.Image, video.DisplayName);
+                deviceVideoViewer.ShowPlaceholder(video.DeviceVideo.Image, video.DisplayName);
             });
         }
 
         private void EventVideosGridView_ContainerContentChanging(ListViewBase sender,
             ContainerContentChangingEventArgs args)
         {
-            HandleDeviceVideoGridViewContainerContentChanging(args, deviceFileViewer =>
+            HandleDeviceVideoGridViewContainerContentChanging(args, deviceVideoViewer =>
             {
                 var video = args.Item as EventVideo;
 
-                deviceFileViewer.ShowPlaceholder(video.Event.VideoThumbnail, video.DisplayName);
+                deviceVideoViewer.ShowPlaceholder(video.Event.VideoThumbnail, video.DisplayName);
             });
         }
 
         private void EventImageGridView_ContainerContentChanging(ListViewBase sender,
             ContainerContentChangingEventArgs args)
         {
-            HandleDeviceVideoGridViewContainerContentChanging(args, deviceFileViewer =>
+            HandleDeviceVideoGridViewContainerContentChanging(args, deviceVideoViewer =>
             {
                 var image = args.Item as EventImage;
 
-                deviceFileViewer.ShowPlaceholder(image.Event.ImageThumbnail, image.DisplayName);
+                deviceVideoViewer.ShowPlaceholder(image.Event.ImageThumbnail, image.DisplayName);
             });
         }
 
@@ -154,26 +154,26 @@ namespace DDPAIDash
         private void HandleDeviceVideoGridViewContainerContentChanging(ContainerContentChangingEventArgs args,
             Action<DeviceVideoViewer> mapFile)
         {
-            var deviceFileViewer = args.ItemContainer.ContentTemplateRoot as DeviceVideoViewer;
+            var deviceVideoViewer = args.ItemContainer.ContentTemplateRoot as DeviceVideoViewer;
 
             if (args.InRecycleQueue)
             {
-                deviceFileViewer.ClearData();
+                deviceVideoViewer.ClearData();
             }
             else if (args.Phase == 0)
             {
-                mapFile(deviceFileViewer);
+                mapFile(deviceVideoViewer);
 
                 args.RegisterUpdateCallback(ContainerContentChangingDelegate);
             }
             else if (args.Phase == 1)
             {
-                deviceFileViewer.ShowName();
+                deviceVideoViewer.ShowName();
                 args.RegisterUpdateCallback(ContainerContentChangingDelegate);
             }
             else if (args.Phase == 2)
             {
-                deviceFileViewer.ShowImage();
+                deviceVideoViewer.ShowImage();
             }
 
             args.Handled = true;
