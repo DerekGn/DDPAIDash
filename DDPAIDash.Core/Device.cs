@@ -566,9 +566,10 @@ namespace DDPAIDash.Core
                         break;
                     case MailBoxMessageKeys.MSG_DeleteEvent:
                         _logger.Info($"Key: {message.Key} Data: {message.Data}");
+                        HandleEventDeleted();
                         break;
                     case MailBoxMessageKeys.MSG_EventOccured:
-                        OnEventAdded(new EventAddedEventArgs(JsonConvert.DeserializeObject<DeviceEvent>(message.Data)));
+                        HandleEventOccured(JsonConvert.DeserializeObject<DeviceEvent>(message.Data));
                         break;
                     case MailBoxMessageKeys.MSG_PlaybackListUpdate:
                         HandlePlaybackListUpdate(JsonConvert.DeserializeObject<VideosListUpdate>(message.Data));
@@ -587,6 +588,20 @@ namespace DDPAIDash.Core
                         break;
                 }
             }
+        }
+
+        private void HandleEventDeleted()
+        {
+            UpdateStorageInfo();
+#warning todo
+            OnEventDeleted(new EventDeletedEventArgs(null));
+        }
+
+        private void HandleEventOccured(DeviceEvent deviceEvent)
+        {
+            UpdateStorageInfo();
+
+            OnEventAdded(new EventAddedEventArgs(deviceEvent));
         }
 
         private void HandlePlaybackListUpdate(VideosListUpdate videosListUpdate)
@@ -662,12 +677,7 @@ namespace DDPAIDash.Core
                             _transport.Execute(apiCommand, JsonConvert.SerializeObject(QueryParameters.Instance)),
                         LoadSettings);
                 },
-                () =>
-                {
-                    return ExecuteRequest(ApiConstants.GetStorageInfo,
-                        apiCommand => _transport.Execute(apiCommand),
-                        response => { Storage = JsonConvert.DeserializeObject<StorageInfo>(response.Data); });
-                }
+                UpdateStorageInfo
             };
 
             foreach (var action in connectActions)
@@ -680,6 +690,13 @@ namespace DDPAIDash.Core
 
 
             return result;
+        }
+
+        private bool UpdateStorageInfo()
+        {
+            return ExecuteRequest(ApiConstants.GetStorageInfo,
+                apiCommand => _transport.Execute(apiCommand),
+                response => { Storage = JsonConvert.DeserializeObject<StorageInfo>(response.Data); });
         }
 
         private void LoadSettings(ResponseMessage response)
