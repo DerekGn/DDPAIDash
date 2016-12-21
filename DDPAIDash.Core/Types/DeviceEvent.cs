@@ -32,11 +32,6 @@ namespace DDPAIDash.Core.Types
 {
     public class DeviceEvent
     {
-        private Stream _imageStream;
-        private BitmapImage _bitmap;
-        private BitmapImage _videoBitmap;
-        private Stream _videoStream;
-
         [JsonProperty("index")]
         public int Index { get; set; }
 
@@ -78,33 +73,9 @@ namespace DDPAIDash.Core.Types
         public int? SVideoSize { get; set; }
 
         [JsonIgnore]
-        public Stream ImageStream
-        {
-            get { return _imageStream; }
-            set
-            {
-                _imageStream = value;
-                _bitmap = new BitmapImage();
-                _bitmap.SetSource(_imageStream.AsRandomAccessStream());
-            }
-        }
+        public Stream ImageThumbnailStream { get; set; }
 
         [JsonIgnore]
-        public BitmapImage ImageThumbnail => _bitmap;
-
-        [JsonIgnore]
-        public Stream VideoStream
-        {
-            get { return _imageStream; }
-            set
-            {
-                _videoStream = value;
-                _videoBitmap = new BitmapImage();
-                _videoBitmap.SetSource(_videoStream.AsRandomAccessStream());
-            }
-        }
-
-        [JsonIgnore]
-        public BitmapImage VideoThumbnail => _videoBitmap;
+        public Stream VideoThumbnailStream { get; set; }
     }
 }

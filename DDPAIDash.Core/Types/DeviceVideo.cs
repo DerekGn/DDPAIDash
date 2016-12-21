@@ -32,9 +32,6 @@ namespace DDPAIDash.Core.Types
 {
     public class DeviceVideo
     {
-        private BitmapImage _image;
-        private Stream _stream;
-
         [JsonProperty("index")]
         public int Index { get; set; }
 
@@ -62,25 +59,6 @@ namespace DDPAIDash.Core.Types
         public string ParentFile { get; set; }
 
         [JsonIgnore]
-        public Stream Stream
-        {
-            get { return _stream; }
-            set
-            {
-                _stream = value;
-                _image = new BitmapImage();
-                _image.SetSource(_stream.AsRandomAccessStream());
-            }
-        }
-
-        [JsonIgnore]
-        public BitmapImage Image
-        {
-            set { _image = value; }
-            get
-            {
-                return _image;
-            }
-        }
+        public Stream ImageStream { get; set; }
     }
 }

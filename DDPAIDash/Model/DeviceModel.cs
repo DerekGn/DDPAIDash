@@ -28,12 +28,14 @@ using System.Linq;
 using DDPAIDash.Core;
 using DDPAIDash.Core.Events;
 using DDPAIDash.Core.Types;
+using Windows.UI.Core;
 
 namespace DDPAIDash.Model
 {
     public class DeviceModel
     {
         private static readonly Lazy<DeviceModel> DeviceModelInstance = new Lazy<DeviceModel>();
+        private readonly CoreDispatcher Dispatcher;
 
         public DeviceModel()
         {
@@ -47,6 +49,11 @@ namespace DDPAIDash.Model
             DeviceInstance.EventDeleted += DeviceInstanceEventDeleted;
             DeviceInstance.EventAdded += DeviceInstanceEventAdded;
             DeviceInstance.VideoAdded += DeviceInstanceVideoAdded;
+
+            if (!Windows.ApplicationModel.DesignMode.DesignModeEnabled)
+            {
+                Dispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
+            }
         }
 
         public static DeviceModel Instance => DeviceModelInstance.Value;
@@ -61,17 +68,21 @@ namespace DDPAIDash.Model
 
         private void DeviceInstanceVideoAdded(object sender, VideoAddedEventArgs e)
         {
-            Videos.Add(new Video(e.Video));
+            ExecuteOnDispatcher(() => {
+                Videos.Add(new Video(e.Video));
+            });
         }
 
         private void DeviceInstanceVideoDeleted(object sender, VideoDeletedEventArgs e)
         {
             var video = Videos.FirstOrDefault(v => v.DeviceVideo.Name == e.Name);
 
-            if (video != null)
-            {
-                Videos.Remove(video);
-            }
+            ExecuteOnDispatcher(() => {
+                if (video != null)
+                {
+                    Videos.Remove(video);
+                }
+            });
         }
 
         private void DeviceInstanceEventAdded(object sender, EventAddedEventArgs e)
@@ -90,15 +101,25 @@ namespace DDPAIDash.Model
 
         private void AddDeviceEvent(DeviceEvent deviceEvent)
         {
-            if (!string.IsNullOrWhiteSpace(deviceEvent.BVideoName))
-            {
-                EventVideos.Add(new EventVideo(deviceEvent));
-            }
+            ExecuteOnDispatcher(() => {
+                if (!string.IsNullOrWhiteSpace(deviceEvent.BVideoName))
+                {
+                    EventVideos.Add(new EventVideo(deviceEvent));
+                }
 
-            if (!string.IsNullOrWhiteSpace(deviceEvent.ImageName))
+                if (!string.IsNullOrWhiteSpace(deviceEvent.ImageName))
+                {
+                    EventImages.Add(new EventImage(deviceEvent));
+                }
+            });
+        }
+
+        private void ExecuteOnDispatcher(Action action)
+        {
+            Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                EventImages.Add(new EventImage(deviceEvent));
-            }
+                action();
+            });
         }
     }
 }

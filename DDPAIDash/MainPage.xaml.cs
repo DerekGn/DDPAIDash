@@ -33,6 +33,9 @@ using Windows.UI.Xaml.Navigation;
 using DDPAIDash.Controls;
 using DDPAIDash.Core.Types;
 using DDPAIDash.Model;
+using System.IO;
+using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=391641
 
@@ -92,7 +95,7 @@ namespace DDPAIDash
             {
                 var video = args.Item as Video;
 
-                deviceVideoViewer.ShowPlaceholder(video.DeviceVideo.Image,
+                deviceVideoViewer.ShowPlaceholder(CreateBitmapFromStream(video.DeviceVideo.ImageStream),
                     ParseVideoName(video.DeviceVideo.Name).ToString(CultureInfo.CurrentUICulture));
             });
         }
@@ -104,7 +107,7 @@ namespace DDPAIDash
             {
                 var video = args.Item as EventVideo;
 
-                deviceVideoViewer.ShowPlaceholder(video.Event.VideoThumbnail,
+                deviceVideoViewer.ShowPlaceholder(CreateBitmapFromStream(video.Event.VideoThumbnailStream),
                     FormatEventName(video.Event.BVideoName).ToString(CultureInfo.CurrentUICulture));
             });
         }
@@ -116,9 +119,17 @@ namespace DDPAIDash
             {
                 var image = args.Item as EventImage;
 
-                deviceVideoViewer.ShowPlaceholder(image.Event.ImageThumbnail,
+                deviceVideoViewer.ShowPlaceholder(CreateBitmapFromStream(image.Event.ImageThumbnailStream),
                     FormatEventName(image.Event.ImageName).ToString(CultureInfo.CurrentUICulture));
             });
+        }
+
+        private ImageSource CreateBitmapFromStream(Stream stream)
+        {
+            var result = new BitmapImage();
+            result.SetSource(stream.AsRandomAccessStream());
+
+            return result;
         }
 
         private void VideoGridView_ItemClickHandler(object sender, ItemClickEventArgs e)

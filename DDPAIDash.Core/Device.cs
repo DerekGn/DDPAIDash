@@ -462,6 +462,8 @@ namespace DDPAIDash.Core
             });
 
             _logger.Verbose("Loading Device Event Files");
+
+            GetDeviceEvents();
         }
 
         private void GetDeviceVideosAndProcess(Action<DeviceVideoList> processingAction)
@@ -513,7 +515,7 @@ namespace DDPAIDash.Core
                 }
             }
 
-            deviceVideo.Stream = _imageCache.GetThumbnailStream(baseFileName);
+            deviceVideo.ImageStream = _imageCache.GetThumbnailStream(baseFileName);
         }
 
         private void LoadDeviceEventThumbnail(DeviceEvent deviceEvent)
@@ -530,8 +532,8 @@ namespace DDPAIDash.Core
                 }
             }
 
-            deviceEvent.ImageStream = _imageCache.GetThumbnailStream(imageFileName);
-            deviceEvent.VideoStream = _imageCache.GetThumbnailStream(imageFileName);
+            deviceEvent.ImageThumbnailStream = _imageCache.GetThumbnailStream(imageFileName);
+            deviceEvent.VideoThumbnailStream = _imageCache.GetThumbnailStream(imageFileName);
         }
 
         private void PollMailbox(CancellationToken cancellationToken)
