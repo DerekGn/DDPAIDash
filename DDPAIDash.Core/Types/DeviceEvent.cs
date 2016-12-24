@@ -26,7 +26,6 @@ using System;
 using System.IO;
 using Newtonsoft.Json;
 using DDPAIDash.Core.Json.Converters;
-using Windows.UI.Xaml.Media.Imaging;
 
 namespace DDPAIDash.Core.Types
 {

@@ -61,13 +61,14 @@ namespace DDPAIDash.Core.Transports
 
         public Uri BaseAddress => _httpClient.BaseAddress;
 
-        public void Connect(string address, int port)
+        public void Open(string address, int port)
         {
+            _httpClient.Timeout = new TimeSpan(0, 0, 5);
             _httpClient.BaseAddress = new Uri($"http://{address}:{port}");
             _httpClient.DefaultRequestHeaders.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
         }
 
-        public void Disconnect()
+        public void Close()
         {
         }
 

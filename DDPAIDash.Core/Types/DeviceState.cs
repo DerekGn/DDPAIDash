@@ -27,6 +27,8 @@ namespace DDPAIDash.Core.Types
     public enum DeviceState
     {
         PoweredDown,
-        Connected
+        Connecting,
+        Connected,
+        Formatting
     }
 }

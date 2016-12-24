@@ -288,7 +288,6 @@
                         <TextBlock Text="{Binding DeviceInstance.Storage.Runtime}" />
                         <TextBlock Text="Total Runtime" Style="{StaticResource BodyTextBlockStyle}" />
                         <TextBlock Text="{Binding DeviceInstance.Storage.TotalRuntime}" />
-                        <Button x:Name="Format" />
                     </StackPanel>
                 </ScrollViewer>
             </PivotItem>

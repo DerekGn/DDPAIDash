@@ -410,20 +410,25 @@ namespace DDPAIDash.Core
         {
             bool result;
 
-            _transport.Connect("193.168.0.1", 80);
-
-            result = PerformConnect(userInfo);
-
-            State = DeviceState.Connected;
-
-            OnStateChanged();
-
-            if (result)
+            if (State == DeviceState.PoweredDown)
             {
-                User = userInfo;
+                OnStateChanged(DeviceState.Connecting);
 
-                _mailboxTask = Task.Factory.StartNew(() => LoadDeviceData(Cts.Token))
-                    .ContinueWith(t => PollMailbox(Cts.Token));
+                _transport.Open("193.168.0.1", 80);
+
+                result = PerformConnect(userInfo);
+
+                if (result)
+                {
+                    User = userInfo;
+
+                    _mailboxTask = Task.Factory.StartNew(() => LoadDeviceData(Cts.Token))
+                        .ContinueWith(t => PollMailbox(Cts.Token));
+                }
+            }
+            else
+            {
+                result = true;
             }
 
             return result;
@@ -431,14 +436,41 @@ namespace DDPAIDash.Core
 
         public void Disconnect()
         {
-            try
+            if((State == DeviceState.Connected) || (State == DeviceState.Formatting))
             {
-#warning logout
-                _transport.Disconnect();
+                _transport.Close();
             }
-            catch (Exception exception)
+        }
+
+        public bool Format()
+        {
+            bool result = false;
+
+            if (State == DeviceState.Connected)
             {
-                throw;
+                result = ExecuteRequest(ApiConstants.MmcFormat, apiCommand => _transport.Execute(apiCommand), responseMessage => { State = DeviceState.Formatting; });
+            }
+
+            return result;
+        }
+
+        public void GetDeviceEvents()
+        {
+            DeviceEventList deviceEventList = null;
+
+            ExecuteRequest(ApiConstants.EventListReq,
+                apiCommand => _transport.Execute(apiCommand), response =>
+                {
+                    deviceEventList = JsonConvert.DeserializeObject<DeviceEventList>(response.Data);
+
+                    deviceEventList = deviceEventList ?? new DeviceEventList();
+                });
+
+            foreach (var deviceEvent in deviceEventList.Events)
+            {
+                LoadDeviceEventThumbnail(deviceEvent);
+
+                OnEventAdded(new EventAddedEventArgs(deviceEvent));
             }
         }
 
@@ -449,7 +481,7 @@ namespace DDPAIDash.Core
 
         private void LoadDeviceData(CancellationToken token)
         {
-            _logger.Verbose("Loading Device Files");
+            _logger.Verbose("Loading Device Videos");
 
             GetDeviceVideosAndProcess(deviceVideoList =>
             {
@@ -480,27 +512,7 @@ namespace DDPAIDash.Core
 
             processingAction(deviceVideoList);
         }
-
-        public void GetDeviceEvents()
-        {
-            DeviceEventList deviceEventList = null;
-
-            ExecuteRequest(ApiConstants.EventListReq,
-                apiCommand => _transport.Execute(apiCommand), response =>
-                {
-                    deviceEventList = JsonConvert.DeserializeObject<DeviceEventList>(response.Data);
-
-                    deviceEventList = deviceEventList ?? new DeviceEventList();
-                });
-
-            foreach (var deviceEvent in deviceEventList.Events)
-            {
-                LoadDeviceEventThumbnail(deviceEvent);
-
-                OnEventAdded(new EventAddedEventArgs(deviceEvent));
-            }
-        }
-
+        
         private void LoadDeviceVideoThumbnail(DeviceVideo deviceVideo)
         {
             var baseFileName = deviceVideo.Name.Substring(0, 14);
@@ -538,6 +550,10 @@ namespace DDPAIDash.Core
 
         private void PollMailbox(CancellationToken cancellationToken)
         {
+            _logger.Info("Mailbox polling task started");
+
+            OnStateChanged(DeviceState.Connected);
+
             do
             {
                 Task.Delay(PollingInterval, cancellationToken).Wait(cancellationToken);
@@ -545,6 +561,7 @@ namespace DDPAIDash.Core
                 ExecuteRequest(ApiConstants.GetMailboxData,
                     apiCommand => _transport.Execute(apiCommand),
                     response => { HandleMailBoxResponse(response.Data); });
+
             } while (!cancellationToken.IsCancellationRequested);
 
             _logger.Info("Mailbox polling task completed");
@@ -552,7 +569,20 @@ namespace DDPAIDash.Core
 
         private void HandleMailBoxResponse(string data)
         {
+            DeviceVideoList currentDeviceVideos = null;
             var mailboxMessages = JsonConvert.DeserializeObject<MailBoxMessageList>(data);
+
+            if(mailboxMessages.Messages.FindIndex(m => (m.Key == MailBoxMessageKeys.MSG_PlaybackListUpdate) || (m.Key == MailBoxMessageKeys.MSG_DeleteEvent) || (m.Key == MailBoxMessageKeys.MSG_EventOccured) || (m.Key == MailBoxMessageKeys.MSG_MMCWarning)) >= 0)
+            {
+                UpdateStorageInfo();
+            }
+
+            if (mailboxMessages.Messages.FindIndex(m => (m.Key == MailBoxMessageKeys.MSG_PlaybackListUpdate)) >= 0)
+            {
+                GetDeviceVideosAndProcess((deviceVideos) => {
+                    currentDeviceVideos = deviceVideos;
+                });
+            }
 
             foreach (var message in mailboxMessages.Messages)
             {
@@ -562,9 +592,8 @@ namespace DDPAIDash.Core
                         _logger.Error($"Key: {message.Key} Data: {message.Data}");
                         break;
                     case MailBoxMessageKeys.MSG_PowerDown:
-                        State = DeviceState.PoweredDown;
                         Cts.Cancel();
-                        OnStateChanged();
+                        OnStateChanged(DeviceState.PoweredDown);
                         break;
                     case MailBoxMessageKeys.MSG_DeleteEvent:
                         _logger.Info($"Key: {message.Key} Data: {message.Data}");
@@ -574,13 +603,13 @@ namespace DDPAIDash.Core
                         HandleEventOccured(JsonConvert.DeserializeObject<DeviceEvent>(message.Data));
                         break;
                     case MailBoxMessageKeys.MSG_PlaybackListUpdate:
-                        HandlePlaybackListUpdate(JsonConvert.DeserializeObject<VideosListUpdate>(message.Data));
+                        HandlePlaybackListUpdate(currentDeviceVideos, JsonConvert.DeserializeObject<VideosListUpdate>(message.Data));
                         break;
                     case MailBoxMessageKeys.MSG_PlaybackLiveSwitch:
                         _logger.Info($"Key: {message.Key} Data: {message.Data}");
                         break;
                     case MailBoxMessageKeys.MSG_MMCWarning:
-                        _logger.Info($"Key: {message.Key} Data: {message.Data}");
+                        HandleMMCWarning();
                         break;
                     case MailBoxMessageKeys.MSG_ButtonMatch:
                         _logger.Info($"Key: {message.Key} Data: {message.Data}");
@@ -592,35 +621,38 @@ namespace DDPAIDash.Core
             }
         }
 
+        private void HandleMMCWarning()
+        {
+            OnStateChanged(DeviceState.Connected);
+        }
+
         private void HandleEventDeleted()
         {
-            UpdateStorageInfo();
 #warning todo
             OnEventDeleted(new EventDeletedEventArgs(null));
         }
 
         private void HandleEventOccured(DeviceEvent deviceEvent)
         {
-            UpdateStorageInfo();
-
             OnEventAdded(new EventAddedEventArgs(deviceEvent));
         }
 
-        private void HandlePlaybackListUpdate(VideosListUpdate videosListUpdate)
+        private void HandlePlaybackListUpdate(DeviceVideoList deviceVideoList, VideosListUpdate videosListUpdate)
         {
             if (videosListUpdate.Action == PlaybackAction.Add)
             {
-                GetDeviceVideosAndProcess(deviceVideoList =>
+                var deviceVideo = deviceVideoList.Files.Find(df => df.Name == videosListUpdate.Name);
+
+                if (deviceVideo != null)
                 {
-                    var deviceVideo = deviceVideoList.Files.Find(df => df.Name == videosListUpdate.Name);
+                    LoadDeviceVideoThumbnail(deviceVideo);
 
-                    if(deviceVideo != null)
-                    {
-                        LoadDeviceVideoThumbnail(deviceVideo);
-
-                        OnVideoAdded(new VideoAddedEventArgs(deviceVideo));
-                    }
-                });
+                    OnVideoAdded(new VideoAddedEventArgs(deviceVideo));
+                }
+                else
+                {
+                    _logger.Error($"Unable to find {videosListUpdate.Name} in current device video list");
+                }
             }
             else if(videosListUpdate.Action == PlaybackAction.Delete)
             {
@@ -689,7 +721,6 @@ namespace DDPAIDash.Core
                 if (!result)
                     break;
             }
-
 
             return result;
         }
@@ -849,8 +880,10 @@ namespace DDPAIDash.Core
             assignValue();
         }
 
-        protected void OnStateChanged()
+        protected void OnStateChanged(DeviceState state)
         {
+            State = state;
+
             var temp = StateChanged;
 
             temp?.Invoke(this, new StateChangedEventArgs(State));

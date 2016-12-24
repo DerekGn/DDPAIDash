@@ -98,6 +98,8 @@ namespace DDPAIDash.Core
         /// </summary>
         void Disconnect();
 
+        bool Format();
+
         /// <summary>
         /// Stream a file from the <see cref="IDevice"/> instance
         /// </summary>

@@ -214,5 +214,10 @@ namespace DDPAIDash
 
             return DateTime.ParseExact(result, "yyyyMMddHHmmss", CultureInfo.CurrentUICulture);
         }
+
+        private void BtnFormat_Click(object sender, RoutedEventArgs e)
+        {
+            DeviceModel.Instance.FormatDevice();
+        }
     }
 }

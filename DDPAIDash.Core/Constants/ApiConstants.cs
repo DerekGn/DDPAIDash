@@ -42,9 +42,11 @@ namespace DDPAIDash.Core.Constants
         public const string GetBaseInfo = "API_GetBaseInfo";
         public const string GeneralSave = "API_GeneralSave";
         public const string RecordOpt = "API_RecordOpt";
+        public const string MmcFormat = "API_MmcFormat";
         public const string SyncDate = "API_SyncDate";
         public const string AvCapReq = "APP_AvCapReq";
         public const string AvCapSet = "APP_AvCapSet";
         public const string SetUuid = "API_SetUuid";
+        
     }
 }

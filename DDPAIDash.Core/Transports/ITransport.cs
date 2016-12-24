@@ -33,7 +33,7 @@ namespace DDPAIDash.Core.Transports
 
         Uri BaseAddress { get; }
 
-        void Connect(string address, int port);
+        void Open(string address, int port);
 
         Stream GetFile(string fileName);
 
@@ -41,6 +41,6 @@ namespace DDPAIDash.Core.Transports
 
         ResponseMessage Execute(string apiCommand, string payload);
 
-        void Disconnect();
+        void Close();
     }
 }

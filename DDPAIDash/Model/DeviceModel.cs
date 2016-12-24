@@ -56,6 +56,15 @@ namespace DDPAIDash.Model
             }
         }
 
+        public void FormatDevice()
+        {
+            EventImages.Clear();
+            EventVideos.Clear();
+            Videos.Clear();
+
+            DeviceInstance.Format();
+        }
+
         public static DeviceModel Instance => DeviceModelInstance.Value;
 
         public IDevice DeviceInstance { get; }
@@ -114,12 +123,12 @@ namespace DDPAIDash.Model
             });
         }
 
-        private void ExecuteOnDispatcher(Action action)
+        private async void ExecuteOnDispatcher(Action action)
         {
-            Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-            {
-                action();
-            });
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+             {
+                 action();
+             });
         }
     }
 }
