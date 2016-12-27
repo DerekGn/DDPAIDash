@@ -79,7 +79,17 @@ namespace DDPAIDash
             EventVideosGridView.ItemsSource = DeviceModel.Instance.EventVideos;
         }
 
-        private void btnCamera_Click(object sender, RoutedEventArgs e)
+        private void BtnFormat_Click(object sender, RoutedEventArgs e)
+        {
+            DeviceModel.Instance.FormatDevice();
+        }
+
+        private void BtnPair_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnConnect_Click(object sender, RoutedEventArgs e)
         {
 #warning TODO load user info from settings
 #warning TODO async
@@ -89,6 +99,39 @@ namespace DDPAIDash
         private void btnSettings_Click(object sender, RoutedEventArgs e)
         {
             Frame.Navigate(typeof(Settings));
+        }
+
+        private void VideoGridView_ItemClickHandler(object sender, ItemClickEventArgs e)
+        {
+            VideoMediaElement.Source =
+                new Uri($"{DeviceModel.Instance.DeviceInstance.BaseAddress}/{((Video)e.ClickedItem).DeviceVideo.Name}");
+        }
+
+        private void EventVideosGridView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            VideoMediaElement.Source =
+                new Uri(
+                    $"{DeviceModel.Instance.DeviceInstance.BaseAddress}/{((EventVideo)e.ClickedItem).Event.BVideoName}");
+        }
+
+        private void EventImageGridView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+        }
+
+        private void VideoSaveButton_Click(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void EventVideoSaveButton_Click(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void EventImageSaveButton_Click(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void MediaElement_MediaFailed(object sender, ExceptionRoutedEventArgs e)
+        {
         }
 
         private void VideoGridView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
@@ -132,39 +175,6 @@ namespace DDPAIDash
             result.SetSource(stream.AsRandomAccessStream());
 
             return result;
-        }
-
-        private void VideoGridView_ItemClickHandler(object sender, ItemClickEventArgs e)
-        {
-            VideoMediaElement.Source =
-                new Uri($"{DeviceModel.Instance.DeviceInstance.BaseAddress}/{((Video) e.ClickedItem).DeviceVideo.Name}");
-        }
-
-        private void EventVideosGridView_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            VideoMediaElement.Source =
-                new Uri(
-                    $"{DeviceModel.Instance.DeviceInstance.BaseAddress}/{((EventVideo) e.ClickedItem).Event.BVideoName}");
-        }
-
-        private void EventImageGridView_ItemClick(object sender, ItemClickEventArgs e)
-        {
-        }
-
-        private void VideoSaveButton_Click(object sender, RoutedEventArgs e)
-        {
-        }
-
-        private void EventVideoSaveButton_Click(object sender, RoutedEventArgs e)
-        {
-        }
-
-        private void EventImageSaveButton_Click(object sender, RoutedEventArgs e)
-        {
-        }
-
-        private void MediaElement_MediaFailed(object sender, ExceptionRoutedEventArgs e)
-        {
         }
 
         private void HandleDeviceVideoGridViewContainerContentChanging(ContainerContentChangingEventArgs args,
@@ -217,12 +227,7 @@ namespace DDPAIDash
             return DateTime.ParseExact(result, "yyyyMMddHHmmss", CultureInfo.CurrentUICulture);
         }
 
-        private void BtnFormat_Click(object sender, RoutedEventArgs e)
-        {
-            DeviceModel.Instance.FormatDevice();
-        }
-
-        private void BtnPair_Click(object sender, RoutedEventArgs e)
+        private void BtnLive_Click(object sender, RoutedEventArgs e)
         {
 
         }

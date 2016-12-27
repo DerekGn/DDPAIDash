@@ -41,6 +41,7 @@ namespace DDPAIDash.Model
         private bool _connectEnabled;
         private bool _formatEnabled;
         private bool _paringEnabled;
+        private bool _liveEnabled;
 
         public DeviceModel()
         {
@@ -127,6 +128,19 @@ namespace DDPAIDash.Model
             }
         }
 
+        public bool LiveEnabled
+        {
+            get
+            {
+                return _liveEnabled;
+            }
+            private set
+            {
+                _liveEnabled = value;
+                OnPropertyChanged(nameof(LiveEnabled));
+            }
+        }
+
         public ObservableCollection<Video> Videos { get; }
 
         public ObservableCollection<EventImage> EventImages { get; }
@@ -165,8 +179,14 @@ namespace DDPAIDash.Model
         {
             if (e.State == DeviceState.Connected)
             {
-                FormatEnabled = SettingsEnabled = PairingEnabled = true;
+                LiveEnabled = FormatEnabled = SettingsEnabled = PairingEnabled = true;
                 ConnectEnabled = false;
+            }
+
+            if(e.State == DeviceState.Formatting)
+            {
+                SettingsEnabled = PairingEnabled = false;
+                FormatEnabled = false;
             }
         }
 
