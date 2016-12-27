@@ -219,5 +219,10 @@ namespace DDPAIDash
         {
             DeviceModel.Instance.FormatDevice();
         }
+
+        private void BtnPair_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
