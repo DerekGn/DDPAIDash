@@ -23,26 +23,31 @@
 */
 
 using System;
-using System.Collections.ObjectModel;
 using System.Linq;
+using System.ComponentModel;
+using System.Collections.ObjectModel;
+using Windows.UI.Core;
 using DDPAIDash.Core;
 using DDPAIDash.Core.Events;
 using DDPAIDash.Core.Types;
-using Windows.UI.Core;
 
 namespace DDPAIDash.Model
 {
-    public class DeviceModel
+    public class DeviceModel : INotifyPropertyChanged
     {
         private static readonly Lazy<DeviceModel> DeviceModelInstance = new Lazy<DeviceModel>();
         private readonly CoreDispatcher Dispatcher;
+        private bool _settingsEnabled;
+        private bool _connectEnabled;
+        private bool _formatEnabled;
+        private bool _paringEnabled;
 
         public DeviceModel()
         {
+            DeviceInstance = new Device();
+            Videos = new ObservableCollection<Video>();
             EventImages = new ObservableCollection<EventImage>();
             EventVideos = new ObservableCollection<EventVideo>();
-            Videos = new ObservableCollection<Video>();
-            DeviceInstance = new Device();
 
             DeviceInstance.VideoDeleted += DeviceInstanceVideoDeleted;
             DeviceInstance.StateChanged += DeviceInstanceStateChanged;
@@ -54,6 +59,8 @@ namespace DDPAIDash.Model
             {
                 Dispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
             }
+
+            ConnectEnabled = true;
         }
 
         public void FormatDevice()
@@ -67,7 +74,58 @@ namespace DDPAIDash.Model
 
         public static DeviceModel Instance => DeviceModelInstance.Value;
 
-        public IDevice DeviceInstance { get; }
+        public IDevice DeviceInstance { get; private set; }
+
+        public bool ConnectEnabled
+        {
+            get
+            {
+                return _connectEnabled;
+            }
+            private set
+            {
+                _connectEnabled = value;
+                OnPropertyChanged(nameof(ConnectEnabled));
+            }
+        }
+
+        public bool FormatEnabled
+        {
+            get
+            {
+                return _formatEnabled;
+            }
+            private set
+            {
+                _formatEnabled = value;
+                OnPropertyChanged(nameof(FormatEnabled));
+            }
+        }
+
+        public bool SettingsEnabled
+        {
+            get
+            {
+                return _settingsEnabled;
+            }
+            private set
+            {
+                _settingsEnabled = value;
+                OnPropertyChanged(nameof(SettingsEnabled));
+            }
+        }
+
+        public bool PairingEnabled {
+            get
+            {
+                return _paringEnabled;
+            }
+            private set
+            {
+                _paringEnabled = value;
+                OnPropertyChanged(nameof(PairingEnabled));
+            }
+        }
 
         public ObservableCollection<Video> Videos { get; }
 
@@ -75,9 +133,12 @@ namespace DDPAIDash.Model
 
         public ObservableCollection<EventVideo> EventVideos { get; }
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
         private void DeviceInstanceVideoAdded(object sender, VideoAddedEventArgs e)
         {
-            ExecuteOnDispatcher(() => {
+            ExecuteOnDispatcher(() =>
+            {
                 Videos.Add(new Video(e.Video));
             });
         }
@@ -86,7 +147,8 @@ namespace DDPAIDash.Model
         {
             var video = Videos.FirstOrDefault(v => v.DeviceVideo.Name == e.Name);
 
-            ExecuteOnDispatcher(() => {
+            ExecuteOnDispatcher(() =>
+            {
                 if (video != null)
                 {
                     Videos.Remove(video);
@@ -101,6 +163,11 @@ namespace DDPAIDash.Model
 
         private void DeviceInstanceStateChanged(object sender, StateChangedEventArgs e)
         {
+            if (e.State == DeviceState.Connected)
+            {
+                FormatEnabled = SettingsEnabled = PairingEnabled = true;
+                ConnectEnabled = false;
+            }
         }
 
         private void DeviceInstanceEventDeleted(object sender, EventDeletedEventArgs e)
@@ -110,7 +177,8 @@ namespace DDPAIDash.Model
 
         private void AddDeviceEvent(DeviceEvent deviceEvent)
         {
-            ExecuteOnDispatcher(() => {
+            ExecuteOnDispatcher(() =>
+            {
                 if (!string.IsNullOrWhiteSpace(deviceEvent.BVideoName))
                 {
                     EventVideos.Add(new EventVideo(deviceEvent));
@@ -129,6 +197,13 @@ namespace DDPAIDash.Model
              {
                  action();
              });
+        }
+
+        private void OnPropertyChanged(string propertyName)
+        {
+            ExecuteOnDispatcher(() => 
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName))
+            );
         }
     }
 }

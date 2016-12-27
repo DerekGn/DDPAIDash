@@ -23,19 +23,19 @@
 */
 
 using System;
+using System.IO;
 using System.Globalization;
 using Windows.Foundation;
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
+using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+using Windows.UI.Xaml.Media.Imaging;
+using Windows.UI.Xaml.Controls.Primitives;
 using DDPAIDash.Controls;
 using DDPAIDash.Core.Types;
 using DDPAIDash.Model;
-using System.IO;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Imaging;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=391641
 
@@ -71,6 +71,8 @@ namespace DDPAIDash
             // Windows.Phone.UI.Input.HardwareButtons.BackPressed event.
             // If you are using the NavigationHelper provided by some templates,
             // this event is handled for you.
+
+            DataContext = DeviceModel.Instance;
 
             VideoGridView.ItemsSource = DeviceModel.Instance.Videos;
             EventImageGridView.ItemsSource = DeviceModel.Instance.EventImages;
