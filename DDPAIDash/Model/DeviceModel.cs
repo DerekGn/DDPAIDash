@@ -153,7 +153,7 @@ namespace DDPAIDash.Model
         {
             ExecuteOnDispatcher(() =>
             {
-                Videos.Add(new Video(e.Video));
+                Videos.Insert(0, new Video(e.Video));
             });
         }
 
@@ -201,12 +201,12 @@ namespace DDPAIDash.Model
             {
                 if (!string.IsNullOrWhiteSpace(deviceEvent.BVideoName))
                 {
-                    EventVideos.Add(new EventVideo(deviceEvent));
+                    EventVideos.Insert(0, new EventVideo(deviceEvent));
                 }
 
                 if (!string.IsNullOrWhiteSpace(deviceEvent.ImageName))
                 {
-                    EventImages.Add(new EventImage(deviceEvent));
+                    EventImages.Insert(0, new EventImage(deviceEvent));
                 }
             });
         }
