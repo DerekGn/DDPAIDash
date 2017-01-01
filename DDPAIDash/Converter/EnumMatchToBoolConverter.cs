@@ -32,27 +32,12 @@ namespace DDPAIDash.Converter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            var param = parameter as string;
-
-            if (param == null)
-                return DependencyProperty.UnsetValue;
-
-            if (Enum.IsDefined(typeof(T), value))
-                return DependencyProperty.UnsetValue;
-
-            var paramValue = Enum.Parse(value.GetType(), param);
-
-            return paramValue.Equals(value);
+            return value.ToString() == parameter.ToString();
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
         {
-            var param = parameter as string;
-
-            if (parameter == null)
-                return DependencyProperty.UnsetValue;
-
-            return Enum.Parse(targetType, param);
+            return (bool)value ? Enum.Parse(typeof(T), parameter.ToString(), true) : null;
         }
     }
 }

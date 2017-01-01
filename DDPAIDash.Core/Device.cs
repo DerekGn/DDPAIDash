@@ -848,7 +848,7 @@ namespace DDPAIDash.Core
 
         private void SetStringValue(string key, string state)
         {
-            var parameter = new Parameters {StringParameters = {new Parameter<string> {Key = key, Value = state}}};
+            var parameter = new Parameters {StringParameters = {new Parameter<string> {Key = key, Value = state.ToLower()}}};
             ExecuteRequest(ApiConstants.GeneralSave,
                 apiCommand => _transport.Execute(apiCommand, JsonConvert.SerializeObject(parameter)), null);
         }
