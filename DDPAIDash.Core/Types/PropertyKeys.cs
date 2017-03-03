@@ -49,6 +49,10 @@ namespace DDPAIDash.Core.Types
         edog_switch,
         parking_mode_switch,
         timelapse_rec_switch,
-        horizontal_mirror
+        horizontal_mirror,
+        parking_power_mgr,
+        button_match,
+        record_split_time,
+        vertical_mirror
     }
 }
