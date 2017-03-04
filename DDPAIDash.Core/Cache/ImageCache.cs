@@ -25,16 +25,16 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Storage.FileProperties;
 using SharpCompress.Readers;
 
 namespace DDPAIDash.Core.Cache
 {
-#warning TODO make async
     internal class ImageCache : IImageCache
     {
-        public void Cache(Stream stream)
+        public async Task CacheAsync(Stream stream)
         {
             using (var reader = ReaderFactory.Open(stream))
             {
@@ -42,16 +42,13 @@ namespace DDPAIDash.Core.Cache
                 {
                     if (reader.Entry.IsDirectory)
                     {
-                        ApplicationData.Current.LocalCacheFolder.CreateFolderAsync(reader.Entry.Key).AsTask();
+                        await ApplicationData.Current.LocalCacheFolder.CreateFolderAsync(reader.Entry.Key);
                     }
                     else
                     {
-                        var newFile =
-                            ApplicationData.Current.LocalCacheFolder.CreateFileAsync(reader.Entry.Key.Replace('/', '\\'))
-                                .AsTask()
-                                .Result;
+                        var newFile = await ApplicationData.Current.LocalCacheFolder.CreateFileAsync(reader.Entry.Key.Replace('/', '\\'));
 
-                        using (var outStream = newFile.OpenStreamForWriteAsync().Result)
+                        using (var outStream = await newFile.OpenStreamForWriteAsync())
                         {
                             reader.WriteEntryTo(outStream);
                         }
@@ -60,91 +57,85 @@ namespace DDPAIDash.Core.Cache
             }
         }
 
-        public void Cache(string imageFileName, Stream stream)
+        public async Task CacheAsync(string imageFileName, Stream stream)
         {
-            var newFile = ApplicationData.Current.LocalCacheFolder.CreateFileAsync(imageFileName).AsTask().Result;
+            var newFile = await ApplicationData.Current.LocalCacheFolder.CreateFileAsync(imageFileName);
 
-            using (var outStream = newFile.OpenStreamForWriteAsync().Result)
+            using (var outStream = await newFile.OpenStreamForWriteAsync())
             {
                 stream.CopyTo(outStream);
             }
         }
 
-        public bool Contains(string name)
+        public async Task<bool> ContainsAsync(string name)
         {
-            return
-                ApplicationData.Current.LocalCacheFolder.GetItemsAsync()
-                    .AsTask()
-                    .Result.FirstOrDefault(i => i.Name == name) != null;
+            return (await ApplicationData.Current.LocalCacheFolder.GetItemsAsync())
+                .FirstOrDefault(i => i.Name == name) != null;
         }
 
-        public void Flush(TimeSpan olderThan)
+        public async Task FlushAsync(TimeSpan olderThan)
         {
-            var files = ApplicationData.Current.LocalCacheFolder.GetFilesAsync().AsTask().Result;
-
-            foreach (var storageFile in files)
+            foreach (var storageFile in await ApplicationData.Current.LocalCacheFolder.GetFilesAsync())
             {
                 if (DateTime.Now.Subtract(storageFile.DateCreated.UtcDateTime) >= olderThan)
                 {
-                    storageFile.DeleteAsync().AsTask();
+                    await storageFile.DeleteAsync();
                 }
             }
 
-            var folders = ApplicationData.Current.LocalCacheFolder.GetFoldersAsync().AsTask().Result;
-
-            foreach (var folder in folders)
+            foreach (var folder in await ApplicationData.Current.LocalCacheFolder.GetFoldersAsync())
             {
                 if (DateTime.Now.Subtract(folder.DateCreated.UtcDateTime) >= olderThan)
                 {
-                    folder.DeleteAsync(StorageDeleteOption.PermanentDelete).AsTask();
+                    await folder.DeleteAsync(StorageDeleteOption.PermanentDelete);
                 }
             }
         }
 
-        public Stream Get(string name)
+        public async Task<Stream> GetAsync(string name)
         {
-            var folder =
-                ApplicationData.Current.LocalCacheFolder.GetFoldersAsync()
-                    .AsTask()
-                    .Result.FirstOrDefault(f => f.Name == name);
+            var folder = (await ApplicationData.Current.LocalCacheFolder.GetFoldersAsync())
+                    .FirstOrDefault(f => f.Name == name);
+
             StorageFile file;
 
             if (folder != null)
             {
-                file = folder.GetFilesAsync().AsTask().Result.First();
+                file = (await folder.GetFilesAsync()).First();
             }
             else
             {
-                file = ApplicationData.Current.LocalCacheFolder.GetFileAsync(name).AsTask().Result;
+                file = await ApplicationData.Current.LocalCacheFolder.GetFileAsync(name);
 
                 if (file == null)
                     throw new FileNotFoundException("File not found in cache", name);
             }
 
-            return file.OpenStreamForReadAsync().Result;
+            return await file.OpenStreamForReadAsync();
         }
 
-        public Stream GetThumbnailStream(string name)
+        public async Task<Stream> GetThumbnailStreamAsync(string name)
         {
-            var folder =
-                ApplicationData.Current.LocalCacheFolder.GetFoldersAsync()
-                    .AsTask()
-                    .Result.FirstOrDefault(f => f.Name == name);
+            var folder = (await ApplicationData.Current.LocalCacheFolder.GetFoldersAsync())
+                .FirstOrDefault(f => f.Name == name);
+
             StorageFile file;
 
             if (folder != null)
             {
-                file = folder.GetFilesAsync().AsTask().Result.First();
+                file = (await folder.GetFilesAsync()).First();
             }
             else
             {
-                file = ApplicationData.Current.LocalCacheFolder.GetFileAsync(name).AsTask().Result;
+                file = await ApplicationData.Current.LocalCacheFolder.GetFileAsync(name);
 
                 if (file == null)
+                {
                     throw new FileNotFoundException("File not found in cache", name);
+                }
             }
 
-            return file.GetThumbnailAsync(ThumbnailMode.ListView).AsTask().Result.AsStream();
+            return (await file.GetThumbnailAsync(ThumbnailMode.ListView)).AsStream();
         }
     }
 }

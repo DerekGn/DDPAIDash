@@ -24,21 +24,22 @@
 
 using System;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace DDPAIDash.Core.Cache
 {
     public interface IImageCache
     {
-        void Flush(TimeSpan olderThan);
+        Task FlushAsync(TimeSpan olderThan);
 
-        Stream Get(string name);
+        Task<Stream> GetAsync(string name);
 
-        Stream GetThumbnailStream(string name);
+        Task<Stream> GetThumbnailStreamAsync(string name);
 
-        bool Contains(string name);
+        Task<bool> ContainsAsync(string name);
 
-        void Cache(Stream stream);
+        Task CacheAsync(Stream stream);
 
-        void Cache(string imageFileName, Stream imageStream);
+        Task CacheAsync(string imageFileName, Stream imageStream);
     }
 }

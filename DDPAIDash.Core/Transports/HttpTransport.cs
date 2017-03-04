@@ -30,6 +30,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using Newtonsoft.Json;
 using DDPAIDash.Core.Constants;
+using System.Threading.Tasks;
 
 namespace DDPAIDash.Core.Transports
 {
@@ -72,32 +73,32 @@ namespace DDPAIDash.Core.Transports
         {
         }
 
-        public ResponseMessage Execute(string apiCommand)
+        public Task<ResponseMessage> ExecuteAsync(string apiCommand)
         {
-            return ExecuteInternal(apiCommand, null);
+            return ExecuteInternalAsync(apiCommand, null);
         }
 
-        public ResponseMessage Execute(string apiCommand, string payload)
+        public Task<ResponseMessage> ExecuteAsync(string apiCommand, string payload)
         {
             var sc = new StringContent(payload, Encoding.UTF8, "application/x-www-form-urlencoded");
 
-            return ExecuteInternal(apiCommand, sc);
+            return ExecuteInternalAsync(apiCommand, sc);
         }
 
-        public Stream GetFile(string fileName)
+        public Task<Stream> GetFileAsync(string fileName)
         {
-            return _httpClient.GetStreamAsync(fileName).Result;
+            return _httpClient.GetStreamAsync(fileName);
         }
 
-        private ResponseMessage ExecuteInternal(string apiCommand, HttpContent content)
+        private async Task<ResponseMessage> ExecuteInternalAsync(string apiCommand, HttpContent content)
         {
-            ResponseMessage result;
+            var postResult = await _httpClient.PostAsync($"/vcam/cmd.cgi?cmd={apiCommand}", content);
 
-            var postResult = _httpClient.PostAsync($"/vcam/cmd.cgi?cmd={apiCommand}", content).Result;
+            string payload;
 
             if (postResult.IsSuccessStatusCode)
             {
-                string payload = postResult.Content.ReadAsStringAsync().Result;
+                payload =  await postResult.Content.ReadAsStringAsync();
 
                 if (apiCommand == ApiConstants.AvCapReq)
                 {
@@ -108,8 +109,6 @@ namespace DDPAIDash.Core.Transports
                         .Replace("\"", "\\\"")
                         .Replace("}}", "}\"}"));
                 }
-
-                result = JsonConvert.DeserializeObject<ResponseMessage>(payload);
             }
             else
             {
@@ -117,7 +116,7 @@ namespace DDPAIDash.Core.Transports
                     $"Error occured sending request to Device: [{_httpClient.BaseAddress}] Result: [{postResult}]");
             }
 
-            return result;
+            return JsonConvert.DeserializeObject<ResponseMessage>(payload);
         }
         
         #region IDisposable Support
@@ -154,7 +153,6 @@ namespace DDPAIDash.Core.Transports
             // TODO: uncomment the following line if the finalizer is overridden above.
             // GC.SuppressFinalize(this);
         }
-        
         #endregion
     }
 }

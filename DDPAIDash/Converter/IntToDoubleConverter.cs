@@ -39,7 +39,6 @@ namespace DDPAIDash.Converter
             }
             catch (OverflowException)
             {
-                      
             }
 
             return result;
@@ -55,7 +54,6 @@ namespace DDPAIDash.Converter
             }
             catch (OverflowException)
             {
-#warning TODO
             }
 
             return result;

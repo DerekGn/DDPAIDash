@@ -33,6 +33,7 @@ using DDPAIDash.Core.Logging;
 using DDPAIDash.Core.Transports;
 using DDPAIDash.Core.Types;
 using Newtonsoft.Json;
+using System.IO;
 
 namespace DDPAIDash.Core
 {
@@ -85,7 +86,7 @@ namespace DDPAIDash.Core
             _transport = transport;
             _logger = logger;
 
-            _imageCache.Flush(new TimeSpan(30, 0, 0, 0));
+            _imageCache.FlushAsync(new TimeSpan(30, 0, 0, 0));
         }
 
         public DeviceInfo Info { get; private set; }
@@ -109,7 +110,7 @@ namespace DDPAIDash.Core
                     () =>
                     {
                         _defaultUser = value;
-                        SetStringValue(PropertyKeys.default_user.ToString(), value);
+                        SetStringValueAsync(PropertyKeys.default_user.ToString(), value);
                     });
             }
         }
@@ -123,7 +124,7 @@ namespace DDPAIDash.Core
                     () =>
                     {
                         _gsmode = value;
-                        SetStringValue(PropertyKeys.gsensor_mode.ToString(), value.Value.ToString());
+                        SetStringValueAsync(PropertyKeys.gsensor_mode.ToString(), value.Value.ToString());
                     });
             }
         }
@@ -137,7 +138,7 @@ namespace DDPAIDash.Core
                     () =>
                     {
                         _cycleRecordSpace = value;
-                        SetIntValue(PropertyKeys.cycle_record_space.ToString(), value.Value);
+                        SetIntValueAsync(PropertyKeys.cycle_record_space.ToString(), value.Value);
                     });
             }
         }
@@ -151,7 +152,7 @@ namespace DDPAIDash.Core
                     () =>
                     {
                         _speakerLevel = value;
-                        SetIntValue(PropertyKeys.speaker_turn.ToString(), value.Value);
+                        SetIntValueAsync(PropertyKeys.speaker_turn.ToString(), value.Value);
                     });
             }
         }
@@ -165,7 +166,7 @@ namespace DDPAIDash.Core
                     () =>
                     {
                         _antiFog = value;
-                        SetIntValue(PropertyKeys.anti_fog.ToString(), value.Value);
+                        SetIntValueAsync(PropertyKeys.anti_fog.ToString(), value.Value);
                     });
             }
         }
@@ -179,7 +180,7 @@ namespace DDPAIDash.Core
                     () =>
                     {
                         _eventAfterTime = value;
-                        SetIntValue(PropertyKeys.event_after_time.ToString(), value.Value);
+                        SetIntValueAsync(PropertyKeys.event_after_time.ToString(), value.Value);
                     });
             }
         }
@@ -193,7 +194,7 @@ namespace DDPAIDash.Core
                     () =>
                     {
                         _eventBeforeTime = value;
-                        SetIntValue(PropertyKeys.event_before_time.ToString(), value.Value);
+                        SetIntValueAsync(PropertyKeys.event_before_time.ToString(), value.Value);
                     });
             }
         }
@@ -207,7 +208,7 @@ namespace DDPAIDash.Core
                     () =>
                     {
                         _displayMode = value;
-                        SetIntValue(PropertyKeys.display_mode.ToString(), (int) value.Value);
+                        SetIntValueAsync(PropertyKeys.display_mode.ToString(), (int) value.Value);
                     });
             }
         }
@@ -221,7 +222,7 @@ namespace DDPAIDash.Core
                     () =>
                     {
                         _edogSwitch = value;
-                        SetStringValue(PropertyKeys.edog_switch.ToString(), value.Value.ToString());
+                        SetStringValueAsync(PropertyKeys.edog_switch.ToString(), value.Value.ToString());
                     });
             }
         }
@@ -235,7 +236,7 @@ namespace DDPAIDash.Core
                     () =>
                     {
                         _wdr = value;
-                        SetStringValue(PropertyKeys.wdr_enable.ToString(), value.Value.ToString());
+                        SetStringValueAsync(PropertyKeys.wdr_enable.ToString(), value.Value.ToString());
                     });
             }
         }
@@ -249,7 +250,7 @@ namespace DDPAIDash.Core
                     () =>
                     {
                         _ldc = value;
-                        SetStringValue(PropertyKeys.ldc_switch.ToString(), value.Value.ToString());
+                        SetStringValueAsync(PropertyKeys.ldc_switch.ToString(), value.Value.ToString());
                     });
             }
         }
@@ -263,7 +264,7 @@ namespace DDPAIDash.Core
                     () =>
                     {
                         _mic = value;
-                        SetStringValue(PropertyKeys.mic_switch.ToString(), value.Value.ToString());
+                        SetStringValueAsync(PropertyKeys.mic_switch.ToString(), value.Value.ToString());
                     });
             }
         }
@@ -277,7 +278,7 @@ namespace DDPAIDash.Core
                     () =>
                     {
                         _quality = value;
-                        SetStringValue(PropertyKeys.image_quality.ToString(), value.Value.ToString());
+                        SetStringValueAsync(PropertyKeys.image_quality.ToString(), value.Value.ToString());
                     });
             }
         }
@@ -291,7 +292,7 @@ namespace DDPAIDash.Core
                     () =>
                     {
                         _osd = value;
-                        SetStringValue(PropertyKeys.osd_switch.ToString(), value.Value.ToString());
+                        SetStringValueAsync(PropertyKeys.osd_switch.ToString(), value.Value.ToString());
                     });
             }
         }
@@ -305,7 +306,7 @@ namespace DDPAIDash.Core
                     () =>
                     {
                         _osdSpeed = value;
-                        SetStringValue(PropertyKeys.osd_speedswitch.ToString(), value.Value.ToString());
+                        SetStringValueAsync(PropertyKeys.osd_speedswitch.ToString(), value.Value.ToString());
                     });
             }
         }
@@ -319,7 +320,7 @@ namespace DDPAIDash.Core
                     () =>
                     {
                         _startSound = value;
-                        SetStringValue(PropertyKeys.start_sound_switch.ToString(), value.Value.ToString());
+                        SetStringValueAsync(PropertyKeys.start_sound_switch.ToString(), value.Value.ToString());
                     });
             }
         }
@@ -333,7 +334,7 @@ namespace DDPAIDash.Core
                     () =>
                     {
                         _parkingMode = value;
-                        SetStringValue(PropertyKeys.parking_mode_switch.ToString(), value.Value.ToString());
+                        SetStringValueAsync(PropertyKeys.parking_mode_switch.ToString(), value.Value.ToString());
                     });
             }
         }
@@ -347,7 +348,7 @@ namespace DDPAIDash.Core
                     () =>
                     {
                         _timeLapse = value;
-                        SetStringValue(PropertyKeys.timelapse_rec_switch.ToString(), value.Value.ToString());
+                        SetStringValueAsync(PropertyKeys.timelapse_rec_switch.ToString(), value.Value.ToString());
                     });
             }
         }
@@ -361,7 +362,7 @@ namespace DDPAIDash.Core
                     () =>
                     {
                         _hmirror = value;
-                        SetStringValue(PropertyKeys.horizontal_mirror.ToString(), value.Value.ToString());
+                        SetStringValueAsync(PropertyKeys.horizontal_mirror.ToString(), value.Value.ToString());
                     });
             }
         }
@@ -375,7 +376,7 @@ namespace DDPAIDash.Core
                     () =>
                     {
                         _delayPoweroffTime = value;
-                        SetIntValue(PropertyKeys.delay_poweroff_time.ToString(), value.Value);
+                        SetIntValueAsync(PropertyKeys.delay_poweroff_time.ToString(), value.Value);
                     });
             }
         }
@@ -389,7 +390,7 @@ namespace DDPAIDash.Core
                     () =>
                     {
                         _isNeedUpdate = value;
-                        SetStringValue(PropertyKeys.is_need_update.ToString(), value.ToString());
+                        SetStringValueAsync(PropertyKeys.is_need_update.ToString(), value.ToString());
                     });
             }
         }
@@ -406,7 +407,7 @@ namespace DDPAIDash.Core
         
         public event EventHandler<VideoAddedEventArgs> VideoAdded;
 
-        public bool Connect(UserInfo userInfo)
+        public async Task<bool> ConnectAsync(UserInfo userInfo)
         {
             bool result;
 
@@ -416,14 +417,14 @@ namespace DDPAIDash.Core
 
                 _transport.Open("193.168.0.1", 80);
 
-                result = PerformConnect(userInfo);
+                result = await PerformConnect(userInfo);
 
                 if (result)
                 {
                     User = userInfo;
 
                     _mailboxTask = Task.Factory.StartNew(() => LoadDeviceData(Cts.Token))
-                        .ContinueWith(t => PollMailbox(Cts.Token));
+                        .ContinueWith(t => PollMailboxAsync(Cts.Token));
                 }
             }
             else
@@ -442,24 +443,24 @@ namespace DDPAIDash.Core
             }
         }
 
-        public bool Format()
+        public async Task<bool> FormatAsync()
         {
             bool result = false;
 
             if (State == DeviceState.Connected)
             {
-                result = ExecuteRequest(ApiConstants.MmcFormat, apiCommand => _transport.Execute(apiCommand), responseMessage => { State = DeviceState.Formatting; });
+                result = await ExecuteRequestAsync(ApiConstants.MmcFormat, apiCommand => _transport.ExecuteAsync(apiCommand), responseMessage => { State = DeviceState.Formatting; });
             }
 
             return result;
         }
 
-        public void GetDeviceEvents()
+        public async void GetDeviceEvents()
         {
             DeviceEventList deviceEventList = null;
 
-            ExecuteRequest(ApiConstants.EventListReq,
-                apiCommand => _transport.Execute(apiCommand), response =>
+            await ExecuteRequestAsync(ApiConstants.EventListReq,
+                apiCommand => _transport.ExecuteAsync(apiCommand), response =>
                 {
                     deviceEventList = JsonConvert.DeserializeObject<DeviceEventList>(response.Data);
 
@@ -479,15 +480,15 @@ namespace DDPAIDash.Core
             throw new NotImplementedException();
         }
 
-        private void LoadDeviceData(CancellationToken token)
+        private async void LoadDeviceData(CancellationToken token)
         {
             _logger.Verbose("Loading Device Videos");
 
-            GetDeviceVideosAndProcess(deviceVideoList =>
+            await GetDeviceVideosAndProcess(async deviceVideoList =>
             {
                 foreach (var deviceVideo in deviceVideoList.Files)
                 {
-                    LoadDeviceVideoThumbnail(deviceVideo);
+                    deviceVideo.ImageStream = await LoadDeviceVideoThumbnailAsync(deviceVideo.Name);
 
                     OnVideoAdded(new VideoAddedEventArgs(deviceVideo));
                 }
@@ -498,127 +499,134 @@ namespace DDPAIDash.Core
             GetDeviceEvents();
         }
 
-        private void GetDeviceVideosAndProcess(Action<DeviceVideoList> processingAction)
+        private async Task GetDeviceVideosAndProcess(Func<DeviceVideoList, Task> processingAction)
         {
             DeviceVideoList deviceVideoList = null;
 
-            ExecuteRequest(ApiConstants.PlaybackListReq,
-                apiCommand => _transport.Execute(apiCommand), response =>
+            await ExecuteRequestAsync(ApiConstants.PlaybackListReq,
+                apiCommand => _transport.ExecuteAsync(apiCommand), response =>
                 {
                     deviceVideoList = JsonConvert.DeserializeObject<DeviceVideoList>(response.Data);
 
                     deviceVideoList = deviceVideoList ?? new DeviceVideoList();
                 });
 
-            processingAction(deviceVideoList);
+            await processingAction(deviceVideoList);
         }
         
-        private void LoadDeviceVideoThumbnail(DeviceVideo deviceVideo)
+        private async Task<Stream> LoadDeviceVideoThumbnailAsync(string deviceVideoName)
         {
-            var baseFileName = deviceVideo.Name.Substring(0, 14);
+            var baseFileName = deviceVideoName.Substring(0, 14);
 
-            if (!_imageCache.Contains(baseFileName))
+            if (!await _imageCache.ContainsAsync(baseFileName))
             {
                 _logger.Verbose($"Cache does not contain [{baseFileName}] retrieving from device");
 
-                using (var tarStream = _transport.GetFile(string.Concat(baseFileName, ".tar")))
+                using (var tarStream = await _transport.GetFileAsync(string.Concat(baseFileName, ".tar")))
                 {
-                    _imageCache.Cache(tarStream);
+                    await _imageCache.CacheAsync(tarStream);
                 }
             }
 
-            deviceVideo.ImageStream = _imageCache.GetThumbnailStream(baseFileName);
+            return await _imageCache.GetThumbnailStreamAsync(baseFileName);
         }
 
-        private void LoadDeviceEventThumbnail(DeviceEvent deviceEvent)
+        private async void LoadDeviceEventThumbnail(DeviceEvent deviceEvent)
         {
             var imageFileName = deviceEvent.ImageName.Replace("_L", "_T").Replace("_X", "_T");
 
-            if (!_imageCache.Contains(imageFileName))
+            if (!await _imageCache.ContainsAsync(imageFileName))
             {
                 _logger.Verbose($"Cache does not contain [{imageFileName}] retrieving from device");
 
-                using (var imageStream = _transport.GetFile(imageFileName))
+                using (var imageStream = await _transport.GetFileAsync(imageFileName))
                 {
-                    _imageCache.Cache(imageFileName, imageStream);
+                    await _imageCache.CacheAsync(imageFileName, imageStream);
                 }
             }
 
-            deviceEvent.ImageThumbnailStream = _imageCache.GetThumbnailStream(imageFileName);
-            deviceEvent.VideoThumbnailStream = _imageCache.GetThumbnailStream(imageFileName);
+            deviceEvent.ImageThumbnailStream = await _imageCache.GetThumbnailStreamAsync(imageFileName);
+            deviceEvent.VideoThumbnailStream = await _imageCache.GetThumbnailStreamAsync(imageFileName);
         }
 
-        private void PollMailbox(CancellationToken cancellationToken)
+        private async void PollMailboxAsync(CancellationToken cancellationToken)
         {
             _logger.Info("Mailbox polling task started");
 
             OnStateChanged(DeviceState.Connected);
 
-            do
+            try
             {
-                Task.Delay(PollingInterval, cancellationToken).Wait(cancellationToken);
+                do
+                {
+                    Task.Delay(PollingInterval, cancellationToken).Wait(cancellationToken);
 
-                ExecuteRequest(ApiConstants.GetMailboxData,
-                    apiCommand => _transport.Execute(apiCommand),
-                    response => { HandleMailBoxResponse(response.Data); });
+                    await ExecuteRequestAsync(ApiConstants.GetMailboxData,
+                        apiCommand => _transport.ExecuteAsync(apiCommand),
+                        response => { HandleMailBoxResponseAsync(response.Data); });
 
-            } while (!cancellationToken.IsCancellationRequested);
+                } while (!cancellationToken.IsCancellationRequested);
+            }
+            catch (Exception ex)
+            {
+                _logger.Critical("Unhandled Exception Occured in PollMailboxAsync", ex);
+            }
 
             _logger.Info("Mailbox polling task completed");
         }
 
-        private void HandleMailBoxResponse(string data)
+        private async void HandleMailBoxResponseAsync(string data)
         {
-            DeviceVideoList currentDeviceVideos = null;
-            var mailboxMessages = JsonConvert.DeserializeObject<MailBoxMessageList>(data);
+            //DeviceVideoList currentDeviceVideos = null;
+            //var mailboxMessages = JsonConvert.DeserializeObject<MailBoxMessageList>(data);
 
-            if(mailboxMessages.Messages.FindIndex(m => (m.Key == MailBoxMessageKeys.MSG_PlaybackListUpdate) || (m.Key == MailBoxMessageKeys.MSG_DeleteEvent) || (m.Key == MailBoxMessageKeys.MSG_EventOccured) || (m.Key == MailBoxMessageKeys.MSG_MMCWarning)) >= 0)
-            {
-                UpdateStorageInfo();
-            }
+            //if(mailboxMessages.Messages.FindIndex(m => (m.Key == MailBoxMessageKeys.MSG_PlaybackListUpdate) || (m.Key == MailBoxMessageKeys.MSG_DeleteEvent) || (m.Key == MailBoxMessageKeys.MSG_EventOccured) || (m.Key == MailBoxMessageKeys.MSG_MMCWarning)) >= 0)
+            //{
+            //    await UpdateStorageInfoAsync();
+            //}
 
-            if (mailboxMessages.Messages.FindIndex(m => (m.Key == MailBoxMessageKeys.MSG_PlaybackListUpdate)) >= 0)
-            {
-                GetDeviceVideosAndProcess((deviceVideos) => {
-                    currentDeviceVideos = deviceVideos;
-                });
-            }
+            //if (mailboxMessages.Messages.FindIndex(m => (m.Key == MailBoxMessageKeys.MSG_PlaybackListUpdate)) >= 0)
+            //{
+            //    GetDeviceVideosAndProcess((deviceVideos) => {
+            //        currentDeviceVideos = deviceVideos;
+            //    });
+            //}
 
-            foreach (var message in mailboxMessages.Messages)
-            {
-                switch (message.Key)
-                {
-                    case MailBoxMessageKeys.Unknown:
-                        _logger.Error($"Key: {message.Key} Data: {message.Data}");
-                        break;
-                    case MailBoxMessageKeys.MSG_PowerDown:
-                        Cts.Cancel();
-                        OnStateChanged(DeviceState.PoweredDown);
-                        break;
-                    case MailBoxMessageKeys.MSG_DeleteEvent:
-                        _logger.Info($"Key: {message.Key} Data: {message.Data}");
-                        HandleEventDeleted();
-                        break;
-                    case MailBoxMessageKeys.MSG_EventOccured:
-                        HandleEventOccured(JsonConvert.DeserializeObject<DeviceEvent>(message.Data));
-                        break;
-                    case MailBoxMessageKeys.MSG_PlaybackListUpdate:
-                        HandlePlaybackListUpdate(currentDeviceVideos, JsonConvert.DeserializeObject<VideosListUpdate>(message.Data));
-                        break;
-                    case MailBoxMessageKeys.MSG_PlaybackLiveSwitch:
-                        _logger.Info($"Key: {message.Key} Data: {message.Data}");
-                        break;
-                    case MailBoxMessageKeys.MSG_MMCWarning:
-                        HandleMMCWarning();
-                        break;
-                    case MailBoxMessageKeys.MSG_ButtonMatch:
-                        _logger.Info($"Key: {message.Key} Data: {message.Data}");
-                        break;
-                    case MailBoxMessageKeys.MSG_RecordSizeWarning:
-                        _logger.Info($"Key: {message.Key} Data: {message.Data}");
-                        break;
-                }
-            }
+            //foreach (var message in mailboxMessages.Messages)
+            //{
+            //    switch (message.Key)
+            //    {
+            //        case MailBoxMessageKeys.Unknown:
+            //            _logger.Error($"Key: {message.Key} Data: {message.Data}");
+            //            break;
+            //        case MailBoxMessageKeys.MSG_PowerDown:
+            //            Cts.Cancel();
+            //            OnStateChanged(DeviceState.PoweredDown);
+            //            break;
+            //        case MailBoxMessageKeys.MSG_DeleteEvent:
+            //            _logger.Info($"Key: {message.Key} Data: {message.Data}");
+            //            HandleEventDeleted();
+            //            break;
+            //        case MailBoxMessageKeys.MSG_EventOccured:
+            //            HandleEventOccured(JsonConvert.DeserializeObject<DeviceEvent>(message.Data));
+            //            break;
+            //        case MailBoxMessageKeys.MSG_PlaybackListUpdate:
+            //            HandlePlaybackListUpdate(currentDeviceVideos, JsonConvert.DeserializeObject<VideosListUpdate>(message.Data));
+            //            break;
+            //        case MailBoxMessageKeys.MSG_PlaybackLiveSwitch:
+            //            _logger.Info($"Key: {message.Key} Data: {message.Data}");
+            //            break;
+            //        case MailBoxMessageKeys.MSG_MMCWarning:
+            //            HandleMMCWarning();
+            //            break;
+            //        case MailBoxMessageKeys.MSG_ButtonMatch:
+            //            _logger.Info($"Key: {message.Key} Data: {message.Data}");
+            //            break;
+            //        case MailBoxMessageKeys.MSG_RecordSizeWarning:
+            //            _logger.Info($"Key: {message.Key} Data: {message.Data}");
+            //            break;
+            //    }
+            //}
         }
 
         private void HandleMMCWarning()
@@ -637,7 +645,7 @@ namespace DDPAIDash.Core
             OnEventAdded(new EventAddedEventArgs(deviceEvent));
         }
 
-        private void HandlePlaybackListUpdate(DeviceVideoList deviceVideoList, VideosListUpdate videosListUpdate)
+        private async void HandlePlaybackListUpdate(DeviceVideoList deviceVideoList, VideosListUpdate videosListUpdate)
         {
             if (videosListUpdate.Action == PlaybackAction.Add)
             {
@@ -645,7 +653,7 @@ namespace DDPAIDash.Core
 
                 if (deviceVideo != null)
                 {
-                    LoadDeviceVideoThumbnail(deviceVideo);
+                    deviceVideo.ImageStream = await LoadDeviceVideoThumbnailAsync(deviceVideo.Name);
 
                     OnVideoAdded(new VideoAddedEventArgs(deviceVideo));
                 }
@@ -654,21 +662,21 @@ namespace DDPAIDash.Core
                     _logger.Error($"Unable to find {videosListUpdate.Name} in current device video list");
                 }
             }
-            else if(videosListUpdate.Action == PlaybackAction.Delete)
+            else if (videosListUpdate.Action == PlaybackAction.Delete)
             {
                 OnVideoDeleted(new VideoDeletedEventArgs(videosListUpdate.Name));
             }
         }
 
-        private bool PerformConnect(UserInfo userInfo)
+        private async Task<bool> PerformConnect(UserInfo userInfo)
         {
             var result = false;
 
-            var connectActions = new List<Func<bool>>
+            var connectActions = new List<Func<Task<bool>>>
             {
-                () =>
+                async () =>
                 {
-                    return ExecuteRequest(ApiConstants.RequestSession, apiCommand => _transport.Execute(apiCommand),
+                    return await ExecuteRequestAsync(ApiConstants.RequestSession, apiCommand => _transport.ExecuteAsync(apiCommand),
                         response =>
                         {
                             SessionId =
@@ -677,46 +685,49 @@ namespace DDPAIDash.Core
                                         .acsessionid;
                         });
                 },
-                () =>
+                async () =>
                 {
-                    return ExecuteRequest(ApiConstants.RequestCertificate,
-                        apiCommand => _transport.Execute(apiCommand, JsonConvert.SerializeObject(userInfo)), null);
+                    return await ExecuteRequestAsync(ApiConstants.RequestCertificate,
+                        apiCommand => _transport.ExecuteAsync(apiCommand, JsonConvert.SerializeObject(userInfo)), null);
                 },
-                () =>
+                async () =>
                 {
-                    return ExecuteRequest(ApiConstants.SyncDate,
+                    return await ExecuteRequestAsync(ApiConstants.SyncDate,
                         apiCommand =>
-                            _transport.Execute(apiCommand, JsonConvert.SerializeObject(TimeZoneSettings.Instance)), null);
+                            _transport.ExecuteAsync(apiCommand, JsonConvert.SerializeObject(TimeZoneSettings.Instance)), null);
                 },
-                () =>
+                async () =>
                 {
-                    return ExecuteRequest(ApiConstants.GetBaseInfo, apiCommand => _transport.Execute(apiCommand),
+                    return await ExecuteRequestAsync(ApiConstants.GetBaseInfo, apiCommand => _transport.ExecuteAsync(apiCommand),
                         response => { Info = JsonConvert.DeserializeObject<DeviceInfo>(response.Data); });
                 },
-                () =>
+                async () =>
                 {
-                    return ExecuteRequest(ApiConstants.AvCapReq, apiCommand => _transport.Execute(apiCommand),
+                    return await ExecuteRequestAsync(ApiConstants.AvCapReq, apiCommand => _transport.ExecuteAsync(apiCommand),
                         response => { Capabilities = JsonConvert.DeserializeObject<DeviceCapabilities>(response.Data); });
                 },
-                () =>
+                async () =>
                 {
-                    return ExecuteRequest(ApiConstants.AvCapSet,
+                    return await ExecuteRequestAsync(ApiConstants.AvCapSet,
                         apiCommand =>
-                            _transport.Execute(apiCommand, JsonConvert.SerializeObject(new StreamSettings(30, 0))), null);
+                            _transport.ExecuteAsync(apiCommand, JsonConvert.SerializeObject(new StreamSettings(30, 0))), null);
                 },
-                () =>
+                async () =>
                 {
-                    return ExecuteRequest(ApiConstants.GeneralQuery,
+                    return await ExecuteRequestAsync(ApiConstants.GeneralQuery,
                         apiCommand =>
-                            _transport.Execute(apiCommand, JsonConvert.SerializeObject(QueryParameters.Instance)),
+                            _transport.ExecuteAsync(apiCommand, JsonConvert.SerializeObject(QueryParameters.Instance)),
                         LoadSettings);
                 },
-                UpdateStorageInfo
+                async () =>
+                {
+                    return await UpdateStorageInfoAsync();
+                }
             };
 
             foreach (var action in connectActions)
             {
-                result = action();
+                result = await action();
 
                 if (!result)
                     break;
@@ -725,10 +736,10 @@ namespace DDPAIDash.Core
             return result;
         }
 
-        private bool UpdateStorageInfo()
+        private async Task<bool> UpdateStorageInfoAsync()
         {
-            return ExecuteRequest(ApiConstants.GetStorageInfo,
-                apiCommand => _transport.Execute(apiCommand),
+            return await ExecuteRequestAsync(ApiConstants.GetStorageInfo,
+                apiCommand => _transport.ExecuteAsync(apiCommand),
                 response => { Storage = JsonConvert.DeserializeObject<StorageInfo>(response.Data); });
         }
 
@@ -817,14 +828,14 @@ namespace DDPAIDash.Core
             }
         }
 
-        private bool ExecuteRequest(string apiCommand, Func<string, ResponseMessage> transportAction,
+        private async Task<bool> ExecuteRequestAsync(string apiCommand, Func<string, Task<ResponseMessage>> transportAction,
             Action<ResponseMessage> responseAction)
         {
             var result = true;
 
             try
             {
-                var response = transportAction(apiCommand);
+                var response = await transportAction(apiCommand);
 
                 if (response.ErrorCode == 0)
                 {
@@ -846,18 +857,18 @@ namespace DDPAIDash.Core
             return result;
         }
 
-        private void SetStringValue(string key, string state)
+        private async void SetStringValueAsync(string key, string state)
         {
             var parameter = new Parameters {StringParameters = {new Parameter<string> {Key = key, Value = state.ToLower()}}};
-            ExecuteRequest(ApiConstants.GeneralSave,
-                apiCommand => _transport.Execute(apiCommand, JsonConvert.SerializeObject(parameter)), null);
+            await ExecuteRequestAsync(ApiConstants.GeneralSave,
+                apiCommand => _transport.ExecuteAsync(apiCommand, JsonConvert.SerializeObject(parameter)), null);
         }
 
-        private void SetIntValue(string key, int state)
+        private async void SetIntValueAsync(string key, int state)
         {
             var parameter = new Parameters {IntParameters = {new Parameter<int> {Key = key, Value = state}}};
-            ExecuteRequest(ApiConstants.GeneralSave,
-                apiCommand => _transport.Execute(apiCommand, JsonConvert.SerializeObject(parameter)), null);
+            await ExecuteRequestAsync(ApiConstants.GeneralSave,
+                apiCommand => _transport.ExecuteAsync(apiCommand, JsonConvert.SerializeObject(parameter)), null);
         }
 
         private static void GuardPropertySet(string propertyName, string value, Action assignValue)

@@ -24,6 +24,7 @@
 
 using System;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace DDPAIDash.Core.Transports
 {
@@ -35,11 +36,11 @@ namespace DDPAIDash.Core.Transports
 
         void Open(string address, int port);
 
-        Stream GetFile(string fileName);
+        Task<Stream> GetFileAsync(string fileName);
 
-        ResponseMessage Execute(string apiCommand);
+        Task<ResponseMessage> ExecuteAsync(string apiCommand);
 
-        ResponseMessage Execute(string apiCommand, string payload);
+        Task<ResponseMessage> ExecuteAsync(string apiCommand, string payload);
 
         void Close();
     }

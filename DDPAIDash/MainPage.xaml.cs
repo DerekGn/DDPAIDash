@@ -81,24 +81,26 @@ namespace DDPAIDash
 
         private void BtnFormat_Click(object sender, RoutedEventArgs e)
         {
-            DeviceModel.Instance.FormatDevice();
+            DeviceModel.Instance.FormatDeviceAsync();
         }
 
         private void BtnPair_Click(object sender, RoutedEventArgs e)
         {
-
         }
 
-        private void btnConnect_Click(object sender, RoutedEventArgs e)
+        private async void btnConnect_Click(object sender, RoutedEventArgs e)
         {
 #warning TODO load user info from settings
-#warning TODO async
-            DeviceModel.Instance.DeviceInstance.Connect(new UserInfo("012345678912345", "admin", "admin", 0));
+            await DeviceModel.Instance.DeviceInstance.ConnectAsync(new UserInfo("012345678912345", "admin", "admin", 0));
         }
 
         private void btnSettings_Click(object sender, RoutedEventArgs e)
         {
             Frame.Navigate(typeof(Settings));
+        }
+
+        private void btnLive_Click(object sender, RoutedEventArgs e)
+        {
         }
 
         private void VideoGridView_ItemClickHandler(object sender, ItemClickEventArgs e)
@@ -225,11 +227,6 @@ namespace DDPAIDash
             var result = name.Substring(2, 14);
 
             return DateTime.ParseExact(result, "yyyyMMddHHmmss", CultureInfo.CurrentUICulture);
-        }
-
-        private void BtnLive_Click(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }

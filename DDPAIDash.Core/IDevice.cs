@@ -25,6 +25,7 @@
 using System;
 using DDPAIDash.Core.Types;
 using DDPAIDash.Core.Events;
+using System.Threading.Tasks;
 
 namespace DDPAIDash.Core
 {
@@ -91,14 +92,14 @@ namespace DDPAIDash.Core
         /// </summary>
         /// <param name="userInfo"></param>
         /// <returns></returns>
-        bool Connect(UserInfo userInfo);
+        Task<bool> ConnectAsync(UserInfo userInfo);
 
         /// <summary>
         /// Disconnect from the <see cref="IDevice"/> instance
         /// </summary>
         void Disconnect();
 
-        bool Format();
+        Task<bool> FormatAsync();
 
         /// <summary>
         /// Stream a file from the <see cref="IDevice"/> instance

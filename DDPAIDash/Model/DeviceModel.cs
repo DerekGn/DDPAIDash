@@ -64,13 +64,13 @@ namespace DDPAIDash.Model
             ConnectEnabled = true;
         }
 
-        public void FormatDevice()
+        public async void FormatDeviceAsync()
         {
             EventImages.Clear();
             EventVideos.Clear();
             Videos.Clear();
 
-            DeviceInstance.Format();
+            await DeviceInstance.FormatAsync();
         }
 
         public static DeviceModel Instance => DeviceModelInstance.Value;
