@@ -122,6 +122,15 @@ namespace DDPAIDash
 
         private void VideoSaveButton_Click(object sender, RoutedEventArgs e)
         {
+            var menuFlyoutItem = sender as MenuFlyoutItem;
+            if (menuFlyoutItem != null)
+            {
+                var v = menuFlyoutItem.DataContext as Video;
+                if (v != null)
+                {
+                    string name = v.DeviceVideo.Name;
+                }
+            }
         }
 
         private void EventVideoSaveButton_Click(object sender, RoutedEventArgs e)

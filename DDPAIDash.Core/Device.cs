@@ -208,7 +208,7 @@ namespace DDPAIDash.Core
                     () =>
                     {
                         _displayMode = value;
-                        SetIntValueAsync(PropertyKeys.display_mode.ToString(), (int) value.Value);
+                        SetIntValueAsync(PropertyKeys.display_mode.ToString(), (int)value.Value);
                     });
             }
         }
@@ -404,7 +404,7 @@ namespace DDPAIDash.Core
         public event EventHandler<EventDeletedEventArgs> EventDeleted;
 
         public event EventHandler<EventAddedEventArgs> EventAdded;
-        
+
         public event EventHandler<VideoAddedEventArgs> VideoAdded;
 
         public async Task<bool> ConnectAsync(UserInfo userInfo)
@@ -437,7 +437,7 @@ namespace DDPAIDash.Core
 
         public void Disconnect()
         {
-            if((State == DeviceState.Connected) || (State == DeviceState.Formatting))
+            if ((State == DeviceState.Connected) || (State == DeviceState.Formatting))
             {
                 _transport.Close();
             }
@@ -469,7 +469,7 @@ namespace DDPAIDash.Core
 
             foreach (var deviceEvent in deviceEventList.Events)
             {
-                LoadDeviceEventThumbnail(deviceEvent);
+                await LoadDeviceEventThumbnail(deviceEvent);
 
                 OnEventAdded(new EventAddedEventArgs(deviceEvent));
             }
@@ -513,7 +513,7 @@ namespace DDPAIDash.Core
 
             await processingAction(deviceVideoList);
         }
-        
+
         private async Task<Stream> LoadDeviceVideoThumbnailAsync(string deviceVideoName)
         {
             var baseFileName = deviceVideoName.Substring(0, 14);
@@ -531,7 +531,7 @@ namespace DDPAIDash.Core
             return await _imageCache.GetThumbnailStreamAsync(baseFileName);
         }
 
-        private async void LoadDeviceEventThumbnail(DeviceEvent deviceEvent)
+        private async Task LoadDeviceEventThumbnail(DeviceEvent deviceEvent)
         {
             var imageFileName = deviceEvent.ImageName.Replace("_L", "_T").Replace("_X", "_T");
 
@@ -577,56 +577,59 @@ namespace DDPAIDash.Core
 
         private async void HandleMailBoxResponseAsync(string data)
         {
-            //DeviceVideoList currentDeviceVideos = null;
-            //var mailboxMessages = JsonConvert.DeserializeObject<MailBoxMessageList>(data);
+            DeviceVideoList currentDeviceVideos = null;
+            var mailboxMessages = JsonConvert.DeserializeObject<MailBoxMessageList>(data);
 
-            //if(mailboxMessages.Messages.FindIndex(m => (m.Key == MailBoxMessageKeys.MSG_PlaybackListUpdate) || (m.Key == MailBoxMessageKeys.MSG_DeleteEvent) || (m.Key == MailBoxMessageKeys.MSG_EventOccured) || (m.Key == MailBoxMessageKeys.MSG_MMCWarning)) >= 0)
-            //{
-            //    await UpdateStorageInfoAsync();
-            //}
+            if (mailboxMessages.Messages.FindIndex(m => (m.Key == MailBoxMessageKeys.MSG_PlaybackListUpdate) || (m.Key == MailBoxMessageKeys.MSG_DeleteEvent) || (m.Key == MailBoxMessageKeys.MSG_EventOccured) || (m.Key == MailBoxMessageKeys.MSG_MMCWarning)) >= 0)
+            {
+                await UpdateStorageInfoAsync();
+            }
 
-            //if (mailboxMessages.Messages.FindIndex(m => (m.Key == MailBoxMessageKeys.MSG_PlaybackListUpdate)) >= 0)
-            //{
-            //    GetDeviceVideosAndProcess((deviceVideos) => {
-            //        currentDeviceVideos = deviceVideos;
-            //    });
-            //}
+            if (mailboxMessages.Messages.FindIndex(m => (m.Key == MailBoxMessageKeys.MSG_PlaybackListUpdate)) >= 0)
+            {
+                await GetDeviceVideosAndProcess(deviceVideos =>
+                 {
+                     currentDeviceVideos = deviceVideos;
 
-            //foreach (var message in mailboxMessages.Messages)
-            //{
-            //    switch (message.Key)
-            //    {
-            //        case MailBoxMessageKeys.Unknown:
-            //            _logger.Error($"Key: {message.Key} Data: {message.Data}");
-            //            break;
-            //        case MailBoxMessageKeys.MSG_PowerDown:
-            //            Cts.Cancel();
-            //            OnStateChanged(DeviceState.PoweredDown);
-            //            break;
-            //        case MailBoxMessageKeys.MSG_DeleteEvent:
-            //            _logger.Info($"Key: {message.Key} Data: {message.Data}");
-            //            HandleEventDeleted();
-            //            break;
-            //        case MailBoxMessageKeys.MSG_EventOccured:
-            //            HandleEventOccured(JsonConvert.DeserializeObject<DeviceEvent>(message.Data));
-            //            break;
-            //        case MailBoxMessageKeys.MSG_PlaybackListUpdate:
-            //            HandlePlaybackListUpdate(currentDeviceVideos, JsonConvert.DeserializeObject<VideosListUpdate>(message.Data));
-            //            break;
-            //        case MailBoxMessageKeys.MSG_PlaybackLiveSwitch:
-            //            _logger.Info($"Key: {message.Key} Data: {message.Data}");
-            //            break;
-            //        case MailBoxMessageKeys.MSG_MMCWarning:
-            //            HandleMMCWarning();
-            //            break;
-            //        case MailBoxMessageKeys.MSG_ButtonMatch:
-            //            _logger.Info($"Key: {message.Key} Data: {message.Data}");
-            //            break;
-            //        case MailBoxMessageKeys.MSG_RecordSizeWarning:
-            //            _logger.Info($"Key: {message.Key} Data: {message.Data}");
-            //            break;
-            //    }
-            //}
+                     return Task.FromResult(deviceVideos);
+                 });
+            }
+
+            foreach (var message in mailboxMessages.Messages)
+            {
+                switch (message.Key)
+                {
+                    case MailBoxMessageKeys.Unknown:
+                        _logger.Error($"Key: {message.Key} Data: {message.Data}");
+                        break;
+                    case MailBoxMessageKeys.MSG_PowerDown:
+                        Cts.Cancel();
+                        OnStateChanged(DeviceState.PoweredDown);
+                        break;
+                    case MailBoxMessageKeys.MSG_DeleteEvent:
+                        _logger.Info($"Key: {message.Key} Data: {message.Data}");
+                        HandleEventDeleted();
+                        break;
+                    case MailBoxMessageKeys.MSG_EventOccured:
+                        HandleEventOccured(JsonConvert.DeserializeObject<DeviceEvent>(message.Data));
+                        break;
+                    case MailBoxMessageKeys.MSG_PlaybackListUpdate:
+                        HandlePlaybackListUpdate(currentDeviceVideos, JsonConvert.DeserializeObject<VideosListUpdate>(message.Data));
+                        break;
+                    case MailBoxMessageKeys.MSG_PlaybackLiveSwitch:
+                        _logger.Info($"Key: {message.Key} Data: {message.Data}");
+                        break;
+                    case MailBoxMessageKeys.MSG_MMCWarning:
+                        HandleMMCWarning();
+                        break;
+                    case MailBoxMessageKeys.MSG_ButtonMatch:
+                        _logger.Info($"Key: {message.Key} Data: {message.Data}");
+                        break;
+                    case MailBoxMessageKeys.MSG_RecordSizeWarning:
+                        _logger.Info($"Key: {message.Key} Data: {message.Data}");
+                        break;
+                }
+            }
         }
 
         private void HandleMMCWarning()
@@ -659,7 +662,7 @@ namespace DDPAIDash.Core
                 }
                 else
                 {
-                    _logger.Error($"Unable to find {videosListUpdate.Name} in current device video list");
+                    _logger.Error($"Video {videosListUpdate.Name} in current device video list");
                 }
             }
             else if (videosListUpdate.Action == PlaybackAction.Delete)
@@ -760,13 +763,13 @@ namespace DDPAIDash.Core
 
         private void LoadSetting<T>(Parameter<T> parameter)
         {
-            switch ((PropertyKeys) Enum.Parse(typeof(PropertyKeys), parameter.Key))
+            switch ((PropertyKeys)Enum.Parse(typeof(PropertyKeys), parameter.Key))
             {
                 case PropertyKeys.wdr_enable:
-                    _wdr = (SwitchState) Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
+                    _wdr = (SwitchState)Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
                     break;
                 case PropertyKeys.gsensor_mode:
-                    _gsmode = (GSensorMode) Enum.Parse(typeof(GSensorMode), parameter.Value.ToString(), true);
+                    _gsmode = (GSensorMode)Enum.Parse(typeof(GSensorMode), parameter.Value.ToString(), true);
                     break;
                 case PropertyKeys.cycle_record_space:
                     _cycleRecordSpace = int.Parse(parameter.Value.ToString());
@@ -778,7 +781,7 @@ namespace DDPAIDash.Core
                     _defaultUser = parameter.Value.ToString();
                     break;
                 case PropertyKeys.ldc_switch:
-                    _ldc = (SwitchState) Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
+                    _ldc = (SwitchState)Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
                     break;
                 case PropertyKeys.anti_fog:
                     _antiFog = int.Parse(parameter.Value.ToString());
@@ -793,37 +796,37 @@ namespace DDPAIDash.Core
                     _eventBeforeTime = int.Parse(parameter.Value.ToString());
                     break;
                 case PropertyKeys.mic_switch:
-                    _mic = (SwitchState) Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
+                    _mic = (SwitchState)Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
                     break;
                 case PropertyKeys.image_quality:
-                    _quality = (ImageQuality) Enum.Parse(typeof(ImageQuality), parameter.Value.ToString(), true);
+                    _quality = (ImageQuality)Enum.Parse(typeof(ImageQuality), parameter.Value.ToString(), true);
                     break;
                 case PropertyKeys.display_mode:
-                    _displayMode = (DisplayMode) int.Parse(parameter.Value.ToString());
+                    _displayMode = (DisplayMode)int.Parse(parameter.Value.ToString());
                     break;
                 case PropertyKeys.osd_switch:
-                    _osd = (SwitchState) Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
+                    _osd = (SwitchState)Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
                     break;
                 case PropertyKeys.osd_speedswitch:
-                    _osdSpeed = (SwitchState) Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
+                    _osdSpeed = (SwitchState)Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
                     break;
                 case PropertyKeys.start_sound_switch:
-                    _startSound = (SwitchState) Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
+                    _startSound = (SwitchState)Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
                     break;
                 case PropertyKeys.delay_poweroff_time:
                     _delayPoweroffTime = int.Parse(parameter.Value.ToString());
                     break;
                 case PropertyKeys.edog_switch:
-                    _edogSwitch = (SwitchState) Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
+                    _edogSwitch = (SwitchState)Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
                     break;
                 case PropertyKeys.parking_mode_switch:
-                    _parkingMode = (SwitchState) Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
+                    _parkingMode = (SwitchState)Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
                     break;
                 case PropertyKeys.timelapse_rec_switch:
-                    _timeLapse = (SwitchState) Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
+                    _timeLapse = (SwitchState)Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
                     break;
                 case PropertyKeys.horizontal_mirror:
-                    _hmirror = (SwitchState) Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
+                    _hmirror = (SwitchState)Enum.Parse(typeof(SwitchState), parameter.Value.ToString(), true);
                     break;
             }
         }
@@ -859,14 +862,14 @@ namespace DDPAIDash.Core
 
         private async void SetStringValueAsync(string key, string state)
         {
-            var parameter = new Parameters {StringParameters = {new Parameter<string> {Key = key, Value = state.ToLower()}}};
+            var parameter = new Parameters { StringParameters = { new Parameter<string> { Key = key, Value = state.ToLower() } } };
             await ExecuteRequestAsync(ApiConstants.GeneralSave,
                 apiCommand => _transport.ExecuteAsync(apiCommand, JsonConvert.SerializeObject(parameter)), null);
         }
 
         private async void SetIntValueAsync(string key, int state)
         {
-            var parameter = new Parameters {IntParameters = {new Parameter<int> {Key = key, Value = state}}};
+            var parameter = new Parameters { IntParameters = { new Parameter<int> { Key = key, Value = state } } };
             await ExecuteRequestAsync(ApiConstants.GeneralSave,
                 apiCommand => _transport.ExecuteAsync(apiCommand, JsonConvert.SerializeObject(parameter)), null);
         }
