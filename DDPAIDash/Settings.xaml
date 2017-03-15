@@ -19,12 +19,7 @@
         <converter:SizeToStringConverter x:Key="SizeToStringConverter" />
         <converter:IntToDoubleConverter x:Key="IntToDoubleConverter" />
 
-        <Style x:Name="PivotItemStyle" TargetType="PivotItem">
-            <Setter Property="FontFamily" Value="Segoe UI" />
-            <Setter Property="FontSize" Value="12" />
-        </Style>
-
-        <Style x:Name="SliderStyle" TargetType="Slider">
+        <!--<Style x:Name="SliderStyle" TargetType="Slider">
             <Setter Property="FontFamily" Value="Segoe UI" />
             <Setter Property="FontSize" Value="12" />
         </Style>
@@ -37,12 +32,45 @@
         <Style x:Name="ToggleSwitchStyle" TargetType="ToggleSwitch">
             <Setter Property="FontFamily" Value="Segoe UI" />
             <Setter Property="FontSize" Value="12" />
+        </Style>-->
+        
+        <DataTemplate x:Key="PivotHeader">
+            <TextBlock Text="{Binding}" FontSize="30"/>
+        </DataTemplate>
+        
+        <Style x:Key="PivotStyle" TargetType="Pivot">
+            <Setter Property="HeaderTemplate" Value="{StaticResource PivotHeader}"/>
         </Style>
+
+        <DataTemplate x:Key="SliderHeaderTemplate">
+            <TextBlock Text="{Binding}" FontSize="20"/>
+        </DataTemplate>
+        
+        <Style x:Key="SliderStyle" TargetType="Slider">
+            <Setter Property="HeaderTemplate" Value="{StaticResource SliderHeaderTemplate}"/>
+        </Style>
+
+        <DataTemplate x:Key="RadioButtonHeaderTemplate">
+            <TextBlock Text="{Binding}" FontSize="20"/>
+        </DataTemplate>
+
+        <Style x:Key="RadioButtonStyle" TargetType="RadioButton">
+            <Setter Property="ContentTemplate" Value="{StaticResource RadioButtonHeaderTemplate}"/>
+        </Style>
+
+        <DataTemplate x:Key="ToggleSwitchHeaderTemplate">
+            <TextBlock Text="{Binding}" FontSize="20"/>
+        </DataTemplate>
+        
+        <Style x:Key="ToggleSwitchStyle" TargetType="ToggleSwitch">
+            <Setter Property="HeaderTemplate" Value="{StaticResource ToggleSwitchHeaderTemplate}"/>
+        </Style>
+        
     </Page.Resources>
 
     <Grid>
-        <Pivot Title="Settings">
-            <PivotItem Header="Device Settings" >
+        <Pivot Title="Settings" Style="{StaticResource PivotStyle}">
+            <PivotItem Header="Device Settings">
                 <ScrollViewer>
                     <StackPanel>
                         <Slider x:Name="AntiFogSlider"
@@ -208,7 +236,7 @@
                     </StackPanel>
                 </ScrollViewer>
             </PivotItem>
-            <PivotItem Header="Device Information" Style="{StaticResource PivotItemStyle}">
+            <PivotItem Header="Device Information">
                 <ScrollViewer>
                     <StackPanel>
                         <TextBlock Text="Model" Style="{StaticResource BodyTextBlockStyle}" />
@@ -256,7 +284,7 @@
                     </StackPanel>
                 </ScrollViewer>
             </PivotItem>
-            <PivotItem Header="Storage Information" Style="{StaticResource PivotItemStyle}">
+            <PivotItem Header="Storage Information">
                 <ScrollViewer>
                     <StackPanel>
                         <TextBlock Text="Capacity" Style="{StaticResource BodyTextBlockStyle}" />
@@ -292,7 +320,7 @@
                     </StackPanel>
                 </ScrollViewer>
             </PivotItem>
-            <PivotItem Header="Video Information" Style="{StaticResource PivotItemStyle}">
+            <PivotItem Header="Video Information">
                 <StackPanel>
                     <TextBlock Text="Resolution Ratio" Style="{StaticResource BodyTextBlockStyle}" />
                     <TextBlock Text="{Binding DeviceInstance.Capabilities.ResolutionRatio}" />

@@ -16,6 +16,7 @@
             <Setter Property="HeaderTemplate" Value="{StaticResource PivotHeader}"/>
         </Style>
     </Page.Resources>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="200"/>
