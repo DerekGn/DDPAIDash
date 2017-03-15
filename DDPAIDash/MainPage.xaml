@@ -8,6 +8,14 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
+    <Page.Resources>
+        <DataTemplate x:Key="PivotHeader">
+            <TextBlock Text="{Binding}" FontSize="30"/>
+        </DataTemplate>
+        <Style x:Key="PivotStyle" TargetType="Pivot">
+            <Setter Property="HeaderTemplate" Value="{StaticResource PivotHeader}"/>
+        </Style>
+    </Page.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="200"/>
@@ -20,7 +28,7 @@
                       MediaFailed="MediaElement_MediaFailed"
                       Height="200">
         </MediaElement>
-        <Pivot x:Name="MainPivot" Grid.Row="1">
+        <Pivot x:Name="MainPivot" Grid.Row="1" Style="{StaticResource PivotStyle}">
             <PivotItem Header="Videos">
                 <controls:DeviceVideoViewer x:Name="DeviceVideos" DataContext="{Binding Videos}" DeviceContentHolding="DeviceVideos_DeviceContentHolding" DeviceContentTapped="DeviceVideos_DeviceContentTapped" />
             </PivotItem>
