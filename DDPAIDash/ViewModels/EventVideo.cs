@@ -1,4 +1,7 @@
-﻿/**
+﻿
+
+using System;
+/**
 * MIT License
 *
 * Copyright (c) 2016 Derek Goslin < http://corememorydump.blogspot.ie/ >
@@ -21,18 +24,50 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 */
-
 using DDPAIDash.Core.Types;
+using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
+using System.Globalization;
 
-namespace DDPAIDash.Model
+namespace DDPAIDash.ViewModels
 {
-    public class EventVideo
+    public class EventVideo : EventBase
     {
+        private DeviceEvent _event;
+        private BitmapImage _image;
+
         public EventVideo(DeviceEvent @event)
         {
-            Event = @event;
+            _event = @event;
+        }
+        
+        public override ImageSource Image
+        {
+            get
+            {
+                if (_image == null)
+                {
+                    _image = CreateBitmapFromStream(_event.VideoThumbnailStream);
+                }
+
+                return _image;
+            }
         }
 
-        public DeviceEvent Event { get; }
+        public override string Name
+        {
+            get
+            {
+                return FormatEventName(_event.BVideoName).ToString(CultureInfo.CurrentUICulture);
+            }
+        }
+
+        public override string SourceName
+        {
+            get
+            {
+                return _event.BVideoName;
+            }
+        }
     }
 }

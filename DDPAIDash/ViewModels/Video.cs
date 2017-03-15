@@ -22,48 +22,59 @@
 * SOFTWARE.
 */
 
-using Windows.UI.Xaml.Controls;
+using System;
+using System.IO;
+using System.Globalization;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
+using DDPAIDash.Core.Types;
 
-// The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
-
-namespace DDPAIDash.Controls
+namespace DDPAIDash.ViewModels
 {
-    public sealed partial class DeviceVideoViewer
+    public class Video : DeviceContent
     {
-        ImageSource _source;
-        string _text;
+        private DeviceVideo _video;
+        private BitmapImage _image;
 
-        public DeviceVideoViewer()
+        public Video(DeviceVideo video)
         {
-            this.InitializeComponent();
+            _video = video;
         }
 
-        public void ShowPlaceholder(ImageSource source, string text)
+        public override string Name
         {
-            _source = source;
-            _text = text;
+            get
+            {
+                return ParseVideoName(_video.Name).ToString(CultureInfo.CurrentUICulture);
+            }
+        }
 
-            NameTextBlock.Opacity = 0;
-            Image.Opacity = 0;
-        }
-        public void ShowName()
+        public override ImageSource Image
         {
-            NameTextBlock.Text = _text;
-            NameTextBlock.Opacity = 1;
+            get
+            {
+                if(_image == null)
+                {
+                    _image = CreateBitmapFromStream(_video.ImageStream);
+                }
+                
+                return _image;
+            }
         }
-        public void ShowImage()
-        {
-            Image.Source = _source;
-            Image.Opacity = 1;
-        }
-        public void ClearData()
-        {
-            _source = null;
-            _text = string.Empty;
 
-            NameTextBlock.ClearValue(TextBlock.TextProperty);
-            Image.ClearValue(Image.SourceProperty);
+        public override string SourceName
+        {
+            get
+            {
+                return _video.Name;
+            }
+        }
+
+        private static DateTime ParseVideoName(string name)
+        {
+            var result = name.Substring(0, 14);
+
+            return DateTime.ParseExact(result, "yyyyMMddHHmmss", CultureInfo.CurrentUICulture);
         }
     }
 }

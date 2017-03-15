@@ -31,7 +31,7 @@ using DDPAIDash.Core;
 using DDPAIDash.Core.Events;
 using DDPAIDash.Core.Types;
 
-namespace DDPAIDash.Model
+namespace DDPAIDash.ViewModels
 {
     public class DeviceModel : INotifyPropertyChanged
     {
@@ -159,15 +159,15 @@ namespace DDPAIDash.Model
 
         private void DeviceInstanceVideoDeleted(object sender, VideoDeletedEventArgs e)
         {
-            var video = Videos.FirstOrDefault(v => v.DeviceVideo.Name == e.Name);
+            //var video = Videos.FirstOrDefault(v => v.DeviceVideo.Name == e.Name);
 
-            ExecuteOnDispatcher(() =>
-            {
-                if (video != null)
-                {
-                    Videos.Remove(video);
-                }
-            });
+            //ExecuteOnDispatcher(() =>
+            //{
+            //    if (video != null)
+            //    {
+            //        Videos.Remove(video);
+            //    }
+            //});
         }
 
         private void DeviceInstanceEventAdded(object sender, EventAddedEventArgs e)

@@ -35,7 +35,7 @@ using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Controls.Primitives;
 using DDPAIDash.Controls;
 using DDPAIDash.Core.Types;
-using DDPAIDash.Model;
+using DDPAIDash.ViewModels;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=391641
 
@@ -46,8 +46,6 @@ namespace DDPAIDash
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        private TypedEventHandler<ListViewBase, ContainerContentChangingEventArgs> _delegate;
-
         public MainPage()
         {
             InitializeComponent();
@@ -74,9 +72,9 @@ namespace DDPAIDash
 
             DataContext = DeviceModel.Instance;
 
-            VideoGridView.ItemsSource = DeviceModel.Instance.Videos;
-            EventImageGridView.ItemsSource = DeviceModel.Instance.EventImages;
-            EventVideosGridView.ItemsSource = DeviceModel.Instance.EventVideos;
+            //VideoGridView.ItemsSource = DeviceModel.Instance.Videos;
+            //EventImageGridView.ItemsSource = DeviceModel.Instance.EventImages;
+            //EventVideosGridView.ItemsSource = DeviceModel.Instance.EventVideos;
         }
 
         private void BtnFormat_Click(object sender, RoutedEventArgs e)
@@ -103,139 +101,34 @@ namespace DDPAIDash
         {
         }
 
-        private void VideoGridView_ItemClickHandler(object sender, ItemClickEventArgs e)
-        {
-            VideoMediaElement.Source =
-                new Uri($"{DeviceModel.Instance.DeviceInstance.BaseAddress}/{((Video)e.ClickedItem).DeviceVideo.Name}");
-        }
-
-        private void EventVideosGridView_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            VideoMediaElement.Source =
-                new Uri(
-                    $"{DeviceModel.Instance.DeviceInstance.BaseAddress}/{((EventVideo)e.ClickedItem).Event.BVideoName}");
-        }
-
-        private void EventImageGridView_ItemClick(object sender, ItemClickEventArgs e)
-        {
-        }
-
-        private void VideoSaveButton_Click(object sender, RoutedEventArgs e)
-        {
-            var menuFlyoutItem = sender as MenuFlyoutItem;
-            if (menuFlyoutItem != null)
-            {
-                var v = menuFlyoutItem.DataContext as Video;
-                if (v != null)
-                {
-                    string name = v.DeviceVideo.Name;
-                }
-            }
-        }
-
-        private void EventVideoSaveButton_Click(object sender, RoutedEventArgs e)
-        {
-        }
-
-        private void EventImageSaveButton_Click(object sender, RoutedEventArgs e)
-        {
-        }
-
         private void MediaElement_MediaFailed(object sender, ExceptionRoutedEventArgs e)
         {
         }
 
-        private void VideoGridView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
+        private void DeviceVideos_DeviceContentHolding(object sender, DeviceContent e)
         {
-            HandleDeviceVideoGridViewContainerContentChanging(args, deviceVideoViewer =>
-            {
-                var video = args.Item as Video;
-
-                deviceVideoViewer.ShowPlaceholder(CreateBitmapFromStream(video.DeviceVideo.ImageStream),
-                    ParseVideoName(video.DeviceVideo.Name).ToString(CultureInfo.CurrentUICulture));
-            });
         }
 
-        private void EventVideosGridView_ContainerContentChanging(ListViewBase sender,
-            ContainerContentChangingEventArgs args)
+        private void DeviceVideos_DeviceContentTapped(object sender, DeviceContent e)
         {
-            HandleDeviceVideoGridViewContainerContentChanging(args, deviceVideoViewer =>
-            {
-                var video = args.Item as EventVideo;
-
-                deviceVideoViewer.ShowPlaceholder(CreateBitmapFromStream(video.Event.VideoThumbnailStream),
-                    FormatEventName(video.Event.BVideoName).ToString(CultureInfo.CurrentUICulture));
-            });
+            VideoMediaElement.Source = new Uri(DeviceModel.Instance.DeviceInstance.BaseAddress, ((Video)e).SourceName);
         }
 
-        private void EventImageGridView_ContainerContentChanging(ListViewBase sender,
-            ContainerContentChangingEventArgs args)
+        private void EventVideos_DeviceContentHolding(object sender, DeviceContent e)
         {
-            HandleDeviceVideoGridViewContainerContentChanging(args, deviceVideoViewer =>
-            {
-                var image = args.Item as EventImage;
-
-                deviceVideoViewer.ShowPlaceholder(CreateBitmapFromStream(image.Event.ImageThumbnailStream),
-                    FormatEventName(image.Event.ImageName).ToString(CultureInfo.CurrentUICulture));
-            });
         }
 
-        private ImageSource CreateBitmapFromStream(Stream stream)
+        private void EventVideos_DeviceContentTapped(object sender, DeviceContent e)
         {
-            var result = new BitmapImage();
-            result.SetSource(stream.AsRandomAccessStream());
-
-            return result;
+            VideoMediaElement.Source = new Uri(DeviceModel.Instance.DeviceInstance.BaseAddress, ((EventVideo)e).SourceName);
         }
 
-        private void HandleDeviceVideoGridViewContainerContentChanging(ContainerContentChangingEventArgs args,
-            Action<DeviceVideoViewer> mapFile)
+        private void DeviceImages_DeviceContentHolding(object sender, DeviceContent e)
         {
-            var deviceVideoViewer = args.ItemContainer.ContentTemplateRoot as DeviceVideoViewer;
-
-            if (args.InRecycleQueue)
-            {
-                deviceVideoViewer.ClearData();
-            }
-            else if (args.Phase == 0)
-            {
-                mapFile(deviceVideoViewer);
-
-                args.RegisterUpdateCallback(ContainerContentChangingDelegate);
-            }
-            else if (args.Phase == 1)
-            {
-                deviceVideoViewer.ShowName();
-                args.RegisterUpdateCallback(ContainerContentChangingDelegate);
-            }
-            else if (args.Phase == 2)
-            {
-                deviceVideoViewer.ShowImage();
-            }
-
-            args.Handled = true;
         }
 
-        private void DisplayFlyoutOnHolding(object sender, HoldingRoutedEventArgs e)
+        private void DeviceImages_DeviceContentTapped(object sender, DeviceContent e)
         {
-            FlyoutBase.ShowAttachedFlyout((FrameworkElement) sender);
-        }
-
-        private TypedEventHandler<ListViewBase, ContainerContentChangingEventArgs> ContainerContentChangingDelegate
-            => _delegate ?? (_delegate = VideoGridView_ContainerContentChanging);
-
-        private static DateTime ParseVideoName(string name)
-        {
-            var result = name.Substring(0, 14);
-
-            return DateTime.ParseExact(result, "yyyyMMddHHmmss", CultureInfo.CurrentUICulture);
-        }
-
-        private static DateTime FormatEventName(string name)
-        {
-            var result = name.Substring(2, 14);
-
-            return DateTime.ParseExact(result, "yyyyMMddHHmmss", CultureInfo.CurrentUICulture);
         }
     }
 }

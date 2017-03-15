@@ -1,4 +1,6 @@
-﻿/**
+﻿
+using DDPAIDash.ViewModels;
+/**
 * MIT License
 *
 * Copyright (c) 2016 Derek Goslin < http://corememorydump.blogspot.ie/ >
@@ -21,18 +23,42 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 */
+using System;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Input;
 
-using DDPAIDash.Core.Types;
+// The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
 
-namespace DDPAIDash.Model
+namespace DDPAIDash.Controls
 {
-    public class EventImage
+    public sealed partial class DeviceVideoViewer
     {
-        public EventImage(DeviceEvent @event)
+        public DeviceVideoViewer()
         {
-            Event = @event;
+            this.InitializeComponent();
         }
 
-        public DeviceEvent Event { get; }
+        public event EventHandler<DeviceContent> DeviceContentTapped;
+
+        public event EventHandler<DeviceContent> DeviceContentHolding;
+
+        private void ImageList_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            RaiseEvent(DeviceContentTapped, (ListView) sender);
+        }
+
+        private void ImageList_Holding(object sender, HoldingRoutedEventArgs e)
+        {
+            RaiseEvent(DeviceContentHolding, (ListView) sender);
+        }
+
+        private void RaiseEvent(EventHandler<DeviceContent> eventToRaise, ListView listView)
+        {
+            var temp = eventToRaise;
+            if (temp != null)
+            {
+                eventToRaise(this, (DeviceContent) listView.SelectedItem);
+            }
+        }
     }
 }

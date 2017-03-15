@@ -89,8 +89,8 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\DeviceVideoViewer.xaml.cs">
-      <DependentUpon>DeviceVideoViewer.xaml</DependentUpon>
+    <Compile Include="Controls\DeviceContentViewer.xaml.cs">
+      <DependentUpon>DeviceContentViewer.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converter\DisplayModeEnumMatchToBoolConverter.cs" />
     <Compile Include="Converter\EnumMatchToBoolConverter.cs" />
@@ -105,10 +105,13 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Model\DeviceModel.cs" />
-    <Compile Include="Model\EventImage.cs" />
-    <Compile Include="Model\EventVideo.cs" />
-    <Compile Include="Model\Video.cs" />
+    <Compile Include="ViewModels\DeviceContent.cs" />
+    <Compile Include="ViewModels\DeviceModel.cs" />
+    <Compile Include="ViewModels\EventBase.cs" />
+    <Compile Include="ViewModels\EventImage.cs" />
+    <Compile Include="ViewModels\EventVideo.cs" />
+    <Compile Include="ViewModels\IDeviceContent.cs" />
+    <Compile Include="ViewModels\Video.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>
@@ -132,7 +135,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="Controls\DeviceVideoViewer.xaml">
+    <Page Include="Controls\DeviceContentViewer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
