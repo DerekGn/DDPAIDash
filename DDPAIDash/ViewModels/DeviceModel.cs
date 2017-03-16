@@ -30,6 +30,7 @@ using Windows.UI.Core;
 using DDPAIDash.Core;
 using DDPAIDash.Core.Events;
 using DDPAIDash.Core.Types;
+using System.Threading.Tasks;
 
 namespace DDPAIDash.ViewModels
 {
@@ -64,13 +65,13 @@ namespace DDPAIDash.ViewModels
             ConnectEnabled = true;
         }
 
-        public async void FormatDeviceAsync()
+        public async Task<bool> FormatDeviceAsync()
         {
             EventImages.Clear();
             EventVideos.Clear();
             Videos.Clear();
 
-            await DeviceInstance.FormatAsync();
+            return await DeviceInstance.FormatAsync();
         }
 
         public static DeviceModel Instance => DeviceModelInstance.Value;
@@ -159,15 +160,15 @@ namespace DDPAIDash.ViewModels
 
         private void DeviceInstanceVideoDeleted(object sender, VideoDeletedEventArgs e)
         {
-            //var video = Videos.FirstOrDefault(v => v.DeviceVideo.Name == e.Name);
+            var video = Videos.FirstOrDefault(v => v.Name == e.Name);
 
-            //ExecuteOnDispatcher(() =>
-            //{
-            //    if (video != null)
-            //    {
-            //        Videos.Remove(video);
-            //    }
-            //});
+            ExecuteOnDispatcher(() =>
+            {
+                if (video != null)
+                {
+                    Videos.Remove(video);
+                }
+            });
         }
 
         private void DeviceInstanceEventAdded(object sender, EventAddedEventArgs e)

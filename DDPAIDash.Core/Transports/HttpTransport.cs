@@ -31,11 +31,13 @@ using System.Net.Http.Headers;
 using Newtonsoft.Json;
 using DDPAIDash.Core.Constants;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace DDPAIDash.Core.Transports
 {
     internal class HttpTransport : ITransport
     {
+        private static readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
         private readonly CookieContainer _cookieContainer;
         private readonly HttpClientHandler _httpClientHandler;
         private readonly HttpClient _httpClient;
@@ -92,13 +94,24 @@ namespace DDPAIDash.Core.Transports
 
         private async Task<ResponseMessage> ExecuteInternalAsync(string apiCommand, HttpContent content)
         {
-            var postResult = await _httpClient.PostAsync($"/vcam/cmd.cgi?cmd={apiCommand}", content);
+            HttpResponseMessage postResult;
+
+            await _semaphore.WaitAsync();
+
+            try
+            {
+                postResult = await _httpClient.PostAsync($"/vcam/cmd.cgi?cmd={apiCommand}", content);
+            }
+            finally
+            {
+                _semaphore.Release();
+            }
 
             string payload;
 
             if (postResult.IsSuccessStatusCode)
             {
-                payload =  await postResult.Content.ReadAsStringAsync();
+                payload = await postResult.Content.ReadAsStringAsync();
 
                 if (apiCommand == ApiConstants.AvCapReq)
                 {

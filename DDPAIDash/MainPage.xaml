@@ -31,13 +31,22 @@
         </MediaElement>
         <Pivot x:Name="MainPivot" Grid.Row="1" Style="{StaticResource PivotStyle}">
             <PivotItem Header="Videos">
-                <controls:DeviceVideoViewer x:Name="DeviceVideos" DataContext="{Binding Videos}" DeviceContentHolding="DeviceVideos_DeviceContentHolding" DeviceContentTapped="DeviceVideos_DeviceContentTapped" />
+                <controls:DeviceVideoViewer x:Name="DeviceVideos" 
+                                            DataContext="{Binding Videos}"
+                                            DeviceContentHolding="DeviceVideos_DeviceContentHolding"
+                                            DeviceContentTapped="DeviceVideos_DeviceContentTapped" />
             </PivotItem>
             <PivotItem Header="Event Videos">
-                <controls:DeviceVideoViewer x:Name="EventVideos" DataContext="{Binding EventVideos}" DeviceContentHolding="EventVideos_DeviceContentHolding" DeviceContentTapped="EventVideos_DeviceContentTapped" />
+                <controls:DeviceVideoViewer x:Name="EventVideos"
+                                            DataContext="{Binding EventVideos}"
+                                            DeviceContentHolding="EventVideos_DeviceContentHolding"
+                                            DeviceContentTapped="EventVideos_DeviceContentTapped" />
             </PivotItem>
             <PivotItem Header="Event Images">
-                <controls:DeviceVideoViewer x:Name="DeviceImages" DataContext="{Binding EventImages}" DeviceContentHolding="DeviceImages_DeviceContentHolding" DeviceContentTapped="DeviceImages_DeviceContentTapped" />
+                <controls:DeviceVideoViewer x:Name="DeviceImages"
+                                            DataContext="{Binding EventImages}"
+                                            DeviceContentHolding="DeviceImages_DeviceContentHolding"
+                                            DeviceContentTapped="DeviceImages_DeviceContentTapped" />
             </PivotItem>
         </Pivot>
     </Grid>

@@ -23,17 +23,9 @@
 */
 
 using System;
-using System.IO;
-using System.Globalization;
-using Windows.Foundation;
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
-using Windows.UI.Xaml.Media.Imaging;
-using Windows.UI.Xaml.Controls.Primitives;
-using DDPAIDash.Controls;
 using DDPAIDash.Core.Types;
 using DDPAIDash.ViewModels;
 
@@ -71,15 +63,11 @@ namespace DDPAIDash
             // this event is handled for you.
 
             DataContext = DeviceModel.Instance;
-
-            //VideoGridView.ItemsSource = DeviceModel.Instance.Videos;
-            //EventImageGridView.ItemsSource = DeviceModel.Instance.EventImages;
-            //EventVideosGridView.ItemsSource = DeviceModel.Instance.EventVideos;
         }
 
-        private void BtnFormat_Click(object sender, RoutedEventArgs e)
+        private async void BtnFormat_Click(object sender, RoutedEventArgs e)
         {
-            DeviceModel.Instance.FormatDeviceAsync();
+            await DeviceModel.Instance.FormatDeviceAsync();
         }
 
         private void BtnPair_Click(object sender, RoutedEventArgs e)
