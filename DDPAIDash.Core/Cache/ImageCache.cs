@@ -42,11 +42,11 @@ namespace DDPAIDash.Core.Cache
                 {
                     if (reader.Entry.IsDirectory)
                     {
-                        await ApplicationData.Current.LocalCacheFolder.CreateFolderAsync(reader.Entry.Key);
+                        await ApplicationData.Current.TemporaryFolder.CreateFolderAsync(reader.Entry.Key);
                     }
                     else
                     {
-                        var newFile = await ApplicationData.Current.LocalCacheFolder.CreateFileAsync(reader.Entry.Key.Replace('/', '\\'));
+                        var newFile = await ApplicationData.Current.TemporaryFolder.CreateFileAsync(reader.Entry.Key.Replace('/', '\\'));
 
                         using (var outStream = await newFile.OpenStreamForWriteAsync())
                         {
@@ -59,7 +59,7 @@ namespace DDPAIDash.Core.Cache
 
         public async Task CacheAsync(string imageFileName, Stream stream)
         {
-            var newFile = await ApplicationData.Current.LocalCacheFolder.CreateFileAsync(imageFileName);
+            var newFile = await ApplicationData.Current.TemporaryFolder.CreateFileAsync(imageFileName);
 
             using (var outStream = await newFile.OpenStreamForWriteAsync())
             {
@@ -69,13 +69,13 @@ namespace DDPAIDash.Core.Cache
 
         public async Task<bool> ContainsAsync(string name)
         {
-            return (await ApplicationData.Current.LocalCacheFolder.GetItemsAsync())
+            return (await ApplicationData.Current.TemporaryFolder.GetItemsAsync())
                 .FirstOrDefault(i => i.Name == name) != null;
         }
 
         public async Task FlushAsync(TimeSpan olderThan)
         {
-            foreach (var storageFile in await ApplicationData.Current.LocalCacheFolder.GetFilesAsync())
+            foreach (var storageFile in await ApplicationData.Current.TemporaryFolder.GetFilesAsync())
             {
                 if (DateTime.Now.Subtract(storageFile.DateCreated.UtcDateTime) >= olderThan)
                 {
@@ -83,7 +83,7 @@ namespace DDPAIDash.Core.Cache
                 }
             }
 
-            foreach (var folder in await ApplicationData.Current.LocalCacheFolder.GetFoldersAsync())
+            foreach (var folder in await ApplicationData.Current.TemporaryFolder.GetFoldersAsync())
             {
                 if (DateTime.Now.Subtract(folder.DateCreated.UtcDateTime) >= olderThan)
                 {
@@ -94,7 +94,7 @@ namespace DDPAIDash.Core.Cache
 
         public async Task<Stream> GetAsync(string name)
         {
-            var folder = (await ApplicationData.Current.LocalCacheFolder.GetFoldersAsync())
+            var folder = (await ApplicationData.Current.TemporaryFolder.GetFoldersAsync())
                     .FirstOrDefault(f => f.Name == name);
 
             StorageFile file;
@@ -105,7 +105,7 @@ namespace DDPAIDash.Core.Cache
             }
             else
             {
-                file = await ApplicationData.Current.LocalCacheFolder.GetFileAsync(name);
+                file = await ApplicationData.Current.TemporaryFolder.GetFileAsync(name);
 
                 if (file == null)
                     throw new FileNotFoundException("File not found in cache", name);
@@ -116,7 +116,7 @@ namespace DDPAIDash.Core.Cache
 
         public async Task<Stream> GetThumbnailStreamAsync(string name)
         {
-            var folder = (await ApplicationData.Current.LocalCacheFolder.GetFoldersAsync())
+            var folder = (await ApplicationData.Current.TemporaryFolder.GetFoldersAsync())
                 .FirstOrDefault(f => f.Name == name);
 
             StorageFile file;
@@ -127,7 +127,7 @@ namespace DDPAIDash.Core.Cache
             }
             else
             {
-                file = await ApplicationData.Current.LocalCacheFolder.GetFileAsync(name);
+                file = await ApplicationData.Current.TemporaryFolder.GetFileAsync(name);
 
                 if (file == null)
                 {
