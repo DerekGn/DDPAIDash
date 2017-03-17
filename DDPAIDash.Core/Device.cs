@@ -423,8 +423,9 @@ namespace DDPAIDash.Core
                 {
                     User = userInfo;
 
-                    _mailboxTask = Task.Factory.StartNew(() => LoadDeviceData(Cts.Token))
-                        .ContinueWith(t => PollMailboxAsync(Cts.Token));
+                    await LoadDeviceData(Cts.Token);
+
+                    _mailboxTask = Task.Factory.StartNew(() => PollMailboxAsync(Cts.Token));
                 }
             }
             else
@@ -455,7 +456,7 @@ namespace DDPAIDash.Core
             return result;
         }
 
-        public async void GetDeviceEvents()
+        public async Task GetDeviceEvents()
         {
             DeviceEventList deviceEventList = null;
 
@@ -480,7 +481,7 @@ namespace DDPAIDash.Core
             throw new NotImplementedException();
         }
 
-        private async void LoadDeviceData(CancellationToken token)
+        private async Task LoadDeviceData(CancellationToken token)
         {
             _logger.Verbose("Loading Device Videos");
 
@@ -496,7 +497,7 @@ namespace DDPAIDash.Core
 
             _logger.Verbose("Loading Device Event Files");
 
-            GetDeviceEvents();
+            await GetDeviceEvents();
         }
 
         private async Task GetDeviceVideosAndProcess(Func<DeviceVideoList, Task> processingAction)
@@ -631,9 +632,7 @@ namespace DDPAIDash.Core
             // Skip the event that has no video
             if (!string.IsNullOrEmpty(deviceEvent.BVideoName))
             {
-                deviceEvent.ImageThumbnailStream = await LoadDeviceEventThumbnailStreamAsync(deviceEvent.ImageName, 23);
-
-                deviceEvent.VideoThumbnailStream = await LoadDeviceEventThumbnailStreamAsync(deviceEvent.BVideoName, 22);
+                await LoadDeviceEventThumbnail(deviceEvent);
 
                 OnEventAdded(new EventAddedEventArgs(deviceEvent));
             }
@@ -884,24 +883,7 @@ namespace DDPAIDash.Core
 
             assignValue();
         }
-
-        private async Task<Stream> LoadDeviceEventThumbnailStreamAsync(string eventVideoName, int fileNameLen)
-        {
-            var baseFileName = string.Concat(eventVideoName.Substring(0, fileNameLen), "_T.jpg");
-            
-            if (!await _imageCache.ContainsAsync(baseFileName))
-            {
-                _logger.Verbose($"Cache does not contain [{baseFileName}] retrieving from device");
-
-                using (var tarStream = await _transport.GetFileAsync(baseFileName))
-                {
-                    await _imageCache.CacheAsync(tarStream);
-                }
-            }
-
-            return await _imageCache.GetThumbnailStreamAsync(baseFileName);
-        }
-
+        
         private async Task<Stream> LoadDeviceVideoThumbnailAsync(string deviceVideoName)
         {
             var baseFileName = deviceVideoName.Substring(0, 14);

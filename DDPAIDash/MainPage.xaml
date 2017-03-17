@@ -16,40 +16,34 @@
             <Setter Property="HeaderTemplate" Value="{StaticResource PivotHeader}"/>
         </Style>
     </Page.Resources>
-    
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="200"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <MediaElement x:Name="VideoMediaElement"
-                      Grid.Row="0"
-                      AutoPlay="true"
-                      AreTransportControlsEnabled="True"
-                      MediaFailed="MediaElement_MediaFailed"
-                      Height="200">
-        </MediaElement>
-        <Pivot x:Name="MainPivot" Grid.Row="1" Style="{StaticResource PivotStyle}">
-            <PivotItem Header="Videos">
-                <controls:DeviceVideoViewer x:Name="DeviceVideos" 
-                                            DataContext="{Binding Videos}"
-                                            DeviceContentHolding="DeviceVideos_DeviceContentHolding"
-                                            DeviceContentTapped="DeviceVideos_DeviceContentTapped" />
-            </PivotItem>
-            <PivotItem Header="Event Videos">
-                <controls:DeviceVideoViewer x:Name="EventVideos"
-                                            DataContext="{Binding EventVideos}"
-                                            DeviceContentHolding="EventVideos_DeviceContentHolding"
-                                            DeviceContentTapped="EventVideos_DeviceContentTapped" />
-            </PivotItem>
-            <PivotItem Header="Event Images">
-                <controls:DeviceVideoViewer x:Name="DeviceImages"
-                                            DataContext="{Binding EventImages}"
-                                            DeviceContentHolding="DeviceImages_DeviceContentHolding"
-                                            DeviceContentTapped="DeviceImages_DeviceContentTapped" />
-            </PivotItem>
-        </Pivot>
-    </Grid>
+
+    <Pivot x:Name="MainPivot" Style="{StaticResource PivotStyle}">
+        <PivotItem Header="Stream">
+            <MediaElement x:Name="VideoMediaElement"
+                    AutoPlay="true"
+                    AreTransportControlsEnabled="True"
+                    MediaFailed="MediaElement_MediaFailed">
+            </MediaElement>
+        </PivotItem>
+        <PivotItem Header="Videos">
+            <controls:DeviceVideoViewer x:Name="DeviceVideos" 
+                                        DataContext="{Binding Videos}"
+                                        DeviceContentHolding="DeviceVideos_DeviceContentHolding"
+                                        DeviceContentTapped="DeviceVideos_DeviceContentTapped" />
+        </PivotItem>
+        <PivotItem Header="Event Videos">
+            <controls:DeviceVideoViewer x:Name="EventVideos"
+                                        DataContext="{Binding EventVideos}"
+                                        DeviceContentHolding="EventVideos_DeviceContentHolding"
+                                        DeviceContentTapped="EventVideos_DeviceContentTapped" />
+        </PivotItem>
+        <PivotItem Header="Event Images">
+            <controls:DeviceVideoViewer x:Name="DeviceImages"
+                                        DataContext="{Binding EventImages}"
+                                        DeviceContentHolding="DeviceImages_DeviceContentHolding"
+                                        DeviceContentTapped="DeviceImages_DeviceContentTapped" />
+        </PivotItem>
+    </Pivot>
 
     <Page.BottomAppBar>
         <CommandBar x:Name="MainCommandBar" ClosedDisplayMode="Minimal">
