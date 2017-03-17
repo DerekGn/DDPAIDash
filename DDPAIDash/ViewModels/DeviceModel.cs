@@ -189,6 +189,13 @@ namespace DDPAIDash.ViewModels
                 SettingsEnabled = PairingEnabled = false;
                 FormatEnabled = false;
             }
+
+            if(e.State == DeviceState.PoweredDown)
+            {
+                //TODO: Handle power down
+                LiveEnabled = FormatEnabled = SettingsEnabled = PairingEnabled = false;
+                ConnectEnabled = true;
+            }
         }
 
         private void DeviceInstanceEventDeleted(object sender, EventDeletedEventArgs e)

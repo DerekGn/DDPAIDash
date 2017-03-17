@@ -514,23 +514,6 @@ namespace DDPAIDash.Core
             await processingAction(deviceVideoList);
         }
 
-        private async Task<Stream> LoadDeviceVideoThumbnailAsync(string deviceVideoName)
-        {
-            var baseFileName = deviceVideoName.Substring(0, 14);
-
-            if (!await _imageCache.ContainsAsync(baseFileName))
-            {
-                _logger.Verbose($"Cache does not contain [{baseFileName}] retrieving from device");
-
-                using (var tarStream = await _transport.GetFileAsync(string.Concat(baseFileName, ".tar")))
-                {
-                    await _imageCache.CacheAsync(tarStream);
-                }
-            }
-
-            return await _imageCache.GetThumbnailStreamAsync(baseFileName);
-        }
-
         private async Task LoadDeviceEventThumbnail(DeviceEvent deviceEvent)
         {
             var imageFileName = deviceEvent.ImageName.Replace("_L", "_T").Replace("_X", "_T");
@@ -643,9 +626,17 @@ namespace DDPAIDash.Core
             OnEventDeleted(new EventDeletedEventArgs(null));
         }
 
-        private void HandleEventOccured(DeviceEvent deviceEvent)
+        private async void HandleEventOccured(DeviceEvent deviceEvent)
         {
-            OnEventAdded(new EventAddedEventArgs(deviceEvent));
+            // Skip the event that has no video
+            if (!string.IsNullOrEmpty(deviceEvent.BVideoName))
+            {
+                deviceEvent.ImageThumbnailStream = await LoadDeviceEventThumbnailStreamAsync(deviceEvent.ImageName, 23);
+
+                deviceEvent.VideoThumbnailStream = await LoadDeviceEventThumbnailStreamAsync(deviceEvent.BVideoName, 22);
+
+                OnEventAdded(new EventAddedEventArgs(deviceEvent));
+            }
         }
 
         private async void HandlePlaybackListUpdate(DeviceVideoList deviceVideoList, VideosListUpdate videosListUpdate)
@@ -892,6 +883,40 @@ namespace DDPAIDash.Core
             }
 
             assignValue();
+        }
+
+        private async Task<Stream> LoadDeviceEventThumbnailStreamAsync(string eventVideoName, int fileNameLen)
+        {
+            var baseFileName = string.Concat(eventVideoName.Substring(0, fileNameLen), "_T.jpg");
+            
+            if (!await _imageCache.ContainsAsync(baseFileName))
+            {
+                _logger.Verbose($"Cache does not contain [{baseFileName}] retrieving from device");
+
+                using (var tarStream = await _transport.GetFileAsync(baseFileName))
+                {
+                    await _imageCache.CacheAsync(tarStream);
+                }
+            }
+
+            return await _imageCache.GetThumbnailStreamAsync(baseFileName);
+        }
+
+        private async Task<Stream> LoadDeviceVideoThumbnailAsync(string deviceVideoName)
+        {
+            var baseFileName = deviceVideoName.Substring(0, 14);
+
+            if (!await _imageCache.ContainsAsync(baseFileName))
+            {
+                _logger.Verbose($"Cache does not contain [{baseFileName}] retrieving from device");
+
+                using (var tarStream = await _transport.GetFileAsync(string.Concat(baseFileName, ".tar")))
+                {
+                    await _imageCache.CacheAsync(tarStream);
+                }
+            }
+
+            return await _imageCache.GetThumbnailStreamAsync(baseFileName);
         }
 
         protected void OnStateChanged(DeviceState state)
