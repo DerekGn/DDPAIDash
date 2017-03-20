@@ -476,9 +476,9 @@ namespace DDPAIDash.Core
             }
         }
 
-        public IStreamDescriptor StreamFile(string filename)
+        public async Task<Stream> StreamFileAsync(string fileName)
         {
-            throw new NotImplementedException();
+            return await _transport.GetFileAsync(fileName);
         }
 
         private async Task LoadDeviceData(CancellationToken token)
@@ -515,7 +515,7 @@ namespace DDPAIDash.Core
             await processingAction(deviceVideoList);
         }
 
-        private async Task LoadDeviceEventThumbnail(DeviceEvent deviceEvent)
+        private async Task LoadDeviceEventThumbnail(DeviceEvent deviceEvent) 
         {
             var imageFileName = deviceEvent.ImageName.Replace("_L", "_T").Replace("_X", "_T");
 

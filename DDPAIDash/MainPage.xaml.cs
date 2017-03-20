@@ -89,6 +89,7 @@ namespace DDPAIDash
 
         private void DeviceVideos_DeviceContentSave(object sender, DeviceContent e)
         {
+            DeviceModel.Instance.DeviceInstance.StreamFileAsync(e.SourceName);
         }
 
         private void DeviceVideos_DeviceContentView(object sender, DeviceContent e)

@@ -26,6 +26,7 @@ using System;
 using DDPAIDash.Core.Types;
 using DDPAIDash.Core.Events;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace DDPAIDash.Core
 {
@@ -104,8 +105,8 @@ namespace DDPAIDash.Core
         /// <summary>
         /// Stream a file from the <see cref="IDevice"/> instance
         /// </summary>
-        /// <returns>An instance of a <see cref="IStreamDescriptor"/></returns>
-        IStreamDescriptor StreamFile(string filename);
+        /// <returns>An instance of a <see cref="Stream"/></returns>
+        Task<Stream> StreamFileAsync(string filename);
         
         /// <summary>
         /// Raised when the <see cref="IDevice"/> state changes

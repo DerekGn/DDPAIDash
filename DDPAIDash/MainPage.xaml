@@ -44,7 +44,7 @@
                                         DeviceContentView="DeviceVideos_DeviceContentView"/>
         </PivotItem>
     </Pivot>
-
+    
     <Page.BottomAppBar>
         <CommandBar x:Name="MainCommandBar" ClosedDisplayMode="Minimal">
             <AppBarButton x:Name="BtnConnect" Click="btnConnect_Click" IsEnabled="{ Binding ConnectEnabled, Mode=TwoWay }">
