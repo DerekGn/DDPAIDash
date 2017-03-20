@@ -24,7 +24,9 @@ using DDPAIDash.ViewModels;
 * SOFTWARE.
 */
 using System;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Input;
 
 // The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
@@ -38,26 +40,35 @@ namespace DDPAIDash.Controls
             this.InitializeComponent();
         }
 
-        public event EventHandler<DeviceContent> DeviceContentTapped;
+        public event EventHandler<DeviceContent> DeviceContentSave;
 
-        public event EventHandler<DeviceContent> DeviceContentHolding;
+        public event EventHandler<DeviceContent> DeviceContentView;
 
-        private void ImageList_Tapped(object sender, TappedRoutedEventArgs e)
+        private void Grid_Holding(object sender, HoldingRoutedEventArgs e)
         {
-            RaiseEvent(DeviceContentTapped, (ListView) sender);
+            FrameworkElement senderElement = sender as FrameworkElement;
+            // If you need the clicked element:
+            // Item whichOne = senderElement.DataContext as Item;
+            FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout(senderElement);
+            flyoutBase.ShowAt(senderElement);
         }
 
-        private void ImageList_Holding(object sender, HoldingRoutedEventArgs e)
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            RaiseEvent(DeviceContentHolding, (ListView) sender);
+            RaiseEvent(DeviceContentSave, (ListView)sender);
         }
 
+        private void ViewButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            RaiseEvent(DeviceContentView, (ListView)sender);
+        }
+        
         private void RaiseEvent(EventHandler<DeviceContent> eventToRaise, ListView listView)
         {
             var temp = eventToRaise;
             if (temp != null)
             {
-                eventToRaise(this, (DeviceContent) listView.SelectedItem);
+                eventToRaise(this, (DeviceContent)listView.SelectedItem);
             }
         }
     }

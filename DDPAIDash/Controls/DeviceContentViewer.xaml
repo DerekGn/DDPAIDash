@@ -10,15 +10,31 @@
 
     <Grid>
         <ScrollViewer VerticalScrollBarVisibility="Auto">
-            <ListView Name="ImageList" ItemsSource="{Binding}" Tapped="ImageList_Tapped" Holding="ImageList_Holding">
+            <ListView Name="ImageList" ItemsSource="{Binding}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <Border Padding="5" Margin="10,10,0,0">
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <StackPanel Orientation="Horizontal" 
+                                        HorizontalAlignment="Center">
                                 <!--image and dimensions-->
-                                <Grid>
-                                    <Image Source="{Binding Image}" Width="260"/>
-                                    <TextBlock Foreground="White" Height="16" TextAlignment="Center" VerticalAlignment="Bottom" Text="{Binding Name}" />
+                                <Grid Holding="Grid_Holding">
+                                    <FlyoutBase.AttachedFlyout>
+                                        <MenuFlyout>
+                                            <MenuFlyoutItem x:Name="SaveButton"
+                                                            Text="Save"
+                                                            Click="SaveButton_Click"/>
+                                            <MenuFlyoutItem x:Name="ViewButton"
+                                                            Text="View"
+                                                            Click="ViewButton_Click"/>
+                                        </MenuFlyout>
+                                    </FlyoutBase.AttachedFlyout>
+                                    <Image Width="260"
+                                           Source="{Binding Image}" />
+                                    <TextBlock Foreground="White" 
+                                               Height="16" 
+                                               TextAlignment="Center" 
+                                               Text="{Binding Name}" 
+                                               VerticalAlignment="Bottom"/>
                                 </Grid>
                             </StackPanel>
                         </Border>

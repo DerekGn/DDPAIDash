@@ -87,29 +87,11 @@ namespace DDPAIDash
         {
         }
 
-        private void DeviceVideos_DeviceContentHolding(object sender, DeviceContent e)
+        private void DeviceVideos_DeviceContentSave(object sender, DeviceContent e)
         {
         }
 
-        private void DeviceVideos_DeviceContentTapped(object sender, DeviceContent e)
-        {
-            VideoMediaElement.Source = new Uri(DeviceModel.Instance.DeviceInstance.BaseAddress, ((Video)e).SourceName);
-        }
-
-        private void EventVideos_DeviceContentHolding(object sender, DeviceContent e)
-        {
-        }
-
-        private void EventVideos_DeviceContentTapped(object sender, DeviceContent e)
-        {
-            VideoMediaElement.Source = new Uri(DeviceModel.Instance.DeviceInstance.BaseAddress, ((EventVideo)e).SourceName);
-        }
-
-        private void DeviceImages_DeviceContentHolding(object sender, DeviceContent e)
-        {
-        }
-
-        private void DeviceImages_DeviceContentTapped(object sender, DeviceContent e)
+        private void DeviceVideos_DeviceContentView(object sender, DeviceContent e)
         {
         }
     }
