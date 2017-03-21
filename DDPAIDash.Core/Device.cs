@@ -419,6 +419,8 @@ namespace DDPAIDash.Core
 
                 result = await PerformConnect(userInfo);
 
+                OnStateChanged(DeviceState.Connected);
+
                 if (result)
                 {
                     User = userInfo;
@@ -536,8 +538,6 @@ namespace DDPAIDash.Core
         private async void PollMailboxAsync(CancellationToken cancellationToken)
         {
             _logger.Info("Mailbox polling task started");
-
-            OnStateChanged(DeviceState.Connected);
 
             try
             {

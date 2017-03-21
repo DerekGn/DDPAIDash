@@ -9,6 +9,7 @@ namespace DDPAIDash.ViewModels
         public abstract ImageSource Image { get; }
         public abstract string Name { get; }
         public abstract string SourceName { get; }
+        public virtual bool Saving { get; set; }
 
         protected BitmapImage CreateBitmapFromStream(Stream stream)
         {

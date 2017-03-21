@@ -17,33 +17,37 @@
         </Style>
     </Page.Resources>
 
-    <Pivot x:Name="MainPivot" Style="{StaticResource PivotStyle}">
-        <PivotItem Header="Stream">
-            <MediaElement x:Name="VideoMediaElement"
-                    AutoPlay="true"
-                    AreTransportControlsEnabled="True"
-                    MediaFailed="MediaElement_MediaFailed">
-            </MediaElement>
-        </PivotItem>
-        <PivotItem Header="Videos">
-            <controls:DeviceVideoViewer x:Name="DeviceVideos" 
+    <Grid>
+        <Pivot x:Name="MainPivot" Style="{StaticResource PivotStyle}">
+            <PivotItem Header="Videos">
+                <controls:DeviceVideoViewer x:Name="DeviceVideos" 
                                         DataContext="{Binding Videos}" 
                                         DeviceContentSave="DeviceVideos_DeviceContentSave" 
                                         DeviceContentView="DeviceVideos_DeviceContentView"/>
-        </PivotItem>
-        <PivotItem Header="Event Videos">
-            <controls:DeviceVideoViewer x:Name="EventVideos"
+            </PivotItem>
+            <PivotItem Header="Event Videos">
+                <controls:DeviceVideoViewer x:Name="EventVideos"
                                         DataContext="{Binding EventVideos}" 
                                         DeviceContentSave="DeviceVideos_DeviceContentSave" 
                                         DeviceContentView="DeviceVideos_DeviceContentView"/>
-        </PivotItem>
-        <PivotItem Header="Event Images">
-            <controls:DeviceVideoViewer x:Name="DeviceImages"
+            </PivotItem>
+            <PivotItem Header="Event Images">
+                <controls:DeviceVideoViewer x:Name="DeviceImages"
                                         DataContext="{Binding EventImages}" 
                                         DeviceContentSave="DeviceVideos_DeviceContentSave" 
                                         DeviceContentView="DeviceVideos_DeviceContentView"/>
-        </PivotItem>
-    </Pivot>
+            </PivotItem>
+            <PivotItem Header="Stream">
+                <MediaElement x:Name="VideoMediaElement"
+                    AutoPlay="true"
+                    AreTransportControlsEnabled="True"
+                    MediaFailed="MediaElement_MediaFailed">
+                </MediaElement>
+            </PivotItem>
+        </Pivot>
+        <ProgressBar x:Name="SyncProgress"
+            VerticalAlignment="Bottom"/>
+    </Grid>
     
     <Page.BottomAppBar>
         <CommandBar x:Name="MainCommandBar" ClosedDisplayMode="Minimal">
