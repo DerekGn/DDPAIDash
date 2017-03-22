@@ -120,5 +120,7 @@ namespace DDPAIDash.Core
         event EventHandler<EventDeletedEventArgs> EventDeleted;
 
         event EventHandler<EventAddedEventArgs> EventAdded;
+
+        event EventHandler<SyncProgressEventArgs> SyncProgress;
     }
 }

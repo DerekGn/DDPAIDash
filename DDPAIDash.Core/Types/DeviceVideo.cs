@@ -58,6 +58,6 @@ namespace DDPAIDash.Core.Types
         public string ParentFile { get; set; }
 
         [JsonIgnore]
-        public Stream ImageStream { get; set; }
+        public Stream ImageThumbnailStream { get; set; }
     }
 }

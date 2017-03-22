@@ -69,8 +69,18 @@ namespace DDPAIDash.Core.Cache
 
         public async Task<bool> ContainsAsync(string name)
         {
-            return (await ApplicationData.Current.TemporaryFolder.GetItemsAsync())
-                .FirstOrDefault(i => i.Name == name) != null;
+            bool result = false;
+
+            try
+            {
+                await ApplicationData.Current.TemporaryFolder.GetItemAsync(name);
+                result = true;
+            }
+            catch (FileNotFoundException)
+            {
+            }
+
+            return result;
         }
 
         public async Task FlushAsync(TimeSpan olderThan)
@@ -92,50 +102,22 @@ namespace DDPAIDash.Core.Cache
             }
         }
 
-        public async Task<Stream> GetAsync(string name)
-        {
-            var folder = (await ApplicationData.Current.TemporaryFolder.GetFoldersAsync())
-                    .FirstOrDefault(f => f.Name == name);
-
-            StorageFile file;
-
-            if (folder != null)
-            {
-                file = (await folder.GetFilesAsync()).First();
-            }
-            else
-            {
-                file = await ApplicationData.Current.TemporaryFolder.GetFileAsync(name);
-
-                if (file == null)
-                    throw new FileNotFoundException("File not found in cache", name);
-            }
-
-            return await file.OpenStreamForReadAsync();
-        }
-
         public async Task<Stream> GetThumbnailStreamAsync(string name)
         {
-            var folder = (await ApplicationData.Current.TemporaryFolder.GetFoldersAsync())
-                .FirstOrDefault(f => f.Name == name);
-
+            var storageItem = await ApplicationData.Current.TemporaryFolder.GetItemAsync(name);
+            
             StorageFile file;
 
-            if (folder != null)
+            if (storageItem.IsOfType(StorageItemTypes.Folder))
             {
-                file = (await folder.GetFilesAsync()).First();
+                file = (await ((StorageFolder)storageItem).GetFilesAsync()).FirstOrDefault();
             }
             else
             {
-                file = await ApplicationData.Current.TemporaryFolder.GetFileAsync(name);
-
-                if (file == null)
-                {
-                    throw new FileNotFoundException("File not found in cache", name);
-                }
+                file = (StorageFile) storageItem;
             }
-
-            return (await file.GetThumbnailAsync(ThumbnailMode.ListView)).AsStream();
+            
+            return file != null ? (await file.GetThumbnailAsync(ThumbnailMode.ListView)).AsStream() : null;
         }
     }
 }

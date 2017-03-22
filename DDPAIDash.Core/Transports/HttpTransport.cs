@@ -87,9 +87,18 @@ namespace DDPAIDash.Core.Transports
             return ExecuteInternalAsync(apiCommand, sc);
         }
 
-        public Task<Stream> GetFileAsync(string fileName)
+        public async Task<Stream> GetFileAsync(string fileName)
         {
-            return _httpClient.GetStreamAsync(fileName);
+            await _semaphore.WaitAsync();
+
+            try
+            {
+                return await _httpClient.GetStreamAsync(fileName);
+            }
+            finally
+            {
+                _semaphore.Release();
+            }
         }
 
         private async Task<ResponseMessage> ExecuteInternalAsync(string apiCommand, HttpContent content)

@@ -397,6 +397,8 @@ namespace DDPAIDash.Core
 
         public Uri BaseAddress => _transport.BaseAddress;
 
+        public event EventHandler<SyncProgressEventArgs> SyncProgress;
+
         public event EventHandler<StateChangedEventArgs> StateChanged;
 
         public event EventHandler<VideoDeletedEventArgs> VideoDeleted;
@@ -425,7 +427,9 @@ namespace DDPAIDash.Core
                 {
                     User = userInfo;
 
-                    await LoadDeviceData(Cts.Token);
+                    await LoadDeviceVideos();
+
+                    await GetDeviceEvents();
 
                     _mailboxTask = Task.Factory.StartNew(() => PollMailboxAsync(Cts.Token));
                 }
@@ -460,6 +464,8 @@ namespace DDPAIDash.Core
 
         public async Task GetDeviceEvents()
         {
+            _logger.Verbose("Loading Device Event Files");
+
             DeviceEventList deviceEventList = null;
 
             await ExecuteRequestAsync(ApiConstants.EventListReq,
@@ -474,7 +480,8 @@ namespace DDPAIDash.Core
             {
                 await LoadDeviceEventThumbnail(deviceEvent);
 
-                OnEventAdded(new EventAddedEventArgs(deviceEvent));
+                if(deviceEvent.ImageThumbnailStream != null && deviceEvent.VideoThumbnailStream != null)
+                    OnEventAdded(new EventAddedEventArgs(deviceEvent));
             }
         }
 
@@ -483,23 +490,26 @@ namespace DDPAIDash.Core
             return await _transport.GetFileAsync(fileName);
         }
 
-        private async Task LoadDeviceData(CancellationToken token)
+        private async Task LoadDeviceVideos()
         {
             _logger.Verbose("Loading Device Videos");
 
             await GetDeviceVideosAndProcess(async deviceVideoList =>
             {
+                int remaining = deviceVideoList.Count;
+
+                OnSyncProgress(new SyncProgressEventArgs(deviceVideoList.Count, remaining));
+
                 foreach (var deviceVideo in deviceVideoList.Files)
                 {
-                    deviceVideo.ImageStream = await LoadDeviceVideoThumbnailAsync(deviceVideo.Name);
+                    deviceVideo.ImageThumbnailStream = await LoadDeviceVideoThumbnailAsync(deviceVideo.Name);
+                    
+                    if(deviceVideo.ImageThumbnailStream != null)
+                        OnVideoAdded(new VideoAddedEventArgs(deviceVideo));
 
-                    OnVideoAdded(new VideoAddedEventArgs(deviceVideo));
+                    OnSyncProgress(new SyncProgressEventArgs(deviceVideoList.Count, --remaining));
                 }
             });
-
-            _logger.Verbose("Loading Device Event Files");
-
-            await GetDeviceEvents();
         }
 
         private async Task GetDeviceVideosAndProcess(Func<DeviceVideoList, Task> processingAction)
@@ -646,7 +656,7 @@ namespace DDPAIDash.Core
 
                 if (deviceVideo != null)
                 {
-                    deviceVideo.ImageStream = await LoadDeviceVideoThumbnailAsync(deviceVideo.Name);
+                    deviceVideo.ImageThumbnailStream = await LoadDeviceVideoThumbnailAsync(deviceVideo.Name);
 
                     OnVideoAdded(new VideoAddedEventArgs(deviceVideo));
                 }
@@ -936,6 +946,13 @@ namespace DDPAIDash.Core
             var temp = EventAdded;
 
             temp?.Invoke(this, eventAddedEventArgs);
+        }
+
+        protected void OnSyncProgress(SyncProgressEventArgs syncProgressEventArgs)
+        {
+            var temp = SyncProgress;
+
+            temp?.Invoke(this, syncProgressEventArgs);
         }
 
         #region IDisposable Support

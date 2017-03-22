@@ -55,20 +55,28 @@ namespace DDPAIDash.Controls
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            RaiseEvent(DeviceContentSave, (ListView)sender);
+            var menuFlyoutItem = sender as MenuFlyoutItem;
+            if (menuFlyoutItem != null)
+            {
+                RaiseEvent(DeviceContentSave, menuFlyoutItem);
+            }
         }
 
         private void ViewButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            RaiseEvent(DeviceContentView, (ListView)sender);
+            var menuFlyoutItem = sender as MenuFlyoutItem;
+            if (menuFlyoutItem != null)
+            {
+                RaiseEvent(DeviceContentSave, menuFlyoutItem);
+            }
         }
         
-        private void RaiseEvent(EventHandler<DeviceContent> eventToRaise, ListView listView)
+        private void RaiseEvent(EventHandler<DeviceContent> eventToRaise, MenuFlyoutItem menuFlyoutItem)
         {
             var temp = eventToRaise;
             if (temp != null)
             {
-                eventToRaise(this, (DeviceContent)listView.SelectedItem);
+                eventToRaise(this, (DeviceContent)menuFlyoutItem.DataContext);
             }
         }
     }

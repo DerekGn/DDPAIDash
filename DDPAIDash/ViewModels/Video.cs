@@ -55,7 +55,7 @@ namespace DDPAIDash.ViewModels
             {
                 if(_image == null)
                 {
-                    _image = CreateBitmapFromStream(_video.ImageStream);
+                    _image = CreateBitmapFromStream(_video.ImageThumbnailStream);
                 }
                 
                 return _image;

@@ -23,21 +23,19 @@
 */
 
 using System;
-using System.IO;
-using System.Threading.Tasks;
 
-namespace DDPAIDash.Core.Cache
+namespace DDPAIDash.Core
 {
-    public interface IImageCache
+    public class SyncProgressEventArgs : EventArgs
     {
-        Task FlushAsync(TimeSpan olderThan);
+        public SyncProgressEventArgs(int total, int remaining)
+        {
+            Total = total;
+            Remaining = remaining;
+        }
 
-        Task<Stream> GetThumbnailStreamAsync(string name);
+        public int Total { get; private set; }
 
-        Task<bool> ContainsAsync(string name);
-
-        Task CacheAsync(Stream stream);
-
-        Task CacheAsync(string imageFileName, Stream imageStream);
+        public int Remaining { get; private set; }
     }
 }

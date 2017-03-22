@@ -43,6 +43,8 @@ namespace DDPAIDash.ViewModels
         private bool _formatEnabled;
         private bool _paringEnabled;
         private bool _liveEnabled;
+        private int _syncCount;
+        private int _syncRemain;
 
         public DeviceModel()
         {
@@ -56,6 +58,7 @@ namespace DDPAIDash.ViewModels
             DeviceInstance.EventDeleted += DeviceInstanceEventDeleted;
             DeviceInstance.EventAdded += DeviceInstanceEventAdded;
             DeviceInstance.VideoAdded += DeviceInstanceVideoAdded;
+            DeviceInstance.SyncProgress += DeviceInstanceSyncProgress;
 
             if (!Windows.ApplicationModel.DesignMode.DesignModeEnabled)
             {
@@ -142,6 +145,31 @@ namespace DDPAIDash.ViewModels
             }
         }
 
+        public int SyncCount
+        {
+            get
+            {
+                return _syncCount;
+            }
+            private set
+            {
+                _syncCount = value;
+                OnPropertyChanged(nameof(SyncCount));
+            }
+        }
+        public int SyncRemain
+        {
+            get
+            {
+                return _syncRemain;
+            }
+            private set
+            {
+                _syncRemain = value;
+                OnPropertyChanged(nameof(SyncRemain));
+            }
+        }
+
         public ObservableCollection<Video> Videos { get; }
 
         public ObservableCollection<EventImage> EventImages { get; }
@@ -201,6 +229,12 @@ namespace DDPAIDash.ViewModels
         private void DeviceInstanceEventDeleted(object sender, EventDeletedEventArgs e)
         {
             AddDeviceEvent(e.Event);
+        }
+        
+        private void DeviceInstanceSyncProgress(object sender, SyncProgressEventArgs e)
+        {
+            SyncCount = e.Total;
+            SyncRemain = e.Remaining;
         }
 
         private void AddDeviceEvent(DeviceEvent deviceEvent)

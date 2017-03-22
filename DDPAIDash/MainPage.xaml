@@ -28,14 +28,14 @@
             <PivotItem Header="Event Videos">
                 <controls:DeviceVideoViewer x:Name="EventVideos"
                                         DataContext="{Binding EventVideos}" 
-                                        DeviceContentSave="DeviceVideos_DeviceContentSave" 
-                                        DeviceContentView="DeviceVideos_DeviceContentView"/>
+                                        DeviceContentSave="EventVideos_DeviceContentSave"
+                                        DeviceContentView="EventVideos_DeviceContentView"/>
             </PivotItem>
             <PivotItem Header="Event Images">
                 <controls:DeviceVideoViewer x:Name="DeviceImages"
                                         DataContext="{Binding EventImages}" 
-                                        DeviceContentSave="DeviceVideos_DeviceContentSave" 
-                                        DeviceContentView="DeviceVideos_DeviceContentView"/>
+                                        DeviceContentSave="DeviceImages_DeviceContentSave" 
+                                        DeviceContentView="DeviceImages_DeviceContentView"/>
             </PivotItem>
             <PivotItem Header="Stream">
                 <MediaElement x:Name="VideoMediaElement"
@@ -46,7 +46,9 @@
             </PivotItem>
         </Pivot>
         <ProgressBar x:Name="SyncProgress"
-            VerticalAlignment="Bottom"/>
+                     VerticalAlignment="Bottom"
+                     Maximum="{Binding SyncCount}"
+                     Value="{Binding SyncRemain}"/>
     </Grid>
     
     <Page.BottomAppBar>
