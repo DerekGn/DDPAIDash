@@ -47,6 +47,8 @@ namespace DDPAIDash.Core
         private readonly ILogger _logger;
         private readonly ITransport _transport;
 
+        private DeviceState _state;
+
         private int? _antiFog;
         private int? _cycleRecordSpace;
         private string _defaultUser;
@@ -70,7 +72,7 @@ namespace DDPAIDash.Core
         private SwitchState? _startSound;
         private SwitchState? _timeLapse;
         private SwitchState? _wdr;
-
+        
         static Device()
         {
             Cts = new CancellationTokenSource();
@@ -95,7 +97,18 @@ namespace DDPAIDash.Core
 
         public StorageInfo Storage { get; private set; }
 
-        public DeviceState State { get; private set; }
+        public DeviceState State
+        {
+            get
+            {
+                return _state;
+            }
+            private set
+            {
+                _state = value;
+                OnStateChanged(_state);
+            }
+        }
 
         public DeviceCapabilities Capabilities { get; private set; }
 
@@ -415,13 +428,13 @@ namespace DDPAIDash.Core
 
             if (State == DeviceState.PoweredDown)
             {
-                OnStateChanged(DeviceState.Connecting);
+                State = DeviceState.Connecting;
 
                 _transport.Open("193.168.0.1", 80);
 
                 result = await PerformConnect(userInfo);
 
-                OnStateChanged(DeviceState.Connected);
+                State = DeviceState.Connected;
 
                 if (result)
                 {
@@ -456,7 +469,10 @@ namespace DDPAIDash.Core
 
             if (State == DeviceState.Connected)
             {
-                result = await ExecuteRequestAsync(ApiConstants.MmcFormat, apiCommand => _transport.ExecuteAsync(apiCommand), responseMessage => { State = DeviceState.Formatting; });
+                result = await ExecuteRequestAsync(ApiConstants.MmcFormat, apiCommand => _transport.ExecuteAsync(apiCommand), responseMessage => 
+                {
+                    State = DeviceState.Formatting;
+                });
             }
 
             return result;
@@ -598,7 +614,7 @@ namespace DDPAIDash.Core
                         break;
                     case MailBoxMessageKeys.MSG_PowerDown:
                         Cts.Cancel();
-                        OnStateChanged(DeviceState.PoweredDown);
+                        State = DeviceState.PoweredDown;
                         break;
                     case MailBoxMessageKeys.MSG_DeleteEvent:
                         _logger.Info($"Key: {message.Key} Data: {message.Data}");
@@ -628,7 +644,7 @@ namespace DDPAIDash.Core
 
         private void HandleMMCWarning()
         {
-            OnStateChanged(DeviceState.Connected);
+            State = DeviceState.Connected;
         }
 
         private void HandleEventDeleted()
@@ -913,8 +929,6 @@ namespace DDPAIDash.Core
 
         protected void OnStateChanged(DeviceState state)
         {
-            State = state;
-
             var temp = StateChanged;
 
             temp?.Invoke(this, new StateChangedEventArgs(State));

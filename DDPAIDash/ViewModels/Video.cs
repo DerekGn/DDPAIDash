@@ -23,7 +23,6 @@
 */
 
 using System;
-using System.IO;
 using System.Globalization;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
@@ -31,7 +30,7 @@ using DDPAIDash.Core.Types;
 
 namespace DDPAIDash.ViewModels
 {
-    public class Video : DeviceContent
+    internal class Video : DeviceContent
     {
         private DeviceVideo _video;
         private BitmapImage _image;

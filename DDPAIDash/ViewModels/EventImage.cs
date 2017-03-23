@@ -1,6 +1,4 @@
 ﻿
-
-using System;
 /**
 * MIT License
 *
@@ -31,7 +29,7 @@ using System.Globalization;
 
 namespace DDPAIDash.ViewModels
 {
-    public class EventImage : EventBase
+    internal class EventImage : EventBase
     {
         private DeviceEvent _event;
         private BitmapImage _image;

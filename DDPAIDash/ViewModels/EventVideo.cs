@@ -1,6 +1,4 @@
 ﻿
-
-using System;
 /**
 * MIT License
 *
@@ -24,6 +22,7 @@ using System;
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 */
+
 using DDPAIDash.Core.Types;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
@@ -31,7 +30,7 @@ using System.Globalization;
 
 namespace DDPAIDash.ViewModels
 {
-    public class EventVideo : EventBase
+    internal class EventVideo : EventBase
     {
         private DeviceEvent _event;
         private BitmapImage _image;

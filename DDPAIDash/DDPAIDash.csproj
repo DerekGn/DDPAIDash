@@ -89,9 +89,14 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\FormatDialog.xaml.cs">
+      <DependentUpon>FormatDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\DeviceContentViewer.xaml.cs">
       <DependentUpon>DeviceContentViewer.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converter\DeviceStateToBooleanConverter.cs" />
+    <Compile Include="Converter\DeviceStateToVisiblityConverter.cs" />
     <Compile Include="Converter\DisplayModeEnumMatchToBoolConverter.cs" />
     <Compile Include="Converter\EnumMatchToBoolConverter.cs" />
     <Compile Include="Converter\GSensorModeEnumMatchToBoolConverter.cs" />
@@ -135,6 +140,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Controls\FormatDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\DeviceContentViewer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

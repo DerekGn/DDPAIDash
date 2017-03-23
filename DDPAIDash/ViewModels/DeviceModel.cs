@@ -31,120 +31,40 @@ using DDPAIDash.Core;
 using DDPAIDash.Core.Events;
 using DDPAIDash.Core.Types;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace DDPAIDash.ViewModels
 {
-    public class DeviceModel : INotifyPropertyChanged
+    internal class DeviceModel : INotifyPropertyChanged
     {
         private static readonly Lazy<DeviceModel> DeviceModelInstance = new Lazy<DeviceModel>();
-        private readonly CoreDispatcher Dispatcher;
-        private bool _settingsEnabled;
-        private bool _connectEnabled;
-        private bool _formatEnabled;
-        private bool _paringEnabled;
-        private bool _liveEnabled;
+        private readonly CoreDispatcher _dispatcher;
+        private readonly IDevice _deviceInstance;
         private int _syncCount;
         private int _syncRemain;
 
         public DeviceModel()
         {
-            DeviceInstance = new Device();
+            _deviceInstance = new Device();
             Videos = new ObservableCollection<Video>();
             EventImages = new ObservableCollection<EventImage>();
             EventVideos = new ObservableCollection<EventVideo>();
 
-            DeviceInstance.VideoDeleted += DeviceInstanceVideoDeleted;
-            DeviceInstance.StateChanged += DeviceInstanceStateChanged;
-            DeviceInstance.EventDeleted += DeviceInstanceEventDeleted;
-            DeviceInstance.EventAdded += DeviceInstanceEventAdded;
-            DeviceInstance.VideoAdded += DeviceInstanceVideoAdded;
-            DeviceInstance.SyncProgress += DeviceInstanceSyncProgress;
+            _deviceInstance.VideoDeleted += DeviceInstanceVideoDeleted;
+            _deviceInstance.StateChanged += DeviceInstanceStateChanged;
+            _deviceInstance.EventDeleted += DeviceInstanceEventDeleted;
+            _deviceInstance.EventAdded += DeviceInstanceEventAdded;
+            _deviceInstance.VideoAdded += DeviceInstanceVideoAdded;
+            _deviceInstance.SyncProgress += DeviceInstanceSyncProgress;
 
             if (!Windows.ApplicationModel.DesignMode.DesignModeEnabled)
             {
-                Dispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
+                _dispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
             }
-
-            ConnectEnabled = true;
         }
-
-        public async Task<bool> FormatDeviceAsync()
-        {
-            EventImages.Clear();
-            EventVideos.Clear();
-            Videos.Clear();
-
-            return await DeviceInstance.FormatAsync();
-        }
-
+        
         public static DeviceModel Instance => DeviceModelInstance.Value;
-
-        public IDevice DeviceInstance { get; private set; }
-
-        public bool ConnectEnabled
-        {
-            get
-            {
-                return _connectEnabled;
-            }
-            private set
-            {
-                _connectEnabled = value;
-                OnPropertyChanged(nameof(ConnectEnabled));
-            }
-        }
-
-        public bool FormatEnabled
-        {
-            get
-            {
-                return _formatEnabled;
-            }
-            private set
-            {
-                _formatEnabled = value;
-                OnPropertyChanged(nameof(FormatEnabled));
-            }
-        }
-
-        public bool SettingsEnabled
-        {
-            get
-            {
-                return _settingsEnabled;
-            }
-            private set
-            {
-                _settingsEnabled = value;
-                OnPropertyChanged(nameof(SettingsEnabled));
-            }
-        }
-
-        public bool PairingEnabled {
-            get
-            {
-                return _paringEnabled;
-            }
-            private set
-            {
-                _paringEnabled = value;
-                OnPropertyChanged(nameof(PairingEnabled));
-            }
-        }
-
-        public bool LiveEnabled
-        {
-            get
-            {
-                return _liveEnabled;
-            }
-            private set
-            {
-                _liveEnabled = value;
-                OnPropertyChanged(nameof(LiveEnabled));
-            }
-        }
-
+                
         public int SyncCount
         {
             get
@@ -157,6 +77,7 @@ namespace DDPAIDash.ViewModels
                 OnPropertyChanged(nameof(SyncCount));
             }
         }
+
         public int SyncRemain
         {
             get
@@ -170,6 +91,8 @@ namespace DDPAIDash.ViewModels
             }
         }
 
+        public DeviceState DeviceState { get { return _deviceInstance.State; } }
+
         public ObservableCollection<Video> Videos { get; }
 
         public ObservableCollection<EventImage> EventImages { get; }
@@ -177,6 +100,25 @@ namespace DDPAIDash.ViewModels
         public ObservableCollection<EventVideo> EventVideos { get; }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public async Task<bool> ConnectAsync(UserInfo userInfo)
+        {
+            return await _deviceInstance.ConnectAsync(userInfo);
+        }
+
+        public async Task<Stream> StreamFileAsync(string sourceName)
+        {
+            return await _deviceInstance.StreamFileAsync(sourceName);
+        }
+
+        public async Task<bool> FormatDeviceAsync()
+        {
+            EventImages.Clear();
+            EventVideos.Clear();
+            Videos.Clear();
+
+            return await _deviceInstance.FormatAsync();
+        }
 
         private void DeviceInstanceVideoAdded(object sender, VideoAddedEventArgs e)
         {
@@ -206,24 +148,7 @@ namespace DDPAIDash.ViewModels
 
         private void DeviceInstanceStateChanged(object sender, StateChangedEventArgs e)
         {
-            if (e.State == DeviceState.Connected)
-            {
-                LiveEnabled = FormatEnabled = SettingsEnabled = PairingEnabled = true;
-                ConnectEnabled = false;
-            }
-
-            if(e.State == DeviceState.Formatting)
-            {
-                SettingsEnabled = PairingEnabled = false;
-                FormatEnabled = false;
-            }
-
-            if(e.State == DeviceState.PoweredDown)
-            {
-                //TODO: Handle power down
-                LiveEnabled = FormatEnabled = SettingsEnabled = PairingEnabled = false;
-                ConnectEnabled = true;
-            }
+            OnPropertyChanged(nameof(DeviceState));
         }
 
         private void DeviceInstanceEventDeleted(object sender, EventDeletedEventArgs e)
@@ -255,7 +180,7 @@ namespace DDPAIDash.ViewModels
 
         private async void ExecuteOnDispatcher(Action action)
         {
-            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            await _dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
              {
                  action();
              });

@@ -31,8 +31,8 @@ using DDPAIDash.ViewModels;
 using Windows.Storage;
 using System.Threading.Tasks;
 using System.IO;
-using Windows.Storage.Streams;
 using Windows.UI.Popups;
+using DDPAIDash.Controls;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=391641
 
@@ -66,7 +66,13 @@ namespace DDPAIDash
 
         private async void BtnFormat_Click(object sender, RoutedEventArgs e)
         {
-            await DeviceModel.Instance.FormatDeviceAsync();
+            FormatDialog formatDialog = new FormatDialog();
+            var result = await formatDialog.ShowAsync();
+
+            if(result == ContentDialogResult.Primary)
+            {
+                await DeviceModel.Instance.FormatDeviceAsync();
+            }
         }
 
         private void BtnPair_Click(object sender, RoutedEventArgs e)
@@ -76,7 +82,7 @@ namespace DDPAIDash
         private async void btnConnect_Click(object sender, RoutedEventArgs e)
         {
 #warning TODO load user info from settings
-            await DeviceModel.Instance.DeviceInstance.ConnectAsync(new UserInfo("012345678912345", "admin", "admin", 0));
+            await DeviceModel.Instance.ConnectAsync(new UserInfo("012345678912345", "admin", "admin", 0));
         }
 
         private void btnSettings_Click(object sender, RoutedEventArgs e)
@@ -118,7 +124,6 @@ namespace DDPAIDash
 
         private void DeviceImages_DeviceContentView(object sender, DeviceContent e)
         {
-
         }
 
         private async Task SaveDeviceContentVideoAsync(StorageFolder storageFolder, DeviceContent e)
@@ -126,7 +131,7 @@ namespace DDPAIDash
             e.Saving = true;
 
             await SaveToFolderAsync(storageFolder, CreationCollisionOption.ReplaceExisting, e.Name,
-                await DeviceModel.Instance.DeviceInstance.StreamFileAsync(e.SourceName));
+                await DeviceModel.Instance.StreamFileAsync(e.SourceName));
 
             e.Saving = false;
         }

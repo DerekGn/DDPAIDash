@@ -1,5 +1,4 @@
-﻿
-/**
+﻿/**
 * MIT License
 *
 * Copyright (c) 2016 Derek Goslin < http://corememorydump.blogspot.ie/ >
@@ -23,14 +22,27 @@
 * SOFTWARE.
 */
 
-using Windows.UI.Xaml.Media;
+using DDPAIDash.Core.Events;
+using System.Threading;
+using Windows.UI.Xaml.Controls;
 
-namespace DDPAIDash.ViewModels
+// The Content Dialog item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
+
+namespace DDPAIDash.Controls
 {
-    public interface IDeviceContent
+    public sealed partial class FormatDialog : ContentDialog
     {
-        string Name { get; }
+        public FormatDialog()
+        {
+            this.InitializeComponent();
+        }
 
-        ImageSource Image { get; }
+        private void FormatDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        {
+        }
+
+        private void FormatDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        {
+        }
     }
 }

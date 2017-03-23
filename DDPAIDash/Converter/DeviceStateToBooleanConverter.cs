@@ -23,14 +23,11 @@
 * SOFTWARE.
 */
 
-using Windows.UI.Xaml.Media;
+using DDPAIDash.Core.Types;
 
-namespace DDPAIDash.ViewModels
+namespace DDPAIDash.Converter
 {
-    public interface IDeviceContent
+    internal class DeviceStateToBooleanConverter : EnumMatchToBoolConverter<DeviceState>
     {
-        string Name { get; }
-
-        ImageSource Image { get; }
     }
 }

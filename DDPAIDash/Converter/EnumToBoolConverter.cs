@@ -28,7 +28,7 @@ using Windows.UI.Xaml.Data;
 
 namespace DDPAIDash.Converter
 {
-    public class EnumToBoolConverter : IValueConverter
+    internal class EnumToBoolConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {

@@ -23,14 +23,23 @@
 * SOFTWARE.
 */
 
-using Windows.UI.Xaml.Media;
+using System;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Data;
+using DDPAIDash.Core.Types;
 
-namespace DDPAIDash.ViewModels
+namespace DDPAIDash.Converter
 {
-    public interface IDeviceContent
+    internal class DeviceStateToVisiblityConverter : IValueConverter
     {
-        string Name { get; }
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            return value != null && (DeviceState) value == DeviceState.Formatting ? Visibility.Visible : Visibility.Collapsed;
+        }
 
-        ImageSource Image { get; }
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
