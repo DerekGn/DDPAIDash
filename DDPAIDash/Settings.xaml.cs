@@ -38,7 +38,7 @@ namespace DDPAIDash
     {
         public Settings()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
 
         /// <summary>

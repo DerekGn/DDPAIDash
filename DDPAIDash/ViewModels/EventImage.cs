@@ -31,7 +31,7 @@ namespace DDPAIDash.ViewModels
 {
     internal class EventImage : EventBase
     {
-        private DeviceEvent _event;
+        private readonly DeviceEvent _event;
         private BitmapImage _image;
 
         public EventImage(DeviceEvent @event)
@@ -39,33 +39,10 @@ namespace DDPAIDash.ViewModels
             _event = @event;
         }
 
-        public override ImageSource Image
-        {
-            get
-            {
-                if (_image == null)
-                {
-                    _image = CreateBitmapFromStream(_event.ImageThumbnailStream);
-                }
+        public override ImageSource Image => _image ?? (_image = CreateBitmapFromStream(_event.ImageThumbnailStream));
 
-                return _image;
-            }
-        }
+        public override string Name => FormatEventName(_event.ImageName).ToString(CultureInfo.CurrentUICulture);
 
-        public override string Name
-        {
-            get
-            {
-                return FormatEventName(_event.ImageName).ToString(CultureInfo.CurrentUICulture);
-            }
-        }
-
-        public override string SourceName
-        {
-            get
-            {
-                return _event.ImageName;
-            }
-        }
+        public override string SourceName => _event.ImageName;
     }
 }

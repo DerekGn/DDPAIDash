@@ -2,7 +2,6 @@
     x:Class="DDPAIDash.Controls.FormatDialog"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:DDPAIDash.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
@@ -14,7 +13,7 @@
 
     <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
         <!-- Content body -->
-        <TextBlock x:Name="body" Style="{StaticResource MessageDialogContentStyle}" TextWrapping="Wrap">
+        <TextBlock x:Name="Body" Style="{StaticResource MessageDialogContentStyle}" TextWrapping="Wrap">
             <TextBlock.Text>
                 Format the Cameras SD card. Warning this will erase all of the stored videos and images
             </TextBlock.Text>

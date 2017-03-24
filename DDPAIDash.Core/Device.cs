@@ -120,9 +120,9 @@ namespace DDPAIDash.Core
             set
             {
                 GuardPropertySet(nameof(DefaultUser), value,
-                    () =>
+                    (v) =>
                     {
-                        _defaultUser = value;
+                        _defaultUser = v;
                         SetStringValueAsync(PropertyKeys.default_user.ToString(), value);
                     });
             }
@@ -134,10 +134,10 @@ namespace DDPAIDash.Core
             set
             {
                 GuardPropertySet(nameof(GsMode), value,
-                    () =>
+                    (v) =>
                     {
-                        _gsmode = value;
-                        SetStringValueAsync(PropertyKeys.gsensor_mode.ToString(), value.Value.ToString());
+                        _gsmode = v;
+                        SetStringValueAsync(PropertyKeys.gsensor_mode.ToString(), v.ToString());
                     });
             }
         }
@@ -148,10 +148,10 @@ namespace DDPAIDash.Core
             set
             {
                 GuardPropertySet(nameof(CycleRecordSpace), value,
-                    () =>
+                    (v) =>
                     {
-                        _cycleRecordSpace = value;
-                        SetIntValueAsync(PropertyKeys.cycle_record_space.ToString(), value.Value);
+                        _cycleRecordSpace = v;
+                        SetIntValueAsync(PropertyKeys.cycle_record_space.ToString(), v);
                     });
             }
         }
@@ -162,10 +162,10 @@ namespace DDPAIDash.Core
             set
             {
                 GuardPropertySet(nameof(SpeakerLevel), value,
-                    () =>
+                    (v) =>
                     {
-                        _speakerLevel = value;
-                        SetIntValueAsync(PropertyKeys.speaker_turn.ToString(), value.Value);
+                        _speakerLevel = v;
+                        SetIntValueAsync(PropertyKeys.speaker_turn.ToString(), v);
                     });
             }
         }
@@ -176,10 +176,10 @@ namespace DDPAIDash.Core
             set
             {
                 GuardPropertySet(nameof(AntiFog), value,
-                    () =>
+                    (v) =>
                     {
-                        _antiFog = value;
-                        SetIntValueAsync(PropertyKeys.anti_fog.ToString(), value.Value);
+                        _antiFog = v;
+                        SetIntValueAsync(PropertyKeys.anti_fog.ToString(), v);
                     });
             }
         }
@@ -190,10 +190,10 @@ namespace DDPAIDash.Core
             set
             {
                 GuardPropertySet(nameof(EventAfterTime), value,
-                    () =>
+                    (v) =>
                     {
-                        _eventAfterTime = value;
-                        SetIntValueAsync(PropertyKeys.event_after_time.ToString(), value.Value);
+                        _eventAfterTime = v;
+                        SetIntValueAsync(PropertyKeys.event_after_time.ToString(), v);
                     });
             }
         }
@@ -204,10 +204,10 @@ namespace DDPAIDash.Core
             set
             {
                 GuardPropertySet(nameof(EventBeforeTime), value,
-                    () =>
+                    (v) =>
                     {
-                        _eventBeforeTime = value;
-                        SetIntValueAsync(PropertyKeys.event_before_time.ToString(), value.Value);
+                        _eventBeforeTime = v;
+                        SetIntValueAsync(PropertyKeys.event_before_time.ToString(), v);
                     });
             }
         }
@@ -218,10 +218,10 @@ namespace DDPAIDash.Core
             set
             {
                 GuardPropertySet(nameof(DisplayMode), value,
-                    () =>
+                    (v) =>
                     {
-                        _displayMode = value;
-                        SetIntValueAsync(PropertyKeys.display_mode.ToString(), (int)value.Value);
+                        _displayMode = v;
+                        SetIntValueAsync(PropertyKeys.display_mode.ToString(), (int)v);
                     });
             }
         }
@@ -232,10 +232,10 @@ namespace DDPAIDash.Core
             set
             {
                 GuardPropertySet(nameof(EDog), value,
-                    () =>
+                    (v) =>
                     {
-                        _edogSwitch = value;
-                        SetStringValueAsync(PropertyKeys.edog_switch.ToString(), value.Value.ToString());
+                        _edogSwitch = v;
+                        SetStringValueAsync(PropertyKeys.edog_switch.ToString(), v.ToString());
                     });
             }
         }
@@ -246,10 +246,10 @@ namespace DDPAIDash.Core
             set
             {
                 GuardPropertySet(nameof(Wdr), value,
-                    () =>
+                    (v) =>
                     {
-                        _wdr = value;
-                        SetStringValueAsync(PropertyKeys.wdr_enable.ToString(), value.Value.ToString());
+                        _wdr = v;
+                        SetStringValueAsync(PropertyKeys.wdr_enable.ToString(), v.ToString());
                     });
             }
         }
@@ -260,10 +260,10 @@ namespace DDPAIDash.Core
             set
             {
                 GuardPropertySet(nameof(Ldc), value,
-                    () =>
+                    (v) =>
                     {
-                        _ldc = value;
-                        SetStringValueAsync(PropertyKeys.ldc_switch.ToString(), value.Value.ToString());
+                        _ldc = v;
+                        SetStringValueAsync(PropertyKeys.ldc_switch.ToString(), v.ToString());
                     });
             }
         }
@@ -274,10 +274,10 @@ namespace DDPAIDash.Core
             set
             {
                 GuardPropertySet(nameof(Mic), value,
-                    () =>
+                    (v) =>
                     {
-                        _mic = value;
-                        SetStringValueAsync(PropertyKeys.mic_switch.ToString(), value.Value.ToString());
+                        _mic = v;
+                        SetStringValueAsync(PropertyKeys.mic_switch.ToString(), v.ToString());
                     });
             }
         }
@@ -288,10 +288,10 @@ namespace DDPAIDash.Core
             set
             {
                 GuardPropertySet(nameof(Ldc), value,
-                    () =>
+                    (v) =>
                     {
-                        _quality = value;
-                        SetStringValueAsync(PropertyKeys.image_quality.ToString(), value.Value.ToString());
+                        _quality = v;
+                        SetStringValueAsync(PropertyKeys.image_quality.ToString(), v.ToString());
                     });
             }
         }
@@ -302,10 +302,10 @@ namespace DDPAIDash.Core
             set
             {
                 GuardPropertySet(nameof(Osd), value,
-                    () =>
+                    (v) =>
                     {
-                        _osd = value;
-                        SetStringValueAsync(PropertyKeys.osd_switch.ToString(), value.Value.ToString());
+                        _osd = v;
+                        SetStringValueAsync(PropertyKeys.osd_switch.ToString(), v.ToString());
                     });
             }
         }
@@ -316,10 +316,10 @@ namespace DDPAIDash.Core
             set
             {
                 GuardPropertySet(nameof(OsdSpeed), value,
-                    () =>
+                    (v) =>
                     {
                         _osdSpeed = value;
-                        SetStringValueAsync(PropertyKeys.osd_speedswitch.ToString(), value.Value.ToString());
+                        SetStringValueAsync(PropertyKeys.osd_speedswitch.ToString(), v.ToString());
                     });
             }
         }
@@ -330,10 +330,10 @@ namespace DDPAIDash.Core
             set
             {
                 GuardPropertySet(nameof(StartSound), value,
-                    () =>
+                    (v) =>
                     {
-                        _startSound = value;
-                        SetStringValueAsync(PropertyKeys.start_sound_switch.ToString(), value.Value.ToString());
+                        _startSound = v;
+                        SetStringValueAsync(PropertyKeys.start_sound_switch.ToString(), v.ToString());
                     });
             }
         }
@@ -344,10 +344,10 @@ namespace DDPAIDash.Core
             set
             {
                 GuardPropertySet(nameof(ParkingMode), value,
-                    () =>
+                    (v) =>
                     {
-                        _parkingMode = value;
-                        SetStringValueAsync(PropertyKeys.parking_mode_switch.ToString(), value.Value.ToString());
+                        _parkingMode = v;
+                        SetStringValueAsync(PropertyKeys.parking_mode_switch.ToString(), v.ToString());
                     });
             }
         }
@@ -358,10 +358,10 @@ namespace DDPAIDash.Core
             set
             {
                 GuardPropertySet(nameof(TimeLapse), value,
-                    () =>
+                    (v) =>
                     {
-                        _timeLapse = value;
-                        SetStringValueAsync(PropertyKeys.timelapse_rec_switch.ToString(), value.Value.ToString());
+                        _timeLapse = v;
+                        SetStringValueAsync(PropertyKeys.timelapse_rec_switch.ToString(), v.ToString());
                     });
             }
         }
@@ -372,10 +372,10 @@ namespace DDPAIDash.Core
             set
             {
                 GuardPropertySet(nameof(HMirror), value,
-                    () =>
+                    (v) =>
                     {
-                        _hmirror = value;
-                        SetStringValueAsync(PropertyKeys.horizontal_mirror.ToString(), value.Value.ToString());
+                        _hmirror = v;
+                        SetStringValueAsync(PropertyKeys.horizontal_mirror.ToString(), v.ToString());
                     });
             }
         }
@@ -386,10 +386,10 @@ namespace DDPAIDash.Core
             set
             {
                 GuardPropertySet(nameof(DelayPoweroffTime), value,
-                    () =>
+                    (v) =>
                     {
-                        _delayPoweroffTime = value;
-                        SetIntValueAsync(PropertyKeys.delay_poweroff_time.ToString(), value.Value);
+                        _delayPoweroffTime = v;
+                        SetIntValueAsync(PropertyKeys.delay_poweroff_time.ToString(), v);
                     });
             }
         }
@@ -400,10 +400,10 @@ namespace DDPAIDash.Core
             set
             {
                 GuardPropertySet(nameof(IsNeedUpdate), value,
-                    () =>
+                    (v) =>
                     {
-                        _isNeedUpdate = value;
-                        SetStringValueAsync(PropertyKeys.is_need_update.ToString(), value.ToString());
+                        _isNeedUpdate = v;
+                        SetStringValueAsync(PropertyKeys.is_need_update.ToString(), v.ToString());
                     });
             }
         }
@@ -630,7 +630,7 @@ namespace DDPAIDash.Core
                         _logger.Info($"Key: {message.Key} Data: {message.Data}");
                         break;
                     case MailBoxMessageKeys.MSG_MMCWarning:
-                        HandleMMCWarning();
+                        HandleMmcWarning();
                         break;
                     case MailBoxMessageKeys.MSG_ButtonMatch:
                         _logger.Info($"Key: {message.Key} Data: {message.Data}");
@@ -642,7 +642,7 @@ namespace DDPAIDash.Core
             }
         }
 
-        private void HandleMMCWarning()
+        private void HandleMmcWarning()
         {
             State = DeviceState.Connected;
         }
@@ -738,10 +738,7 @@ namespace DDPAIDash.Core
                             _transport.ExecuteAsync(apiCommand, JsonConvert.SerializeObject(QueryParameters.Instance)),
                         LoadSettings);
                 },
-                async () =>
-                {
-                    return await UpdateStorageInfoAsync();
-                }
+                async () => await UpdateStorageInfoAsync()
             };
 
             foreach (var action in connectActions)
@@ -890,24 +887,24 @@ namespace DDPAIDash.Core
                 apiCommand => _transport.ExecuteAsync(apiCommand, JsonConvert.SerializeObject(parameter)), null);
         }
 
-        private static void GuardPropertySet(string propertyName, string value, Action assignValue)
+        private static void GuardPropertySet(string propertyName, string value, Action<string> assignValue)
         {
             if (value == null)
             {
                 throw new ArgumentNullException(propertyName);
             }
 
-            assignValue();
+            assignValue(value);
         }
 
-        private static void GuardPropertySet<T>(string propertyName, T? value, Action assignValue) where T : struct
+        private static void GuardPropertySet<T>(string propertyName, T? value, Action<T> assignValue) where T : struct
         {
             if (!value.HasValue)
             {
                 throw new ArgumentNullException(propertyName);
             }
 
-            assignValue();
+            assignValue(value.Value);
         }
         
         private async Task<Stream> LoadDeviceVideoThumbnailAsync(string deviceVideoName)

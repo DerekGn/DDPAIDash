@@ -37,17 +37,15 @@ namespace DDPAIDash.Core.Transports
 {
     internal class HttpTransport : ITransport
     {
-        private static readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
+        private static readonly SemaphoreSlim Semaphore = new SemaphoreSlim(1, 1);
         private readonly CookieContainer _cookieContainer;
-        private readonly HttpClientHandler _httpClientHandler;
         private readonly HttpClient _httpClient;
         private string _sessionId;
 
         public HttpTransport()
         {
             _cookieContainer = new CookieContainer();
-            _httpClientHandler = new HttpClientHandler { CookieContainer = _cookieContainer };
-            _httpClient = new HttpClient();
+            _httpClient = new HttpClient(new HttpClientHandler { CookieContainer = _cookieContainer });
         }
 
         public string SessionId
@@ -89,7 +87,7 @@ namespace DDPAIDash.Core.Transports
 
         public async Task<Stream> GetFileAsync(string fileName)
         {
-            await _semaphore.WaitAsync();
+            await Semaphore.WaitAsync();
 
             try
             {
@@ -97,7 +95,7 @@ namespace DDPAIDash.Core.Transports
             }
             finally
             {
-                _semaphore.Release();
+                Semaphore.Release();
             }
         }
 
@@ -105,7 +103,7 @@ namespace DDPAIDash.Core.Transports
         {
             HttpResponseMessage postResult;
 
-            await _semaphore.WaitAsync();
+            await Semaphore.WaitAsync();
 
             try
             {
@@ -113,7 +111,7 @@ namespace DDPAIDash.Core.Transports
             }
             finally
             {
-                _semaphore.Release();
+                Semaphore.Release();
             }
 
             string payload;

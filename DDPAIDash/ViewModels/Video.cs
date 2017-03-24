@@ -32,7 +32,7 @@ namespace DDPAIDash.ViewModels
 {
     internal class Video : DeviceContent
     {
-        private DeviceVideo _video;
+        private readonly DeviceVideo _video;
         private BitmapImage _image;
 
         public Video(DeviceVideo video)
@@ -40,34 +40,11 @@ namespace DDPAIDash.ViewModels
             _video = video;
         }
 
-        public override string Name
-        {
-            get
-            {
-                return ParseVideoName(_video.Name).ToString(CultureInfo.CurrentUICulture);
-            }
-        }
+        public override string Name => ParseVideoName(_video.Name).ToString(CultureInfo.CurrentUICulture);
 
-        public override ImageSource Image
-        {
-            get
-            {
-                if(_image == null)
-                {
-                    _image = CreateBitmapFromStream(_video.ImageThumbnailStream);
-                }
-                
-                return _image;
-            }
-        }
+        public override ImageSource Image => _image ?? (_image = CreateBitmapFromStream(_video.ImageThumbnailStream));
 
-        public override string SourceName
-        {
-            get
-            {
-                return _video.Name;
-            }
-        }
+        public override string SourceName => _video.Name;
 
         private static DateTime ParseVideoName(string name)
         {

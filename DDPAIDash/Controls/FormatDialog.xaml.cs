@@ -22,8 +22,6 @@
 * SOFTWARE.
 */
 
-using DDPAIDash.Core.Events;
-using System.Threading;
 using Windows.UI.Xaml.Controls;
 
 // The Content Dialog item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
@@ -34,7 +32,7 @@ namespace DDPAIDash.Controls
     {
         public FormatDialog()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
 
         private void FormatDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)

@@ -91,7 +91,7 @@ namespace DDPAIDash.ViewModels
             }
         }
 
-        public DeviceState DeviceState { get { return _deviceInstance.State; } }
+        public DeviceState DeviceState => _deviceInstance.State;
 
         public ObservableCollection<Video> Videos { get; }
 

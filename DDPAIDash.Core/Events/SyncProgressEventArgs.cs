@@ -24,7 +24,7 @@
 
 using System;
 
-namespace DDPAIDash.Core
+namespace DDPAIDash.Core.Events
 {
     public class SyncProgressEventArgs : EventArgs
     {

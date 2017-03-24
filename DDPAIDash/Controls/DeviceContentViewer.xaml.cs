@@ -37,7 +37,7 @@ namespace DDPAIDash.Controls
     {
         public DeviceVideoViewer()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
 
         public event EventHandler<DeviceContent> DeviceContentSave;
@@ -62,7 +62,7 @@ namespace DDPAIDash.Controls
             }
         }
 
-        private void ViewButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private void ViewButton_Click(object sender, RoutedEventArgs e)
         {
             var menuFlyoutItem = sender as MenuFlyoutItem;
             if (menuFlyoutItem != null)
