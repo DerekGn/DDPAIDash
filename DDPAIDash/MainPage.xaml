@@ -41,7 +41,7 @@
                                         DeviceContentSave="DeviceImages_DeviceContentSave" 
                                         DeviceContentView="DeviceImages_DeviceContentView"/>
             </PivotItem>
-            <PivotItem Header="Stream">
+            <PivotItem x:Name="PivotItemStream" Header="Stream">
                 <MediaElement x:Name="VideoMediaElement"
                     AutoPlay="true"
                     AreTransportControlsEnabled="True"
