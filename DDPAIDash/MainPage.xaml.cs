@@ -105,6 +105,7 @@ namespace DDPAIDash
 
         private void DeviceVideos_DeviceContentView(object sender, DeviceContent e)
         {
+            DisplayVideo(e);
         }
 
         private void EventVideos_DeviceContentSave(object sender, DeviceContent e)
@@ -114,7 +115,7 @@ namespace DDPAIDash
 
         private void EventVideos_DeviceContentView(object sender, DeviceContent e)
         {
-
+            DisplayVideo(e);
         }
 
         private void DeviceImages_DeviceContentSave(object sender, DeviceContent e)
@@ -145,6 +146,12 @@ namespace DDPAIDash
 
             var dialog = new MessageDialog("");
             await dialog.ShowAsync();
+        }
+
+        private void DisplayVideo(DeviceContent e)
+        {
+            MainPivot.SelectedItem = PivotItemStream;
+            VideoMediaElement.Source = DeviceModel.Instance.GetDeviceContentUri(e.SourceName);
         }
     }
 }

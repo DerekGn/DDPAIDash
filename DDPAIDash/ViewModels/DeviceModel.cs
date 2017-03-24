@@ -192,5 +192,10 @@ namespace DDPAIDash.ViewModels
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName))
             );
         }
+
+        public Uri GetDeviceContentUri(string sourceName)
+        {
+            return new Uri($"{_deviceInstance.BaseAddress}/{sourceName}");
+        }
     }
 }
