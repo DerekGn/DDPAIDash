@@ -67,7 +67,7 @@ namespace DDPAIDash.Controls
             var menuFlyoutItem = sender as MenuFlyoutItem;
             if (menuFlyoutItem != null)
             {
-                RaiseEvent(DeviceContentSave, menuFlyoutItem);
+                RaiseEvent(DeviceContentView, menuFlyoutItem);
             }
         }
         
