@@ -39,23 +39,22 @@ namespace DDPAIDash.ViewModels
     {
         private static readonly Lazy<DeviceModel> DeviceModelInstance = new Lazy<DeviceModel>();
         private readonly CoreDispatcher _dispatcher;
-        private readonly IDevice _deviceInstance;
         private int _syncCount;
         private int _syncRemain;
 
         public DeviceModel()
         {
-            _deviceInstance = new Device();
+            DeviceInstance = new Device();
             Videos = new ObservableCollection<Video>();
             EventImages = new ObservableCollection<EventImage>();
             EventVideos = new ObservableCollection<EventVideo>();
 
-            _deviceInstance.VideoDeleted += DeviceInstanceVideoDeleted;
-            _deviceInstance.StateChanged += DeviceInstanceStateChanged;
-            _deviceInstance.EventDeleted += DeviceInstanceEventDeleted;
-            _deviceInstance.EventAdded += DeviceInstanceEventAdded;
-            _deviceInstance.VideoAdded += DeviceInstanceVideoAdded;
-            _deviceInstance.SyncProgress += DeviceInstanceSyncProgress;
+            DeviceInstance.VideoDeleted += DeviceInstanceVideoDeleted;
+            DeviceInstance.StateChanged += DeviceInstanceStateChanged;
+            DeviceInstance.EventDeleted += DeviceInstanceEventDeleted;
+            DeviceInstance.EventAdded += DeviceInstanceEventAdded;
+            DeviceInstance.VideoAdded += DeviceInstanceVideoAdded;
+            DeviceInstance.SyncProgress += DeviceInstanceSyncProgress;
 
             if (!Windows.ApplicationModel.DesignMode.DesignModeEnabled)
             {
@@ -64,7 +63,9 @@ namespace DDPAIDash.ViewModels
         }
         
         public static DeviceModel Instance => DeviceModelInstance.Value;
-                
+
+        public IDevice DeviceInstance { get; private set; }
+
         public int SyncCount
         {
             get
@@ -91,7 +92,7 @@ namespace DDPAIDash.ViewModels
             }
         }
 
-        public DeviceState DeviceState => _deviceInstance.State;
+        public DeviceState DeviceState => DeviceInstance.State;
 
         public ObservableCollection<Video> Videos { get; }
 
@@ -103,12 +104,12 @@ namespace DDPAIDash.ViewModels
 
         public async Task<bool> ConnectAsync(UserInfo userInfo)
         {
-            return await _deviceInstance.ConnectAsync(userInfo);
+            return await DeviceInstance.ConnectAsync(userInfo);
         }
 
         public async Task<Stream> StreamFileAsync(string sourceName)
         {
-            return await _deviceInstance.StreamFileAsync(sourceName);
+            return await DeviceInstance.StreamFileAsync(sourceName);
         }
 
         public async Task<bool> FormatDeviceAsync()
@@ -117,7 +118,7 @@ namespace DDPAIDash.ViewModels
             EventVideos.Clear();
             Videos.Clear();
 
-            return await _deviceInstance.FormatAsync();
+            return await DeviceInstance.FormatAsync();
         }
 
         private void DeviceInstanceVideoAdded(object sender, VideoAddedEventArgs e)
@@ -195,7 +196,7 @@ namespace DDPAIDash.ViewModels
 
         public Uri GetDeviceContentUri(string sourceName)
         {
-            return new Uri($"{_deviceInstance.BaseAddress}/{sourceName}");
+            return new Uri($"{DeviceInstance.BaseAddress}/{sourceName}");
         }
     }
 }
