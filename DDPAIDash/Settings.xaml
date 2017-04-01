@@ -4,6 +4,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:converter="using:DDPAIDash.Converter"
+    xmlns:controls ="using:DDPAIDash.Controls"
     x:Class="DDPAIDash.Settings"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -63,7 +64,7 @@
             <PivotItem Header="Device Settings">
                 <ScrollViewer>
                     <StackPanel>
-                        <Slider x:Name="AntiFogSlider"
+                        <controls:SliderExtended x:Name="AntiFogSlider"
                                 Style="{StaticResource SliderStyle}"
                                 Header="Anti Fog Level" Minimum="0" Maximum="10"
                                 IsEnabled="{Binding DeviceInstance.AntiFog, Converter={StaticResource NullableToBooleanConverter}, Mode=OneWay}"
@@ -73,7 +74,7 @@
                         <!--DeviceInstance.CycleRecordSpace-->
                         <!--DeviceInstance.DefaultUser-->
 
-                        <Slider x:Name="DelayPoweroffTimeSlider" 
+                        <controls:SliderExtended x:Name="DelayPoweroffTimeSlider" 
                                 Style="{StaticResource SliderStyle}"
                                 Header="Delay Power off Time" Minimum="0" Maximum="10"
                                 IsEnabled="{Binding DeviceInstance.DelayPoweroffTime, Converter={StaticResource NullableToBooleanConverter}, Mode=OneWay}"
@@ -196,7 +197,7 @@
                             </StackPanel>
                         </StackPanel>
 
-                        <Slider x:Name="SpeakerLevelSlider" 
+                        <controls:SliderExtended x:Name="SpeakerLevelSlider" 
                                 Style="{StaticResource SliderStyle}"
                                 Header="Speaker Level" Minimum="0" Maximum="100"
                                 IsEnabled="{Binding DeviceInstance.SpeakerLevel, Converter={StaticResource NullableToBooleanConverter}, Mode=OneWay}"
