@@ -29,7 +29,7 @@ using Windows.ApplicationModel.Core;
 
 namespace DDPAIDash.Core.Logging
 {
-    internal class EtwLogger : ILogger
+    public class EtwLogger : ILogger
     {
         private static readonly Lazy<ILogger> InstanceLazy = new Lazy<ILogger>(() => new EtwLogger());
 
@@ -78,6 +78,11 @@ namespace DDPAIDash.Core.Logging
         public void Error(string message)
         {
             _logChannel.LogMessage(message, LoggingLevel.Error);
+        }
+
+        public void Error(string message, Exception exception)
+        {
+            _logChannel.LogMessage($"Message: {message} Exception: {exception}", LoggingLevel.Error);
         }
 
         public void Critical(string message, Exception exception)

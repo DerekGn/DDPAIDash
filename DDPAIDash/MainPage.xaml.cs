@@ -28,10 +28,6 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using DDPAIDash.Core.Types;
 using DDPAIDash.ViewModels;
-using Windows.Storage;
-using System.Threading.Tasks;
-using System.IO;
-using Windows.UI.Popups;
 using DDPAIDash.Controls;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=391641
@@ -100,7 +96,7 @@ namespace DDPAIDash
 
         private void DeviceVideos_DeviceContentSave(object sender, DeviceContent e)
         {
-            SaveDeviceContentVideoAsync(KnownFolders.VideosLibrary, e).Wait();
+            DeviceModel.Instance.SaveDeviceContentAsync(e);
         }
 
         private void DeviceVideos_DeviceContentView(object sender, DeviceContent e)
@@ -110,7 +106,7 @@ namespace DDPAIDash
 
         private void EventVideos_DeviceContentSave(object sender, DeviceContent e)
         {
-            SaveDeviceContentVideoAsync(KnownFolders.VideosLibrary, e).Wait();
+            DeviceModel.Instance.SaveDeviceContentAsync(e);
         }
 
         private void EventVideos_DeviceContentView(object sender, DeviceContent e)
@@ -125,27 +121,6 @@ namespace DDPAIDash
 
         private void DeviceImages_DeviceContentView(object sender, DeviceContent e)
         {
-        }
-
-        private async Task SaveDeviceContentVideoAsync(StorageFolder storageFolder, DeviceContent e)
-        {
-            e.Saving = true;
-
-            await SaveToFolderAsync(storageFolder, CreationCollisionOption.ReplaceExisting, e.Name,
-                await DeviceModel.Instance.StreamFileAsync(e.SourceName));
-
-            e.Saving = false;
-        }
-
-        private async Task SaveToFolderAsync(StorageFolder storageFolder, CreationCollisionOption options, string fileName, Stream fileStream)
-        {
-            var file = await storageFolder.CreateFileAsync(fileName, options);
-            var outfileStream = await file.OpenAsync(FileAccessMode.ReadWrite);
-            await fileStream.CopyToAsync(outfileStream.AsStreamForWrite());
-            await fileStream.FlushAsync();
-
-            var dialog = new MessageDialog("");
-            await dialog.ShowAsync();
         }
 
         private void DisplayVideo(DeviceContent e)

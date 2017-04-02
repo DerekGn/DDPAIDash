@@ -96,6 +96,7 @@
       <DependentUpon>DeviceContentViewer.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\SliderExtended.cs" />
+    <Compile Include="Converter\BooleanToVisiblityConverter.cs" />
     <Compile Include="Converter\DeviceStateToBooleanConverter.cs" />
     <Compile Include="Converter\DeviceStateToVisiblityConverter.cs" />
     <Compile Include="Converter\DisplayModeEnumMatchToBoolConverter.cs" />

@@ -44,8 +44,8 @@ namespace DDPAIDash.Core
         private static readonly CancellationTokenSource Cts;
 
         private readonly IImageCache _imageCache;
-        private readonly ILogger _logger;
         private readonly ITransport _transport;
+        private readonly ILogger _logger;
 
         private DeviceState _state;
 
@@ -674,7 +674,8 @@ namespace DDPAIDash.Core
                 {
                     deviceVideo.ImageThumbnailStream = await LoadDeviceVideoThumbnailAsync(deviceVideo.Name);
 
-                    OnVideoAdded(new VideoAddedEventArgs(deviceVideo));
+                    if(deviceVideo.ImageThumbnailStream != null)
+                        OnVideoAdded(new VideoAddedEventArgs(deviceVideo));
                 }
                 else
                 {

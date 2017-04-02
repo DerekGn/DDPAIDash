@@ -1,4 +1,7 @@
 ﻿
+
+
+using System.ComponentModel;
 /**
 * MIT License
 *
@@ -22,7 +25,6 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 */
-
 using System.IO;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
@@ -31,17 +33,51 @@ namespace DDPAIDash.ViewModels
 {
     public abstract class DeviceContent : IDeviceContent
     {
+        private double _progress;
+        private bool _saving;
+        
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public abstract ImageSource Image { get; }
         public abstract string Name { get; }
         public abstract string SourceName { get; }
-        public virtual bool Saving { get; set; }
+        public bool Saving
+        {
+            get
+            {
+                return _saving;
+            }
+            set
+            {
+                _saving = value;
+                OnPropertyChanged(nameof(Saving));
+            }
+        }
 
+        public double Progress
+        {
+            get
+            {
+                return _progress;
+            }
+            set
+            {
+                _progress = value;
+                OnPropertyChanged(nameof(Progress));
+            }
+        }
+        
         protected BitmapImage CreateBitmapFromStream(Stream stream)
         {
             var result = new BitmapImage();
             result.SetSource(stream.AsRandomAccessStream());
 
             return result;
+        }
+
+        private void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));            
         }
     }
 }

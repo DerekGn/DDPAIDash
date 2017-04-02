@@ -4,7 +4,12 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:converter="using:DDPAIDash.Converter"
     mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <converter:BooleanToVisiblityConverter x:Key="BooleanToVisiblityConverter" />
+    </UserControl.Resources>
 
     <Grid>
         <ScrollViewer VerticalScrollBarVisibility="Auto">
@@ -32,13 +37,12 @@
                                                TextAlignment="Center" 
                                                VerticalAlignment="Bottom"
                                                Text="{Binding Name}" />
-                                    <ProgressRing
-                                        VerticalAlignment="Center"
-                                        HorizontalAlignment="Center"
-                                        Background="Transparent"
-                                        Height="90" 
-                                        Width="90"
-                                        IsActive="{Binding Saving}"/>
+                                    <ProgressBar
+                                        Minimum="0"
+                                        Maximum="100"
+                                        Value="{Binding Progress}"
+                                        IsEnabled="{Binding Saving}"
+                                        Visibility="{Binding Saving, Converter={StaticResource BooleanToVisiblityConverter}, Mode=OneWay}"/>
                                 </Grid>
                             </StackPanel>
                         </Border>

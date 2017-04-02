@@ -31,6 +31,7 @@ namespace DDPAIDash.Core.Logging
         void Info(string message);
         void Verbose(string message);
         void Error(string message);
+        void Error(string message, Exception exception);
         void Critical(string message, Exception exception);
     }
 }

@@ -32,17 +32,27 @@ using DDPAIDash.Core.Events;
 using DDPAIDash.Core.Types;
 using System.Threading.Tasks;
 using System.IO;
+using Windows.Storage;
+using Windows.Networking.BackgroundTransfer;
+using System.Threading;
+using DDPAIDash.Core.Logging;
 
 namespace DDPAIDash.ViewModels
 {
     internal class DeviceModel : INotifyPropertyChanged
     {
         private static readonly Lazy<DeviceModel> DeviceModelInstance = new Lazy<DeviceModel>();
+        private readonly BackgroundDownloader _downloader = new BackgroundDownloader();
         private readonly CoreDispatcher _dispatcher;
+        private readonly ILogger _logger;
         private int _syncCount;
         private int _syncRemain;
 
-        public DeviceModel()
+        public DeviceModel() : this(EtwLogger.Instance)
+        {
+        }
+
+        public DeviceModel(ILogger logger)
         {
             DeviceInstance = new Device();
             Videos = new ObservableCollection<Video>();
@@ -60,6 +70,8 @@ namespace DDPAIDash.ViewModels
             {
                 _dispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
             }
+
+            _logger = logger;
         }
         
         public static DeviceModel Instance => DeviceModelInstance.Value;
@@ -105,6 +117,27 @@ namespace DDPAIDash.ViewModels
         public async Task<bool> ConnectAsync(UserInfo userInfo)
         {
             return await DeviceInstance.ConnectAsync(userInfo);
+        }
+
+        internal async Task SaveDeviceContentAsync(DeviceContent e)
+        {
+            StorageFile destinationFile;
+            try
+            {
+                StorageFolder folder = e as EventImage != null ? KnownFolders.PicturesLibrary : KnownFolders.VideosLibrary;
+
+                destinationFile = await KnownFolders.VideosLibrary.CreateFileAsync(
+                    e.SourceName, CreationCollisionOption.ReplaceExisting);
+            }
+            catch (FileNotFoundException)
+            {
+                return;
+            }
+            
+            DownloadOperation download = _downloader.CreateDownload(new Uri(string.Format("{0}/{1}",
+                DeviceInstance.BaseAddress, e.SourceName)), destinationFile);
+            
+            await HandleDownloadAsync(download, e);
         }
 
         public async Task<Stream> StreamFileAsync(string sourceName)
@@ -197,6 +230,47 @@ namespace DDPAIDash.ViewModels
         public Uri GetDeviceContentUri(string sourceName)
         {
             return new Uri($"{DeviceInstance.BaseAddress}/{sourceName}");
+        }
+
+        private async Task HandleDownloadAsync(DownloadOperation download, DeviceContent deviceContent)
+        {
+            try
+            {
+                deviceContent.Saving = true;
+                
+                Progress<DownloadOperation> progressCallback = new Progress<DownloadOperation>(DownloadProgress);
+                
+                await download.StartAsync().AsTask(CancellationToken.None, progressCallback);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error($"An exception occured during download of [{deviceContent.SourceName}]", ex);
+            }
+            finally
+            {
+                deviceContent.Progress = 0;
+                deviceContent.Saving = false;
+            }
+        }
+
+        private void DownloadProgress(DownloadOperation download)
+        {
+            double percent = 100;
+            if (download.Progress.TotalBytesToReceive > 0)
+            {
+                percent = download.Progress.BytesReceived * 100 / download.Progress.TotalBytesToReceive;
+            }
+
+            DeviceContent content = Videos.FirstOrDefault(i => i.SourceName == download.ResultFile.Name);
+
+            if(content == null)
+                content = EventVideos.FirstOrDefault(i => i.SourceName == download.ResultFile.Name);
+
+            if (content == null)
+                content = EventImages.FirstOrDefault(i => i.SourceName == download.ResultFile.Name);
+
+            if(content != null)
+                content.Progress = percent;
         }
     }
 }

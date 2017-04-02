@@ -21,15 +21,23 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 */
-using Windows.UI.Xaml.Media;
-using System.ComponentModel;
 
-namespace DDPAIDash.ViewModels
+using System;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Data;
+
+namespace DDPAIDash.Converter
 {
-    public interface IDeviceContent : INotifyPropertyChanged
+    internal class BooleanToVisiblityConverter : IValueConverter
     {
-        string Name { get; }
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            return value != null && (bool)value ? Visibility.Visible : Visibility.Collapsed;
+        }
 
-        ImageSource Image { get; }
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

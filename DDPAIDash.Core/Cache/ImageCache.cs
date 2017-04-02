@@ -29,31 +29,50 @@ using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Storage.FileProperties;
 using SharpCompress.Readers;
+using DDPAIDash.Core.Logging;
 
 namespace DDPAIDash.Core.Cache
 {
     internal class ImageCache : IImageCache
     {
+        private readonly ILogger _logger;
+
+        public ImageCache() : this(EtwLogger.Instance)
+        {
+        }
+
+        public ImageCache(ILogger logger)
+        {
+            _logger = logger;
+        }
+
         public async Task CacheAsync(Stream stream)
         {
-            using (var reader = ReaderFactory.Open(stream))
+            try
             {
-                while (reader.MoveToNextEntry())
+                using (var reader = ReaderFactory.Open(stream))
                 {
-                    if (reader.Entry.IsDirectory)
+                    while (reader.MoveToNextEntry())
                     {
-                        await ApplicationData.Current.TemporaryFolder.CreateFolderAsync(reader.Entry.Key);
-                    }
-                    else
-                    {
-                        var newFile = await ApplicationData.Current.TemporaryFolder.CreateFileAsync(reader.Entry.Key.Replace('/', '\\'));
-
-                        using (var outStream = await newFile.OpenStreamForWriteAsync())
+                        if (reader.Entry.IsDirectory)
                         {
-                            reader.WriteEntryTo(outStream);
+                            await ApplicationData.Current.TemporaryFolder.CreateFolderAsync(reader.Entry.Key);
+                        }
+                        else
+                        {
+                            var newFile = await ApplicationData.Current.TemporaryFolder.CreateFileAsync(reader.Entry.Key.Replace('/', '\\'));
+
+                            using (var outStream = await newFile.OpenStreamForWriteAsync())
+                            {
+                                reader.WriteEntryTo(outStream);
+                            }
                         }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error($"An exception occured adding to [{typeof(ImageCache).Name}]", ex);
             }
         }
 
@@ -104,20 +123,29 @@ namespace DDPAIDash.Core.Cache
 
         public async Task<Stream> GetThumbnailStreamAsync(string name)
         {
-            var storageItem = await ApplicationData.Current.TemporaryFolder.GetItemAsync(name);
-            
-            StorageFile file;
+            try
+            {
+                var storageItem = await ApplicationData.Current.TemporaryFolder.GetItemAsync(name);
 
-            if (storageItem.IsOfType(StorageItemTypes.Folder))
-            {
-                file = (await ((StorageFolder)storageItem).GetFilesAsync()).FirstOrDefault();
+                StorageFile file;
+
+                if (storageItem.IsOfType(StorageItemTypes.Folder))
+                {
+                    file = (await ((StorageFolder)storageItem).GetFilesAsync()).FirstOrDefault();
+                }
+                else
+                {
+                    file = (StorageFile)storageItem;
+                }
+
+                return file != null ? (await file.GetThumbnailAsync(ThumbnailMode.ListView)).AsStream() : null;
             }
-            else
+            catch (Exception ex)
             {
-                file = (StorageFile) storageItem;
+                _logger.Error($"An exception occured reading thumb nail for file [{name}] from {typeof(ImageCache).Name}", ex);
             }
-            
-            return file != null ? (await file.GetThumbnailAsync(ThumbnailMode.ListView)).AsStream() : null;
+
+            return null;
         }
     }
 }
