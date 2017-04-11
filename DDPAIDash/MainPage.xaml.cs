@@ -22,13 +22,11 @@
 * SOFTWARE.
 */
 
-using System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using DDPAIDash.Core.Types;
 using DDPAIDash.ViewModels;
-using DDPAIDash.Controls;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=391641
 
@@ -58,21 +56,6 @@ namespace DDPAIDash
             // TODO: Prepare page for display here.
 
             DataContext = DeviceModel.Instance;
-        }
-
-        private async void BtnFormat_Click(object sender, RoutedEventArgs e)
-        {
-            FormatDialog formatDialog = new FormatDialog();
-            var result = await formatDialog.ShowAsync();
-
-            if(result == ContentDialogResult.Primary)
-            {
-                await DeviceModel.Instance.FormatDeviceAsync();
-            }
-        }
-
-        private void BtnPair_Click(object sender, RoutedEventArgs e)
-        {
         }
 
         private async void btnConnect_Click(object sender, RoutedEventArgs e)
