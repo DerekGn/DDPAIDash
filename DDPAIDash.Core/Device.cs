@@ -34,6 +34,7 @@ using DDPAIDash.Core.Transports;
 using DDPAIDash.Core.Types;
 using Newtonsoft.Json;
 using System.IO;
+using System.Linq;
 
 namespace DDPAIDash.Core
 {
@@ -440,10 +441,8 @@ namespace DDPAIDash.Core
                 {
                     User = userInfo;
 
-                    await LoadDeviceVideos();
-
-                    await GetDeviceEvents();
-
+                    await LoadDeviceContent();
+                    
                     _mailboxTask = Task.Factory.StartNew(() => PollMailboxAsync(Cts.Token));
                 }
             }
@@ -477,11 +476,48 @@ namespace DDPAIDash.Core
 
             return result;
         }
-
-        public async Task GetDeviceEvents()
+        
+        public async Task<Stream> StreamFileAsync(string fileName)
         {
+            return await _transport.GetFileAsync(fileName);
+        }
+
+        private  async Task LoadDeviceContent()
+        {
+            List<DeviceVideo> deviceVideos = await GetDeviceVideoList();
+            List<DeviceEvent> deviceEvents = await GetDeviceEventsList();
+            int remaining = deviceVideos.Count + deviceEvents.Count;
+            int total = remaining;
+
+            OnSyncProgress(new SyncProgressEventArgs(total, remaining));
+
+            _logger.Verbose("Loading Device Videos");
+
+            foreach (var deviceVideo in deviceVideos)
+            {
+                deviceVideo.ImageThumbnailStream = await LoadDeviceVideoThumbnailAsync(deviceVideo.Name);
+
+                if (deviceVideo.ImageThumbnailStream != null)
+                    OnVideoAdded(new VideoAddedEventArgs(deviceVideo));
+
+                OnSyncProgress(new SyncProgressEventArgs(total, --remaining));
+            }
+
             _logger.Verbose("Loading Device Event Files");
 
+            foreach (var deviceEvent in deviceEvents)
+            {
+                await LoadDeviceEventThumbnail(deviceEvent);
+
+                if (deviceEvent.ImageThumbnailStream != null && deviceEvent.VideoThumbnailStream != null)
+                    OnEventAdded(new EventAddedEventArgs(deviceEvent));
+
+                OnSyncProgress(new SyncProgressEventArgs(total, --remaining));
+            }
+        }
+
+        private async Task<List<DeviceEvent>> GetDeviceEventsList()
+        {
             DeviceEventList deviceEventList = null;
 
             await ExecuteRequestAsync(ApiConstants.EventListReq,
@@ -492,42 +528,24 @@ namespace DDPAIDash.Core
                     deviceEventList = deviceEventList ?? new DeviceEventList();
                 });
 
-            foreach (var deviceEvent in deviceEventList.Events)
-            {
-                await LoadDeviceEventThumbnail(deviceEvent);
-
-                if(deviceEvent.ImageThumbnailStream != null && deviceEvent.VideoThumbnailStream != null)
-                    OnEventAdded(new EventAddedEventArgs(deviceEvent));
-            }
+            return deviceEventList.Events.FindAll(e => !string.IsNullOrWhiteSpace(e.ImageName));
         }
 
-        public async Task<Stream> StreamFileAsync(string fileName)
+        private async Task<List<DeviceVideo>> GetDeviceVideoList()
         {
-            return await _transport.GetFileAsync(fileName);
-        }
+            DeviceVideoList deviceVideoList = null;
 
-        private async Task LoadDeviceVideos()
-        {
-            _logger.Verbose("Loading Device Videos");
-
-            await GetDeviceVideosAndProcess(async deviceVideoList =>
-            {
-                int remaining = deviceVideoList.Count;
-
-                OnSyncProgress(new SyncProgressEventArgs(deviceVideoList.Count, remaining));
-
-                foreach (var deviceVideo in deviceVideoList.Files)
+            await ExecuteRequestAsync(ApiConstants.PlaybackListReq,
+                apiCommand => _transport.ExecuteAsync(apiCommand), response =>
                 {
-                    deviceVideo.ImageThumbnailStream = await LoadDeviceVideoThumbnailAsync(deviceVideo.Name);
-                    
-                    if(deviceVideo.ImageThumbnailStream != null)
-                        OnVideoAdded(new VideoAddedEventArgs(deviceVideo));
+                    deviceVideoList = JsonConvert.DeserializeObject<DeviceVideoList>(response.Data);
 
-                    OnSyncProgress(new SyncProgressEventArgs(deviceVideoList.Count, --remaining));
-                }
-            });
+                    deviceVideoList = deviceVideoList ?? new DeviceVideoList();
+                });
+
+            return deviceVideoList.Videos;
         }
-
+        
         private async Task GetDeviceVideosAndProcess(Func<DeviceVideoList, Task> processingAction)
         {
             DeviceVideoList deviceVideoList = null;
@@ -668,7 +686,7 @@ namespace DDPAIDash.Core
         {
             if (videosListUpdate.Action == PlaybackAction.Add)
             {
-                var deviceVideo = deviceVideoList.Files.Find(df => df.Name == videosListUpdate.Name);
+                var deviceVideo = deviceVideoList.Videos.Find(df => df.Name == videosListUpdate.Name);
 
                 if (deviceVideo != null)
                 {

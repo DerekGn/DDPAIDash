@@ -31,13 +31,13 @@ namespace DDPAIDash.Core.Types
     {
         public DeviceVideoList()
         {
-            Files = new List<DeviceVideo>();
+            Videos = new List<DeviceVideo>();
         }
 
         [JsonProperty("num")]
         public int Count { get; set; }
 
         [JsonProperty("file")]
-        public List<DeviceVideo> Files { get; set; }
+        public List<DeviceVideo> Videos { get; set; }
     }
 }
