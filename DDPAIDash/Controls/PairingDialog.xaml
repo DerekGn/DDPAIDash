@@ -1,22 +1,20 @@
 ﻿<ContentDialog
-    x:Class="DDPAIDash.Controls.FormatDialog"
+    x:Class="DDPAIDash.Controls.PairingDialog"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Title="Format Camera SD Card"
+    Title="Pair Button With Camera"
     PrimaryButtonText="Yes"
     SecondaryButtonText="No"
-    PrimaryButtonClick="FormatDialog_PrimaryButtonClick"
-    SecondaryButtonClick="FormatDialog_SecondaryButtonClick">
+    PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
+    SecondaryButtonClick="ContentDialog_SecondaryButtonClick">
 
     <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
         <!-- Content body -->
         <TextBlock x:Name="Body" Style="{StaticResource MessageDialogContentStyle}" TextWrapping="Wrap">
-            <TextBlock.Text>
-                Format the Cameras SD card. Warning this will erase all of the stored videos and images
-            </TextBlock.Text>
+            <TextBlock.Text>Start the camera button paring process</TextBlock.Text>
         </TextBlock>
     </StackPanel>
 </ContentDialog>

@@ -95,6 +95,12 @@
     <Compile Include="Controls\DeviceContentViewer.xaml.cs">
       <DependentUpon>DeviceContentViewer.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\FormattingControl.xaml.cs">
+      <DependentUpon>FormattingControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\PairingDialog.xaml.cs">
+      <DependentUpon>PairingDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\SliderExtended.cs" />
     <Compile Include="Converter\BooleanToVisiblityConverter.cs" />
     <Compile Include="Converter\DeviceStateToBooleanConverter.cs" />
@@ -147,6 +153,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\DeviceContentViewer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\FormattingControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\PairingDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -1,0 +1,33 @@
+﻿<UserControl
+    x:Class="DDPAIDash.Controls.FormattingControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:DDPAIDash.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:converter="using:DDPAIDash.Converter"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="400">
+
+    <UserControl.Resources>
+        <converter:DeviceStateToVisiblityConverter x:Key="DeviceStateToVisiblityConverter" />
+        <converter:DeviceStateToBooleanConverter x:Key="DeviceStateToBooleanConverter" />
+
+        <Style x:Key="TextBlockStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="20"/>
+        </Style>
+
+    </UserControl.Resources>
+    
+    <Grid
+        Visibility="{Binding DeviceState, Converter={StaticResource DeviceStateToVisiblityConverter}, Mode=OneWay}">
+        <TextBlock
+            HorizontalAlignment="Center"
+            Style="{StaticResource TextBlockStyle}">Formatting Camera</TextBlock>
+        <ProgressRing 
+            x:Name="FormatProgress"
+            IsActive="{Binding DeviceState, Converter={StaticResource DeviceStateToBooleanConverter}, ConverterParameter=Formatting, Mode=OneWay}"
+            VerticalAlignment="Center"/>
+    </Grid>
+</UserControl>

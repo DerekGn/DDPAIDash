@@ -13,6 +13,7 @@
         <converter:ImageQualityEnumMatchToBoolConverter x:Key="ImageQualityEnumMatchToBoolConverter" />
         <converter:DisplayModeEnumMatchToBoolConverter x:Key="DisplayModeEnumMatchToBoolConverter" />
         <converter:GSensorModeEnumMatchToBoolConverter x:Key="GSensorModeEnumMatchToBoolConverter" />
+        <converter:DeviceStateToVisiblityConverter x:Key="DeviceStateToVisiblityConverter" />
         <converter:DeviceStateToBooleanConverter x:Key="DeviceStateToBooleanConverter" />
         <converter:NullableToVisibilityConverter x:Key="NullableToVisibilityConverter" />
         <converter:SwitchStateToValueConvertor x:Key="SwitchStateToValueConvertor" />
@@ -333,6 +334,9 @@
                 </StackPanel>
             </PivotItem>
         </Pivot>
+        <controls:FormattingControl
+            VerticalAlignment="Center"
+            Visibility="{Binding DeviceState, Converter={StaticResource DeviceStateToVisiblityConverter}, Mode=OneWay}"/>
     </Grid>
     <Page.BottomAppBar>
         <CommandBar x:Name="SettingsCommandBar" ClosedDisplayMode="Minimal">
