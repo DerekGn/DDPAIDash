@@ -55,16 +55,10 @@
                      Value="{Binding SyncRemain}"/>
         <controls:FormattingControl
             VerticalAlignment="Center"
-            Visibility="{Binding DeviceState, Converter={StaticResource DeviceStateToVisiblityConverter}, Mode=OneWay}"/>
-        <!--<StackPanel 
+            Visibility="{Binding DeviceState, Converter={StaticResource DeviceStateToVisiblityConverter}, ConverterParameter=Formatting, Mode=OneWay}"/>
+        <controls:PairingControl
             VerticalAlignment="Center"
-            Visibility="{Binding DeviceState, Converter={StaticResource DeviceStateToVisiblityConverter}, Mode=OneWay}">
-            <TextBlock
-                HorizontalAlignment="Center">Formatting Camera</TextBlock>
-            <ProgressRing x:Name="FormatProgress"
-                      IsActive="{Binding DeviceState, Converter={StaticResource DeviceStateToBooleanConverter}, ConverterParameter=Formatting, Mode=OneWay}"
-                      VerticalAlignment="Center"/>    
-        </StackPanel>-->
+            Visibility="{Binding DeviceState, Converter={StaticResource DeviceStateToVisiblityConverter}, ConverterParameter=Pairing, Mode=OneWay}"/>
     </Grid>
     
     <Page.BottomAppBar>

@@ -1,5 +1,5 @@
 ﻿<UserControl
-    x:Class="DDPAIDash.Controls.FormattingControl"
+    x:Class="DDPAIDash.Controls.PairingControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:DDPAIDash.Controls"
@@ -19,15 +19,15 @@
         </Style>
 
     </UserControl.Resources>
-    
+
     <Grid
-        Visibility="{Binding DeviceState, Converter={StaticResource DeviceStateToVisiblityConverter}, ConverterParameter=Formatting, Mode=OneWay}">
+        Visibility="{Binding DeviceState, Converter={StaticResource DeviceStateToVisiblityConverter}, ConverterParameter=Pairing, Mode=OneWay}">
         <TextBlock
             HorizontalAlignment="Center"
-            Style="{StaticResource TextBlockStyle}">Formatting Camera</TextBlock>
+            Style="{StaticResource TextBlockStyle}">Press the button to complete the pairing</TextBlock>
         <ProgressRing 
             x:Name="FormatProgress"
-            IsActive="{Binding DeviceState, Converter={StaticResource DeviceStateToBooleanConverter}, ConverterParameter=Formatting, Mode=OneWay}"
+            IsActive="{Binding DeviceState, Converter={StaticResource DeviceStateToBooleanConverter}, ConverterParameter=Pairing, Mode=OneWay}"
             VerticalAlignment="Center"/>
     </Grid>
 </UserControl>

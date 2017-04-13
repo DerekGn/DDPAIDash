@@ -476,7 +476,24 @@ namespace DDPAIDash.Core
 
             return result;
         }
-        
+
+        public async Task<int> PairDeviceButtonAsync()
+        {
+            int result = 0;
+
+            if (State == DeviceState.Connected)
+            {
+                await ExecuteRequestAsync(ApiConstants.ButtonMatch, apiCommand => _transport.ExecuteAsync(apiCommand), responseMessage =>
+                {
+                    var pairingTimer = JsonConvert.DeserializeObject<PairingTimer>(responseMessage.Data);
+                    result = pairingTimer.WaitTime;
+                    State = DeviceState.Pairing;
+                });
+            }
+
+            return result;
+        }
+
         public async Task<Stream> StreamFileAsync(string fileName)
         {
             return await _transport.GetFileAsync(fileName);

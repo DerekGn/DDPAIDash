@@ -31,7 +31,7 @@ namespace DDPAIDash.Converter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            return value.ToString() == parameter.ToString();
+            return value != null && value.ToString() == parameter.ToString();
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

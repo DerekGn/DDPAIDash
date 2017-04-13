@@ -98,6 +98,9 @@
     <Compile Include="Controls\FormattingControl.xaml.cs">
       <DependentUpon>FormattingControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\PairingControl.xaml.cs">
+      <DependentUpon>PairingControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\PairingDialog.xaml.cs">
       <DependentUpon>PairingDialog.xaml</DependentUpon>
     </Compile>
@@ -157,6 +160,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\FormattingControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\PairingControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

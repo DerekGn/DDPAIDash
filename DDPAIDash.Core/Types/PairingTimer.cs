@@ -1,5 +1,4 @@
-﻿
-/**
+﻿/**
 * MIT License
 *
 * Copyright (c) 2016 Derek Goslin < http://corememorydump.blogspot.ie/ >
@@ -23,23 +22,10 @@
 * SOFTWARE.
 */
 
-using System;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Data;
-using DDPAIDash.Core.Types;
-
-namespace DDPAIDash.Converter
+namespace DDPAIDash.Core.Types
 {
-    internal class DeviceStateToVisiblityConverter : IValueConverter
+    internal class PairingTimer
     {
-        public object Convert(object value, Type targetType, object parameter, string language)
-        {
-            return value != null && (DeviceState) value == (DeviceState) Enum.Parse(typeof(DeviceState), (string) parameter) ? Visibility.Visible : Visibility.Collapsed;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, string language)
-        {
-            throw new NotImplementedException();
-        }
+        public int WaitTime { get; set; }
     }
 }

@@ -117,6 +117,7 @@
     <Compile Include="Types\MailBoxMessage.cs" />
     <Compile Include="Types\MailBoxMessageKeys.cs" />
     <Compile Include="Types\MailBoxMessageList.cs" />
+    <Compile Include="Types\PairingTimer.cs" />
     <Compile Include="Types\Parameter.cs" />
     <Compile Include="Types\Parameters.cs" />
     <Compile Include="Types\PlaybackAction.cs" />

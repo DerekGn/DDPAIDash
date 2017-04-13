@@ -28,6 +28,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using DDPAIDash.ViewModels;
 using DDPAIDash.Controls;
+using System.Threading.Tasks;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
 
@@ -64,8 +65,16 @@ namespace DDPAIDash
             }
         }
 
-        private void BtnPair_Click(object sender, RoutedEventArgs e)
+        private async void BtnPair_Click(object sender, RoutedEventArgs e)
         {
+            PairingDialog pairingDialog = new PairingDialog();
+
+            var result = await pairingDialog.ShowAsync();
+
+            if (result == ContentDialogResult.Primary)
+            {
+                int timer = await DeviceModel.Instance.PairDeviceButtonAsync();
+            }
         }
     }
 }

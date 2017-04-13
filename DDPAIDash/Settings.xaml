@@ -336,7 +336,10 @@
         </Pivot>
         <controls:FormattingControl
             VerticalAlignment="Center"
-            Visibility="{Binding DeviceState, Converter={StaticResource DeviceStateToVisiblityConverter}, Mode=OneWay}"/>
+            Visibility="{Binding DeviceState, Converter={StaticResource DeviceStateToVisiblityConverter}, ConverterParameter=Formatting, Mode=OneWay}"/>
+        <controls:PairingControl
+            VerticalAlignment="Center"
+            Visibility="{Binding DeviceState, Converter={StaticResource DeviceStateToVisiblityConverter}, ConverterParameter=Pairing, Mode=OneWay}"/>
     </Grid>
     <Page.BottomAppBar>
         <CommandBar x:Name="SettingsCommandBar" ClosedDisplayMode="Minimal">

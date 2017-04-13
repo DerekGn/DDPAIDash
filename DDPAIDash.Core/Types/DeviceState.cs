@@ -29,6 +29,7 @@ namespace DDPAIDash.Core.Types
         PoweredDown,
         Connecting,
         Connected,
-        Formatting
+        Formatting,
+        Pairing
     }
 }

@@ -154,6 +154,11 @@ namespace DDPAIDash.ViewModels
             return await DeviceInstance.FormatAsync();
         }
 
+        public async Task<int> PairDeviceButtonAsync()
+        {
+            return await DeviceInstance.PairDeviceButtonAsync();
+        }
+
         private void DeviceInstanceVideoAdded(object sender, VideoAddedEventArgs e)
         {
             ExecuteOnDispatcher(() =>
