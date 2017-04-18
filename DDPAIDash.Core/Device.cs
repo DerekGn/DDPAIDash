@@ -477,7 +477,7 @@ namespace DDPAIDash.Core
             return result;
         }
 
-        public async Task<int> PairDeviceButtonAsync()
+        public async Task PairDeviceButtonAsync()
         {
             int result = 0;
 
@@ -489,9 +489,11 @@ namespace DDPAIDash.Core
                     result = pairingTimer.WaitTime;
                     State = DeviceState.Pairing;
                 });
-            }
 
-            return result;
+                await Task.Delay(result);
+
+                State = DeviceState.Connected;
+            }
         }
 
         public async Task<Stream> StreamFileAsync(string fileName)

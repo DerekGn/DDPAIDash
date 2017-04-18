@@ -102,7 +102,7 @@ namespace DDPAIDash.Core
 
         Task<bool> FormatAsync();
 
-        Task<int> PairDeviceButtonAsync();
+        Task PairDeviceButtonAsync();
 
         /// <summary>
         /// Stream a file from the <see cref="IDevice"/> instance

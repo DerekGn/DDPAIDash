@@ -73,7 +73,7 @@ namespace DDPAIDash
 
             if (result == ContentDialogResult.Primary)
             {
-                int timer = await DeviceModel.Instance.PairDeviceButtonAsync();
+                await DeviceModel.Instance.PairDeviceButtonAsync().ConfigureAwait(false);
             }
         }
     }
